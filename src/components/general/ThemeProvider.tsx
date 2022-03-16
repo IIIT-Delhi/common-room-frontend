@@ -12,13 +12,7 @@ import {
 	Outfit_800ExtraBold,
 	Outfit_900Black,
 } from '@expo-google-fonts/outfit';
-import {
-	extendTheme,
-	NativeBaseProvider,
-	Spinner,
-	themeTools,
-} from 'native-base';
-import { Text } from 'react-native';
+import { extendTheme, NativeBaseProvider, themeTools } from 'native-base';
 import AppLoading from 'expo-app-loading';
 
 const fontConfig = {
