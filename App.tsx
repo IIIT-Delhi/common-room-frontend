@@ -1,12 +1,6 @@
 import React from 'react';
-import { FeedScreen } from './src/screens';
+import { FeedScreen } from './src/components/screens';
 import ThemeProvider from './src/components/general/ThemeProvider';
-
-// Define the config
-const config = {
-	useSystemColorMode: false,
-	initialColorMode: 'dark',
-};
 
 export default function App() {
 	return (

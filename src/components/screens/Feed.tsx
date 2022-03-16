@@ -1,6 +1,6 @@
 import { Text } from 'native-base';
 import React from 'react';
-import { ParentScrollContainer } from '../components/general';
+import { ParentScrollContainer } from '../general';
 
 export default function FeedScreen() {
 	return (
