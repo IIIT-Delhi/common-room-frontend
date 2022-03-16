@@ -6,11 +6,13 @@ type ParentScrollContainerProps = {
 	children: any;
 	props?: any;
 	showsVerticalScrollIndicator?: boolean;
+	noHorizontalPadding?: boolean;
 };
 
 const ParentScrollContainer = ({
 	children,
 	showsVerticalScrollIndicator = true,
+	noHorizontalPadding = false,
 	...props
 }: ParentScrollContainerProps) => {
 	const { colors } = useTheme();
@@ -23,7 +25,7 @@ const ParentScrollContainer = ({
 				bg="bg.500"
 				mt={Platform.OS === 'android' ? StatusBar.currentHeight : 0}
 				pt="8"
-				px="8"
+				px={noHorizontalPadding ? '0' : '4'}
 				{...props}
 				contentContainerStyle={{
 					paddingBottom: 100,
