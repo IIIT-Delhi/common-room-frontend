@@ -1,13 +1,26 @@
-import { Box, Heading, HStack, ScrollView, Text, VStack } from 'native-base';
 import React from 'react';
-import { ParentScrollContainer } from '../general';
+import MaskedView from '@react-native-community/masked-view';
+import {
+	Box,
+	Heading,
+	HStack,
+	Image,
+	ScrollView,
+	Text,
+	useTheme,
+	VStack,
+} from 'native-base';
+import { SquircleView } from 'react-native-figma-squircle';
+import { ParentScrollContainer, SquircleImage } from '../general';
+import { Heading4 } from '../typography';
+import { TouchableOpacity } from 'react-native';
 
 export default function FeedScreen() {
 	return (
 		<ParentScrollContainer noHorizontalPadding>
-			<Heading fontSize="24px" fontWeight="semibold" m="auto">
+			<Heading4 isSemiBold m="auto">
 				Feed
-			</Heading>
+			</Heading4>
 			<EventsForYou />
 		</ParentScrollContainer>
 	);
@@ -16,19 +29,100 @@ export default function FeedScreen() {
 const EventsForYou = () => {
 	return (
 		<VStack mt="8">
-			<Heading fontSize="24px" fontWeight="medium" ml="4">
-				Events for you
-			</Heading>
-			<ScrollView horizontal mt="4">
+			{/* ======================================== */}
+			<Heading4 ml="4">Events for you</Heading4>
+			<ScrollView horizontal mt="4" showsHorizontalScrollIndicator={false}>
 				<HStack space="4" pl="4">
-					<Box h="189" w="152" borderRadius="2xl" bg="white" />
-					<Box h="189" w="152" borderRadius="2xl" bg="white" />
-					<Box h="189" w="152" borderRadius="2xl" bg="white" />
-					<Box h="189" w="152" borderRadius="2xl" bg="white" />
-					<Box h="189" w="152" borderRadius="2xl" bg="white" />
+					<EFYCard
+						src={{
+							uri: 'https://i.imgur.com/6UdeTsV.png',
+						}}
+					/>
+					<EFYCard
+						src={{
+							uri: 'https://i.imgur.com/wirtZl3.png',
+						}}
+					/>
+					<EFYCard
+						src={{
+							uri: 'https://i.imgur.com/v2JMO5K.png',
+						}}
+					/>
 					<Box />
 				</HStack>
 			</ScrollView>
+			{/* ======================================== */}
+			<VStack mx="4">
+				<Heading4 mt="8">Today</Heading4>
+				<VStack mt="4" space="3">
+					<TodayCard
+						src={{
+							uri: 'https://i.imgur.com/lBEuvFL.png',
+						}}
+					/>
+					<TodayCard
+						src={{
+							uri: 'https://i.imgur.com/lBEuvFL.png',
+						}}
+					/>
+				</VStack>
+			</VStack>
 		</VStack>
+	);
+};
+
+const EFYCard = ({
+	src = {
+		uri: 'https://i.imgur.com/6UdeTsV.png',
+	},
+}) => {
+	return (
+		<TouchableOpacity activeOpacity={0.8}>
+			<SquircleImage height={189} width={152} src={src} />
+		</TouchableOpacity>
+	);
+};
+
+const TodayCard = ({
+	src = {
+		uri: 'https://i.imgur.com/lBEuvFL.png',
+	},
+}) => {
+	const { colors } = useTheme();
+	return (
+		<TouchableOpacity activeOpacity={0.8}>
+			<SquircleView
+				squircleParams={{
+					cornerSmoothing: 1,
+					cornerRadius: 10,
+					fillColor: colors.bg['400'],
+				}}
+				style={{
+					width: '100%',
+					minHeight: 20,
+					padding: 8,
+				}}
+			>
+				<HStack space="4">
+					<MaskedView
+						maskElement={
+							<SquircleView
+								style={{ width: 115, height: 115 }}
+								squircleParams={{
+									cornerSmoothing: 1,
+									cornerRadius: 10,
+								}}
+							/>
+						}
+					>
+						<Image source={src} size="xl" w="115" h="115" alt="Dummy Image" />
+					</MaskedView>
+					<VStack space="1">
+						<Heading4>Parody Night</Heading4>
+						<Text>by Audiobytes</Text>
+					</VStack>
+				</HStack>
+			</SquircleView>
+		</TouchableOpacity>
 	);
 };

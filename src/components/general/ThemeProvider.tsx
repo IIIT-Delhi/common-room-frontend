@@ -76,6 +76,7 @@ const colors = {
 		900: '#001E2C',
 	},
 	bg: {
+		400: '#18171C',
 		500: '#111111',
 	},
 };
@@ -105,22 +106,13 @@ const components = {
 		},
 	},
 	Heading: {
-		baseStyle: (props: any) => ({
-			color: themeTools.mode('primary.500', 'white')(props),
-		}),
-		defaultProps: { size: 'xl' },
-		variants: {},
-		sizes: {},
+		baseStyle: {
+			colors: 'white',
+		},
 	},
 };
 
 const theme = extendTheme({
-	space: {
-		'space-1': '8px',
-		'space-2': '12px',
-		'space-3': '16px',
-		'space-4': '32px',
-	},
 	fontConfig,
 	fonts,
 	colors,
