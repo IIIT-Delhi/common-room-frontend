@@ -57,13 +57,9 @@ const EventsForYou = () => {
 			{/* ======================================== */}
 			<VStack mx="4">
 				<Heading4 mt="8">Today</Heading4>
-				<VStack mt="4" space="3">
-					<TodayFeed />
-				</VStack>
+				<TodayFeed />
 				<Heading4 mt="8">Happening This Week</Heading4>
-				<VStack mt="4" space="3">
-					<ThisWeekFeed />
-				</VStack>
+				<ThisWeekFeed />
 			</VStack>
 		</VStack>
 	);
@@ -141,7 +137,7 @@ const EventCard = ({
 };
 const TodayFeed = () => {
 	return (
-		<>
+		<VStack mt="4" space="3">
 			<EventCard
 				src={{
 					uri: 'https://i.imgur.com/lBEuvFL.png',
@@ -156,12 +152,12 @@ const TodayFeed = () => {
 				eventName="W.A.S.D Elements Game Jam"
 				clubName="DesignHub"
 			/>
-		</>
+		</VStack>
 	);
 };
 const ThisWeekFeed = () => {
 	return (
-		<>
+		<VStack mt="4" space="3">
 			<EventCard
 				src={{
 					uri: 'https://i.imgur.com/gVB6nNA.jpg',
@@ -181,6 +177,6 @@ const ThisWeekFeed = () => {
 				eventName="This is a meme event to check long titles"
 				clubName="DesignHub"
 			/>
-		</>
+		</VStack>
 	);
 };
