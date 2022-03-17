@@ -6,12 +6,9 @@ import { TouchableOpacity } from 'react-native';
 import { ParentScrollContainer, SquircleImage } from '../components/general';
 import { Heading4 } from '../components/typography';
 import { SubHeading2 } from '../components/typography/Heading';
+import clubImage from '../assets/dummyClubEvents';
 
-function EFYCard({
-	src = {
-		uri: 'https://i.imgur.com/6UdeTsV.png',
-	},
-}) {
+function EFYCard({ src = clubImage.WASD }) {
 	return (
 		<TouchableOpacity activeOpacity={0.8}>
 			<SquircleImage height={189} width={152} src={src} />
@@ -20,9 +17,7 @@ function EFYCard({
 }
 
 function EventCard({
-	src = {
-		uri: 'https://i.imgur.com/lBEuvFL.png',
-	},
+	src = clubImage.parodyNight,
 	attendingCount = 21,
 	dateTime = '21 Feb, 1PM',
 	eventName = 'Parody Night',
@@ -45,30 +40,49 @@ function EventCard({
 				}}
 			>
 				<HStack space="4">
-					<SquircleImage height={115} width={115} src={src} flex="1" />
+					<SquircleImage
+						height={115}
+						width={115}
+						src={src}
+						flex="1"
+					/>
 					<VStack space="3" flex="9">
 						<VStack space="1">
 							<Heading4 numberOfLines={2} ellipsizeMode="tail">
 								{eventName}
 							</Heading4>
-							<SubHeading2 color="subtle.500">by {clubName}</SubHeading2>
+							<SubHeading2 color="subtle.500">
+								by {clubName}
+							</SubHeading2>
 						</VStack>
 						<HStack space="3">
-							<HStack space="1" justifyContent="center" alignItems="center">
+							<HStack
+								space="1"
+								justifyContent="center"
+								alignItems="center"
+							>
 								<RemixIcon
 									size={16}
 									name="ri-account-circle-fill"
 									color={colors.primary['500']}
 								/>
-								<SubHeading2 color="primary.500">{attendingCount}</SubHeading2>
+								<SubHeading2 color="primary.500">
+									{attendingCount}
+								</SubHeading2>
 							</HStack>
-							<HStack space="1" justifyContent="center" alignItems="center">
+							<HStack
+								space="1"
+								justifyContent="center"
+								alignItems="center"
+							>
 								<RemixIcon
 									size={16}
 									name="ri-calendar-fill"
 									color={colors.primary['500']}
 								/>
-								<SubHeading2 color="primary.500">{dateTime}</SubHeading2>
+								<SubHeading2 color="primary.500">
+									{dateTime}
+								</SubHeading2>
 							</HStack>
 						</HStack>
 					</VStack>
@@ -80,15 +94,9 @@ function EventCard({
 function TodayFeed() {
 	return (
 		<VStack mt="4" space="3">
+			<EventCard src={clubImage.parodyNight} />
 			<EventCard
-				src={{
-					uri: 'https://i.imgur.com/lBEuvFL.png',
-				}}
-			/>
-			<EventCard
-				src={{
-					uri: 'https://i.imgur.com/6UdeTsV.png',
-				}}
+				src={clubImage.WASD}
 				attendingCount={25}
 				dateTime="21 Feb, 5PM"
 				eventName="W.A.S.D Elements Game Jam"
@@ -101,9 +109,7 @@ function ThisWeekFeed() {
 	return (
 		<VStack mt="4" space="3">
 			<EventCard
-				src={{
-					uri: 'https://i.imgur.com/gVB6nNA.jpg',
-				}}
+				src={clubImage.placementPrep}
 				attendingCount={25}
 				dateTime="27 Feb, 5PM"
 				eventName="Placement Preparation Checker"
@@ -111,9 +117,7 @@ function ThisWeekFeed() {
 			/>
 
 			<EventCard
-				src={{
-					uri: 'https://i.imgur.com/2HlPf0M.jpeg',
-				}}
+				src={clubImage.meme}
 				attendingCount={25}
 				dateTime="27 Feb, 5PM"
 				eventName="This is a meme event to check long titles"
@@ -126,21 +130,9 @@ function EventsForYouFeed() {
 	return (
 		<ScrollView horizontal mt="4" showsHorizontalScrollIndicator={false}>
 			<HStack space="4" pl="4">
-				<EFYCard
-					src={{
-						uri: 'https://i.imgur.com/qUGBWT1.png',
-					}}
-				/>
-				<EFYCard
-					src={{
-						uri: 'https://i.imgur.com/wirtZl3.png',
-					}}
-				/>
-				<EFYCard
-					src={{
-						uri: 'https://i.imgur.com/v2JMO5K.png',
-					}}
-				/>
+				<EFYCard src={clubImage.valorant} />
+				<EFYCard src={clubImage.alumni} />
+				<EFYCard src={clubImage.byldAPI} />
 				<Box />
 			</HStack>
 		</ScrollView>
