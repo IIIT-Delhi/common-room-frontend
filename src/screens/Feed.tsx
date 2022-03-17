@@ -122,38 +122,43 @@ function ThisWeekFeed() {
 		</VStack>
 	);
 }
-
-function EventsForYou() {
+function EventsForYouFeed() {
+	return (
+		<ScrollView horizontal mt="4" showsHorizontalScrollIndicator={false}>
+			<HStack space="4" pl="4">
+				<EFYCard
+					src={{
+						uri: 'https://i.imgur.com/qUGBWT1.png',
+					}}
+				/>
+				<EFYCard
+					src={{
+						uri: 'https://i.imgur.com/wirtZl3.png',
+					}}
+				/>
+				<EFYCard
+					src={{
+						uri: 'https://i.imgur.com/v2JMO5K.png',
+					}}
+				/>
+				<Box />
+			</HStack>
+		</ScrollView>
+	);
+}
+function FeedStream() {
 	return (
 		<VStack mt="8">
-			{/* ======================================== */}
+			{/* ====================1==================== */}
 			<Heading4 ml="4">Events for you</Heading4>
-			<ScrollView horizontal mt="4" showsHorizontalScrollIndicator={false}>
-				<HStack space="4" pl="4">
-					<EFYCard
-						src={{
-							uri: 'https://i.imgur.com/qUGBWT1.png',
-						}}
-					/>
-					<EFYCard
-						src={{
-							uri: 'https://i.imgur.com/wirtZl3.png',
-						}}
-					/>
-					<EFYCard
-						src={{
-							uri: 'https://i.imgur.com/v2JMO5K.png',
-						}}
-					/>
-					<Box />
-				</HStack>
-			</ScrollView>
-			{/* ======================================== */}
+			<EventsForYouFeed />
+			{/* =====================2=================== */}
 			<VStack mx="4">
 				<Heading4 mt="8">Today</Heading4>
 				<VStack mt="4" space="3">
 					<TodayFeed />
 				</VStack>
+				{/* =====================3=================== */}
 				<Heading4 mt="8">Happening This Week</Heading4>
 				<VStack mt="4" space="3">
 					<ThisWeekFeed />
@@ -169,7 +174,7 @@ export default function FeedScreen() {
 			<Heading4 isSemiBold m="auto">
 				Feed
 			</Heading4>
-			<EventsForYou />
+			<FeedStream />
 		</ParentScrollContainer>
 	);
 }
