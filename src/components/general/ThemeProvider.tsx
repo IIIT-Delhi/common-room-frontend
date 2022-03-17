@@ -79,6 +79,12 @@ const colors = {
 		400: '#18171C',
 		500: '#111111',
 	},
+	subtle: {
+		500: '#BFC9D2',
+	},
+	body: {
+		500: '#3B3B47',
+	},
 };
 const components = {
 	Button: {

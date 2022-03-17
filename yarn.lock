@@ -6878,6 +6878,11 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
+react-native-remix-icon@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-remix-icon/-/react-native-remix-icon-0.3.0.tgz#1b594dc7703f42eff9c016b3150764701d59ebd2"
+  integrity sha512-GKwada565yFZOh/6y9ssI8ykrQbWUyAmoayfezQt85sorKimh3vpJaJJy35874HMJUYnzkIyRTWL9OivxZMfXA==
+
 react-native-safe-area-context@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.2.0.tgz#06113c6b208f982d68ab5c3cebd199ca93db6941"

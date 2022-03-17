@@ -50,4 +50,27 @@ const Heading5 = ({ children, ...props }: any) => {
 	);
 };
 
-export { Heading1, Heading2, Heading3, Heading4, Heading5 };
+const SubHeading1 = ({ children, ...props }: any) => {
+	return (
+		<Heading {...props} fontSize="18" lineHeight="22" fontWeight="medium">
+			{children}
+		</Heading>
+	);
+};
+
+const SubHeading2 = ({ children, ...props }: any) => {
+	return (
+		<Heading {...props} fontSize="16" lineHeight="18" fontWeight="medium">
+			{children}
+		</Heading>
+	);
+};
+export {
+	Heading1,
+	Heading2,
+	Heading3,
+	Heading4,
+	Heading5,
+	SubHeading1,
+	SubHeading2,
+};

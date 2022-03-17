@@ -9,11 +9,14 @@ import {
 	Text,
 	useTheme,
 	VStack,
+	Icon,
 } from 'native-base';
 import { SquircleView } from 'react-native-figma-squircle';
 import { ParentScrollContainer, SquircleImage } from '../general';
 import { Heading4 } from '../typography';
 import { TouchableOpacity } from 'react-native';
+import { SubHeading2 } from '../typography/Heading';
+import RemixIcon from 'react-native-remix-icon';
 
 export default function FeedScreen() {
 	return (
@@ -35,7 +38,7 @@ const EventsForYou = () => {
 				<HStack space="4" pl="4">
 					<EFYCard
 						src={{
-							uri: 'https://i.imgur.com/6UdeTsV.png',
+							uri: 'https://i.imgur.com/qUGBWT1.png',
 						}}
 					/>
 					<EFYCard
@@ -55,16 +58,11 @@ const EventsForYou = () => {
 			<VStack mx="4">
 				<Heading4 mt="8">Today</Heading4>
 				<VStack mt="4" space="3">
-					<TodayCard
-						src={{
-							uri: 'https://i.imgur.com/lBEuvFL.png',
-						}}
-					/>
-					<TodayCard
-						src={{
-							uri: 'https://i.imgur.com/lBEuvFL.png',
-						}}
-					/>
+					<TodayFeed />
+				</VStack>
+				<Heading4 mt="8">Happening This Week</Heading4>
+				<VStack mt="4" space="3">
+					<ThisWeekFeed />
 				</VStack>
 			</VStack>
 		</VStack>
@@ -83,10 +81,14 @@ const EFYCard = ({
 	);
 };
 
-const TodayCard = ({
+const EventCard = ({
 	src = {
 		uri: 'https://i.imgur.com/lBEuvFL.png',
 	},
+	attendingCount = 21,
+	dateTime = '21 Feb, 1PM',
+	eventName = 'Parody Night',
+	clubName = 'Audiobytes',
 }) => {
 	const { colors } = useTheme();
 	return (
@@ -101,28 +103,84 @@ const TodayCard = ({
 					width: '100%',
 					minHeight: 20,
 					padding: 8,
+					maxHeight: 115 + 16,
 				}}
 			>
 				<HStack space="4">
-					<MaskedView
-						maskElement={
-							<SquircleView
-								style={{ width: 115, height: 115 }}
-								squircleParams={{
-									cornerSmoothing: 1,
-									cornerRadius: 10,
-								}}
-							/>
-						}
-					>
-						<Image source={src} size="xl" w="115" h="115" alt="Dummy Image" />
-					</MaskedView>
-					<VStack space="1">
-						<Heading4>Parody Night</Heading4>
-						<Text>by Audiobytes</Text>
+					<SquircleImage height={115} width={115} src={src} flex="1" />
+					<VStack space="3" flex="9">
+						<VStack space="1">
+							<Heading4 numberOfLines={2} ellipsizeMode="tail">
+								{eventName}
+							</Heading4>
+							<SubHeading2 color="subtle.500">by {clubName}</SubHeading2>
+						</VStack>
+						<HStack space="3">
+							<HStack space="1" justifyContent="center" alignItems="center">
+								<RemixIcon
+									size={16}
+									name="ri-account-circle-fill"
+									color={colors.primary['500']}
+								/>
+								<SubHeading2 color="primary.500">{attendingCount}</SubHeading2>
+							</HStack>
+							<HStack space="1" justifyContent="center" alignItems="center">
+								<RemixIcon
+									size={16}
+									name="ri-calendar-fill"
+									color={colors.primary['500']}
+								/>
+								<SubHeading2 color="primary.500">{dateTime}</SubHeading2>
+							</HStack>
+						</HStack>
 					</VStack>
 				</HStack>
 			</SquircleView>
 		</TouchableOpacity>
+	);
+};
+const TodayFeed = () => {
+	return (
+		<>
+			<EventCard
+				src={{
+					uri: 'https://i.imgur.com/lBEuvFL.png',
+				}}
+			/>
+			<EventCard
+				src={{
+					uri: 'https://i.imgur.com/6UdeTsV.png',
+				}}
+				attendingCount={25}
+				dateTime="21 Feb, 5PM"
+				eventName="W.A.S.D Elements Game Jam"
+				clubName="DesignHub"
+			/>
+		</>
+	);
+};
+const ThisWeekFeed = () => {
+	return (
+		<>
+			<EventCard
+				src={{
+					uri: 'https://i.imgur.com/gVB6nNA.jpg',
+				}}
+				attendingCount={25}
+				dateTime="27 Feb, 5PM"
+				eventName="Placement Preparation Checker"
+				clubName="Biobytes"
+			/>
+
+			<EventCard
+				src={{
+					uri: 'https://i.imgur.com/2HlPf0M.jpeg',
+				}}
+				attendingCount={25}
+				dateTime="27 Feb, 5PM"
+				eventName="This is a meme event to check long titles"
+				clubName="DesignHub"
+			/>
+		</>
 	);
 };
