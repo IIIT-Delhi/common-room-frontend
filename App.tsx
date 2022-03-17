@@ -1,11 +1,17 @@
 import React from 'react';
-import { FeedScreen } from './src/components/screens';
-import ThemeProvider from './src/components/general/ThemeProvider';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ThemeProvider } from './src/providers';
+import HomeStack from './src/navigation/home';
 
 export default function App() {
 	return (
 		<ThemeProvider>
-			<FeedScreen />
+			<SafeAreaProvider>
+				<NavigationContainer>
+					<HomeStack />
+				</NavigationContainer>
+			</SafeAreaProvider>
 		</ThemeProvider>
 	);
 }
