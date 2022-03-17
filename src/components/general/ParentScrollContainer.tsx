@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, ScrollView, StatusBar, useTheme } from 'native-base';
-import { Platform, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 
 type ParentScrollContainerProps = {
 	children: any;
@@ -9,21 +9,20 @@ type ParentScrollContainerProps = {
 	noHorizontalPadding?: boolean;
 };
 
-const ParentScrollContainer = ({
+function ParentScrollContainer({
 	children,
 	showsVerticalScrollIndicator = true,
 	noHorizontalPadding = false,
 	...props
-}: ParentScrollContainerProps) => {
+}: ParentScrollContainerProps) {
 	const { colors } = useTheme();
-	const [refreshing, setRefreshing] = useState(false);
+	const refreshing = false;
 
 	return (
 		<Box flex="1">
 			<StatusBar barStyle="light-content" backgroundColor={colors.bg['500']} />
 			<ScrollView
 				bg="bg.500"
-				mt={Platform.OS === 'android' ? StatusBar.currentHeight : 0}
 				pt="8"
 				px={noHorizontalPadding ? '0' : '4'}
 				{...props}
@@ -39,5 +38,6 @@ const ParentScrollContainer = ({
 			</ScrollView>
 		</Box>
 	);
-};
+}
+
 export default ParentScrollContainer;

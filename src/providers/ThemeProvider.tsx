@@ -12,7 +12,7 @@ import {
 	Outfit_800ExtraBold,
 	Outfit_900Black,
 } from '@expo-google-fonts/outfit';
-import { extendTheme, NativeBaseProvider, themeTools } from 'native-base';
+import { extendTheme, NativeBaseProvider } from 'native-base';
 import AppLoading from 'expo-app-loading';
 
 const fontConfig = {
@@ -143,6 +143,11 @@ const theme = extendTheme({
 		'9xl': 128,
 	},
 });
+
+type CustomThemeType = typeof theme;
+declare module 'native-base' {
+	interface ICustomTheme extends CustomThemeType {}
+}
 
 export default function ThemeProvider({ children }: any) {
 	const [fontsLoaded] = useFonts({
