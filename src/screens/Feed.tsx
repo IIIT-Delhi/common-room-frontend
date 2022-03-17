@@ -22,10 +22,16 @@ function EventCard({
 	dateTime = '21 Feb, 1PM',
 	eventName = 'Parody Night',
 	clubName = 'Audiobytes',
+	isOldCard = false,
 }) {
 	const { colors } = useTheme();
 	return (
-		<TouchableOpacity activeOpacity={0.8}>
+		<TouchableOpacity
+			activeOpacity={isOldCard ? 0.1 : 0.8}
+			style={{
+				opacity: isOldCard ? 0.2 : 1,
+			}}
+		>
 			<SquircleView
 				squircleParams={{
 					cornerSmoothing: 1,
@@ -117,11 +123,34 @@ function ThisWeekFeed() {
 			/>
 
 			<EventCard
+				src={clubImage.micDrop}
+				attendingCount={25}
+				dateTime="27 Feb, 5PM"
+				eventName="How you doin?"
+				clubName="MicDrop"
+			/>
+		</VStack>
+	);
+}
+function FeedbackFeed() {
+	return (
+		<VStack mt="4" space="3">
+			<EventCard
+				src={clubImage.roboMaze}
+				attendingCount={25}
+				dateTime="27 Feb, 5PM"
+				eventName="Maze Coverage and Basics of Graphs"
+				clubName="Cyborg"
+				isOldCard
+			/>
+
+			<EventCard
 				src={clubImage.meme}
 				attendingCount={25}
 				dateTime="27 Feb, 5PM"
 				eventName="This is a meme event to check long titles"
 				clubName="DesignHub"
+				isOldCard
 			/>
 		</VStack>
 	);
@@ -147,14 +176,16 @@ function FeedStream() {
 			{/* =====================2=================== */}
 			<VStack mx="4">
 				<Heading4 mt="8">Today</Heading4>
-				<VStack mt="4" space="3">
-					<TodayFeed />
-				</VStack>
+				<TodayFeed />
 				{/* =====================3=================== */}
 				<Heading4 mt="8">Happening This Week</Heading4>
-				<VStack mt="4" space="3">
-					<ThisWeekFeed />
-				</VStack>
+				<ThisWeekFeed />
+				{/* =====================4=================== */}
+				<Heading4 mt="8">Leave Feedback</Heading4>
+				<FeedbackFeed />
+				<SubHeading2 mt="6" color="body.500" m="auto">
+					older events
+				</SubHeading2>
 			</VStack>
 		</VStack>
 	);

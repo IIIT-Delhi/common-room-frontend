@@ -20,6 +20,12 @@ const clubImage = {
 	byldAPI: {
 		uri: 'https://i.imgur.com/v2JMO5K.png',
 	},
+	roboMaze: {
+		uri: 'https://i.imgur.com/Gg64tAv.png',
+	},
+	micDrop: {
+		uri: 'https://i.imgur.com/4PCQ5fV.png',
+	},
 };
 
 export default clubImage;
