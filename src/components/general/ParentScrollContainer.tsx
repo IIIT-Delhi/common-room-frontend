@@ -29,7 +29,7 @@ function ParentScrollContainer({
 				px={noHorizontalPadding ? '0' : '4'}
 				{...props}
 				contentContainerStyle={{
-					paddingBottom: 100,
+					paddingBottom: 40,
 				}}
 				showsVerticalScrollIndicator={showsVerticalScrollIndicator}
 				refreshControl={

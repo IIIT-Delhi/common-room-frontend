@@ -10,10 +10,15 @@ import {
 import { SquircleView } from 'react-native-figma-squircle';
 import RemixIcon from 'react-native-remix-icon';
 import { TouchableOpacity } from 'react-native';
-import { ParentScrollContainer, SquircleImage } from '../components/general';
+import {
+	Header,
+	ParentScrollContainer,
+	SquircleImage,
+} from '../components/general';
 import { Heading4 } from '../components/typography';
 import { SubHeading2 } from '../components/typography/Heading';
 import clubImage from '../assets/dummyClubEvents';
+import SquircleCard from '../components/general/SquircleCard';
 
 function EFYCard({ src = clubImage.WASD }) {
 	return (
@@ -39,19 +44,7 @@ function EventCard({
 				opacity: isOldCard ? 0.2 : 1,
 			}}
 		>
-			<SquircleView
-				squircleParams={{
-					cornerSmoothing: 1,
-					cornerRadius: 10,
-					fillColor: colors.bg['400'],
-				}}
-				style={{
-					width: '100%',
-					minHeight: 20,
-					padding: 8,
-					maxHeight: 115 + 16,
-				}}
-			>
+			<SquircleCard>
 				<HStack space="4">
 					<SquircleImage
 						height={115}
@@ -100,7 +93,7 @@ function EventCard({
 						</HStack>
 					</VStack>
 				</HStack>
-			</SquircleView>
+			</SquircleCard>
 		</TouchableOpacity>
 	);
 }
@@ -201,11 +194,7 @@ function FeedStream() {
 export default function FeedScreen() {
 	return (
 		<ParentScrollContainer noHorizontalPadding stickyHeaderIndices={[0]}>
-			<Box bg="bg.500" pt="4" pb="2">
-				<Heading4 isSemiBold m="auto">
-					Feed
-				</Heading4>
-			</Box>
+			<Header title="Feed" />
 			<FeedStream />
 		</ParentScrollContainer>
 	);

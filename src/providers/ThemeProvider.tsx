@@ -85,6 +85,9 @@ const colors = {
 	body: {
 		500: '#3B3B47',
 	},
+	alert: {
+		500: '#FF005C',
+	},
 };
 const components = {
 	Button: {

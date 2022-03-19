@@ -3,7 +3,12 @@ import React from 'react';
 import { Icon, useTheme } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RemixIcon } from '../../components/general';
-import { FeedScreen, NotificationsScreen } from '../../screens';
+import {
+	AccountScreen,
+	FeedScreen,
+	NotificationsScreen,
+	SearchScreen,
+} from '../../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,8 +58,8 @@ function BottomTabs() {
 		>
 			<Tab.Screen name="Feed" component={FeedScreen} />
 			<Tab.Screen name="Notifications" component={NotificationsScreen} />
-			<Tab.Screen name="Explore" component={NotificationsScreen} />
-			<Tab.Screen name="Account" component={NotificationsScreen} />
+			<Tab.Screen name="Explore" component={SearchScreen} />
+			<Tab.Screen name="Account" component={AccountScreen} />
 		</Tab.Navigator>
 	);
 }

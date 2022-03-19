@@ -26,6 +26,18 @@ const clubImage = {
 	micDrop: {
 		uri: 'https://i.imgur.com/4PCQ5fV.png',
 	},
+	audiobytes: {
+		uri: 'https://imgur.com/6MhTvtX.png',
+	},
+	byld: {
+		uri: 'https://i.imgur.com/dJMUTqk.png',
+	},
+	cyborg: {
+		uri: 'https://i.imgur.com/7oXhuKB.jpg',
+	},
+	designhub: {
+		uri: 'https://i.imgur.com/1Z6F9gx.png',
+	},
 };
 
 export default clubImage;
