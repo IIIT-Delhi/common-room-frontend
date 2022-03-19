@@ -20,10 +20,12 @@ function ParentScrollContainer({
 
 	return (
 		<Box flex="1">
-			<StatusBar barStyle="light-content" backgroundColor={colors.bg['500']} />
+			<StatusBar
+				barStyle="light-content"
+				backgroundColor={colors.bg['500']}
+			/>
 			<ScrollView
 				bg="bg.500"
-				pt="8"
 				px={noHorizontalPadding ? '0' : '4'}
 				{...props}
 				contentContainerStyle={{
@@ -31,7 +33,10 @@ function ParentScrollContainer({
 				}}
 				showsVerticalScrollIndicator={showsVerticalScrollIndicator}
 				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={() => null} />
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={() => null}
+					/>
 				}
 			>
 				{children}

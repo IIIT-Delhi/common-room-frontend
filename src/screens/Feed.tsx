@@ -1,5 +1,12 @@
 import React from 'react';
-import { Box, HStack, ScrollView, useTheme, VStack } from 'native-base';
+import {
+	Box,
+	Heading,
+	HStack,
+	ScrollView,
+	useTheme,
+	VStack,
+} from 'native-base';
 import { SquircleView } from 'react-native-figma-squircle';
 import RemixIcon from 'react-native-remix-icon';
 import { TouchableOpacity } from 'react-native';
@@ -11,7 +18,7 @@ import clubImage from '../assets/dummyClubEvents';
 function EFYCard({ src = clubImage.WASD }) {
 	return (
 		<TouchableOpacity activeOpacity={0.8}>
-			<SquircleImage height={189} width={152} src={src} />
+			<SquircleImage height={225} width={225} src={src} />
 		</TouchableOpacity>
 	);
 }
@@ -169,7 +176,7 @@ function EventsForYouFeed() {
 }
 function FeedStream() {
 	return (
-		<VStack mt="8">
+		<VStack mt="6">
 			{/* ====================1==================== */}
 			<Heading4 ml="4">Events for you</Heading4>
 			<EventsForYouFeed />
@@ -193,10 +200,12 @@ function FeedStream() {
 
 export default function FeedScreen() {
 	return (
-		<ParentScrollContainer noHorizontalPadding>
-			<Heading4 isSemiBold m="auto">
-				Feed
-			</Heading4>
+		<ParentScrollContainer noHorizontalPadding stickyHeaderIndices={[0]}>
+			<Box bg="bg.500" pt="4" pb="2">
+				<Heading4 isSemiBold m="auto">
+					Feed
+				</Heading4>
+			</Box>
 			<FeedStream />
 		</ParentScrollContainer>
 	);
