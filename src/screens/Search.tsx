@@ -1,4 +1,3 @@
-import React from 'react';
 import { Header, ParentScrollContainer } from '../components/general';
 
 export default function SearchScreen() {

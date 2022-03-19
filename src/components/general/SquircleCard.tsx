@@ -1,5 +1,5 @@
 import { useTheme } from 'native-base';
-import React from 'react';
+
 import { SquircleView } from 'react-native-figma-squircle';
 
 export default function SquircleCard({ children }: any) {

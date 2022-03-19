@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image } from 'native-base';
 import { SquircleView } from 'react-native-figma-squircle';
 import MaskedView from '@react-native-community/masked-view';

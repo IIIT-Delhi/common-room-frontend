@@ -27,6 +27,7 @@
         "react/prop-types": 0,
         "react/jsx-props-no-spreading": "off",
         "no-underscore-dangle": ["error", { "allow": ["_id"] }],
-        "react/require-default-props": "off"
+        "react/require-default-props": "off",
+        "react/react-in-jsx-scope": "off"
     }
 }

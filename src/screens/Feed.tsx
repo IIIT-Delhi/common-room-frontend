@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, HStack, ScrollView, useTheme, VStack } from 'native-base';
 import RemixIcon from 'react-native-remix-icon';
 import { TouchableOpacity } from 'react-native';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Heading } from 'native-base';
 
 function Heading1({ children, ...props }: any) {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Text } from 'native-base';
 
 function Body1({ children, ...props }: any) {

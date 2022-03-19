@@ -1,5 +1,5 @@
 import { Box, HStack, Image, VStack } from 'native-base';
-import React from 'react';
+
 import { TouchableOpacity } from 'react-native';
 import clubImage from '../assets/dummyClubEvents';
 import {

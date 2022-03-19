@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box } from 'native-base';
 import { Heading4 } from '../typography';
 

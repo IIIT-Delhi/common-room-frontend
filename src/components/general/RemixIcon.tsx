@@ -1,4 +1,3 @@
-import React from 'react';
 import RNRemixIcon from 'react-native-remix-icon';
 
 function RemixIcon(props: any) {
