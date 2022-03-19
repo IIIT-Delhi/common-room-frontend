@@ -1,5 +1,6 @@
 import { Box, HStack, Image, VStack } from 'native-base';
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import clubImage from '../assets/dummyClubEvents';
 import {
 	Header,
@@ -11,22 +12,24 @@ import { Body1, Body2, Heading4 } from '../components/typography';
 
 function NotificationCard({ clubImg, description, time }: any) {
 	return (
-		<SquircleCard>
-			<HStack justifyContent="space-between">
-				<HStack space="4" flex="8">
-					<SquircleImage
-						height={50}
-						width={50}
-						src={clubImg}
-						flex="1"
-					/>
-					<Body1 flex="5">{description}</Body1>
+		<TouchableOpacity activeOpacity={0.8}>
+			<SquircleCard>
+				<HStack justifyContent="space-between">
+					<HStack space="4" flex="8">
+						<SquircleImage
+							height={50}
+							width={50}
+							src={clubImg}
+							flex="1"
+						/>
+						<Body1 flex="5">{description}</Body1>
+					</HStack>
+					<Body2 flex="1" textAlign="right">
+						{time}
+					</Body2>
 				</HStack>
-				<Body2 flex="1" textAlign="right">
-					{time}
-				</Body2>
-			</HStack>
-		</SquircleCard>
+			</SquircleCard>
+		</TouchableOpacity>
 	);
 }
 export default function NotificationsScreen() {
