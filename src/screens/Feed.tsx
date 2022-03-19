@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-	Box,
-	Heading,
-	HStack,
-	ScrollView,
-	useTheme,
-	VStack,
-} from 'native-base';
-import { SquircleView } from 'react-native-figma-squircle';
+import { Box, HStack, ScrollView, useTheme, VStack } from 'native-base';
 import RemixIcon from 'react-native-remix-icon';
 import { TouchableOpacity } from 'react-native';
 import {

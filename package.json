@@ -26,6 +26,8 @@
     "expo-app-loading": "1.1.2",
     "expo-font": "~9.2.1",
     "expo-status-bar": "~1.0.4",
+    "expo-system-ui": "^1.1.1",
+    "firebase": "8.2.3",
     "native-base": "^3.3.7",
     "react": "16.13.1",
     "react-dom": "16.13.1",

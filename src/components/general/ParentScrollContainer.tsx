@@ -1,11 +1,8 @@
 import React from 'react';
 import { Box, ScrollView, StatusBar, useTheme } from 'native-base';
-import { RefreshControl } from 'react-native';
+import { RefreshControl, ScrollViewProps } from 'react-native';
 
-type ParentScrollContainerProps = {
-	children: any;
-	props?: any;
-	showsVerticalScrollIndicator?: boolean;
+type ParentScrollContainerProps = ScrollViewProps & {
 	noHorizontalPadding?: boolean;
 };
 

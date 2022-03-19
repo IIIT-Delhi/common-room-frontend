@@ -29,31 +29,25 @@ function BottomTabs() {
 					borderTopWidth: 2,
 				},
 				tabBarIcon: ({ focused }) => {
-					const icons = {
-						Feed: focused ? 'ri-home-2-fill' : 'ri-home-2-line',
-						Notifications: focused
-							? 'ri-notification-2-fill'
-							: 'ri-notification-2-line',
-						Explore: focused
-							? 'ri-search-2-fill'
-							: 'ri-search-2-line',
-						Account: focused
-							? 'ri-account-circle-fill'
-							: 'ri-account-circle-line',
+					const icons: { [key: string]: string } = {
+						Feed: 'home-2',
+						Notifications: 'notification-2',
+						Explore: 'search-2',
+						Account: 'account-circle',
 					};
-					const iconName = icons[route.name];
-					const size = focused ? '7' : '7';
 					return (
 						<Icon
 							as={RemixIcon}
-							key={iconName}
-							name={iconName}
-							size={size}
+							key={`remix-${route.name}`}
+							name={`${icons[route.name]}-${
+								focused ? 'fill' : 'line'
+							}`}
+							size="7"
 							color={focused ? 'primary.500' : 'subtle.500'}
 						/>
 					);
 				},
-				tabBarLabel: () => null,
+				tabBarShowLabel: false,
 			})}
 		>
 			<Tab.Screen name="Feed" component={FeedScreen} />
