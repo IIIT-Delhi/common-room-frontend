@@ -75,8 +75,16 @@ const colors = {
 		900: '#001E2C',
 	},
 	bg: {
+		50: '#CFCFCF',
+		100: '#CFCFCF',
+		200: '#A0A0A0',
+		300: '#707070',
 		400: '#18171C',
 		500: '#111111',
+		600: '#0E0E0E',
+		700: '#0A0A0A',
+		800: '#060606',
+		900: '#030303',
 	},
 	subtle: {
 		500: '#BFC9D2',
@@ -97,6 +105,7 @@ const components = {
 		defaultProps: {
 			colorScheme: 'primary',
 			variant: 'solid',
+			outerHeight: '14',
 		},
 	},
 	IconButton: {
