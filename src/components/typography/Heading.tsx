@@ -11,14 +11,14 @@ function Heading1({ children, ...props }: HeadingProps) {
 		</Heading>
 	);
 }
-function Heading2({ children, ...props }: any) {
+function Heading2({ children, ...props }: HeadingProps) {
 	return (
 		<Heading {...props} fontSize="32" lineHeight="36" fontWeight="semibold">
 			{children}
 		</Heading>
 	);
 }
-function Heading3({ children, ...props }: any) {
+function Heading3({ children, ...props }: HeadingProps) {
 	return (
 		<Heading
 			{...props}
@@ -45,7 +45,7 @@ function Heading4({ children, isSemiBold = false, ...props }: HeadingProps) {
 	);
 }
 
-function Heading5({ children, ...props }: any) {
+function Heading5({ children, ...props }: HeadingProps) {
 	return (
 		<Heading {...props} fontSize="20" lineHeight="24" fontWeight="medium">
 			{children}
@@ -53,7 +53,7 @@ function Heading5({ children, ...props }: any) {
 	);
 }
 
-function SubHeading1({ children, ...props }: any) {
+function SubHeading1({ children, ...props }: HeadingProps) {
 	return (
 		<Heading {...props} fontSize="18" lineHeight="22" fontWeight="medium">
 			{children}
@@ -61,7 +61,7 @@ function SubHeading1({ children, ...props }: any) {
 	);
 }
 
-function SubHeading2({ children, ...props }: any) {
+function SubHeading2({ children, ...props }: HeadingProps) {
 	return (
 		<Heading {...props} fontSize="16" lineHeight="18" fontWeight="medium">
 			{children}

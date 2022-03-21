@@ -99,7 +99,7 @@ const colors = {
 const components = {
 	Button: {
 		baseStyle: {
-			rounded: 'lg',
+			rounded: 'xl',
 			colorScheme: 'primary',
 		},
 		defaultProps: {
