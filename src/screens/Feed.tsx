@@ -162,17 +162,17 @@ function FeedStream() {
 	return (
 		<VStack mt="6">
 			{/* ====================1==================== */}
-			<Heading4 ml="4">Events for you</Heading4>
+			<Heading4 ml="4">Events for you &nbsp;⭐</Heading4>
 			<EventsForYouFeed />
 			{/* =====================2=================== */}
 			<VStack mx="4">
-				<Heading4 mt="8">Today</Heading4>
+				<Heading4 mt="8">Today 💃</Heading4>
 				<TodayFeed />
 				{/* =====================3=================== */}
-				<Heading4 mt="8">Happening This Week</Heading4>
+				<Heading4 mt="8">Happening This Week &nbsp;&nbsp;📅</Heading4>
 				<ThisWeekFeed />
 				{/* =====================4=================== */}
-				<Heading4 mt="8">Leave Feedback</Heading4>
+				<Heading4 mt="8">Leave Feedback &nbsp;&nbsp;💬</Heading4>
 				<FeedbackFeed />
 				<SubHeading2 mt="6" color="body.500" m="auto">
 					older events

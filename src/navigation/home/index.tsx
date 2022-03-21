@@ -7,7 +7,7 @@ import {
 	AccountScreen,
 	FeedScreen,
 	NotificationsScreen,
-	SearchScreen,
+	ExploreScreen,
 } from '../../screens';
 
 const Tab = createBottomTabNavigator();
@@ -51,7 +51,7 @@ function BottomTabs() {
 		>
 			<Tab.Screen name="Feed" component={FeedScreen} />
 			<Tab.Screen name="Notifications" component={NotificationsScreen} />
-			<Tab.Screen name="Explore" component={SearchScreen} />
+			<Tab.Screen name="Explore" component={ExploreScreen} />
 			<Tab.Screen name="Account" component={AccountScreen} />
 		</Tab.Navigator>
 	);
