@@ -3,12 +3,14 @@ import { RefreshControl, ScrollViewProps } from 'react-native';
 
 type ParentScrollContainerProps = ScrollViewProps & {
 	noHorizontalPadding?: boolean;
+	contentUnderStatusBar?: boolean;
 };
 
 function ParentScrollContainer({
 	children,
 	showsVerticalScrollIndicator = true,
 	noHorizontalPadding = false,
+	contentUnderStatusBar = false,
 	...props
 }: ParentScrollContainerProps) {
 	const { colors } = useTheme();
@@ -18,7 +20,10 @@ function ParentScrollContainer({
 		<Box flex="1">
 			<StatusBar
 				barStyle="light-content"
-				backgroundColor={colors.bg['500']}
+				backgroundColor={
+					contentUnderStatusBar ? 'transparent' : colors.bg['500']
+				}
+				translucent={contentUnderStatusBar}
 			/>
 			<ScrollView
 				bg="bg.500"

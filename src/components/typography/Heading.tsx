@@ -1,6 +1,10 @@
-import { Heading } from 'native-base';
+import { Heading, IHeadingProps } from 'native-base';
 
-function Heading1({ children, ...props }: any) {
+type HeadingProps = IHeadingProps & {
+	isSemiBold?: boolean;
+};
+
+function Heading1({ children, ...props }: HeadingProps) {
 	return (
 		<Heading {...props} fontSize="48" lineHeight="52" fontWeight="bold">
 			{children}
@@ -28,7 +32,7 @@ function Heading3({ children, ...props }: any) {
 	);
 }
 
-function Heading4({ children, isSemiBold = false, ...props }: any) {
+function Heading4({ children, isSemiBold = false, ...props }: HeadingProps) {
 	return (
 		<Heading
 			{...props}
