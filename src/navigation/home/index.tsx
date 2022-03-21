@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 
-import { Icon, useTheme } from 'native-base';
+import { useTheme } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RemixIcon } from '../../components/general';
 import {
@@ -36,8 +36,7 @@ function BottomTabs() {
 						Account: 'account-circle',
 					};
 					return (
-						<Icon
-							as={RemixIcon}
+						<RemixIcon
 							key={`remix-${route.name}`}
 							name={`${icons[route.name]}-${
 								focused ? 'fill' : 'line'

@@ -1,3 +1,4 @@
+import { Icon, IIconProps } from 'native-base';
 import RNRemixIcon from 'react-native-remix-icon';
 
 function RemixIcon(props: any) {
@@ -6,4 +7,8 @@ function RemixIcon(props: any) {
 	return <RNRemixIcon name={name} size={size} color={color} />;
 }
 
-export default RemixIcon;
+function NativeRemixIcon(props: IIconProps) {
+	return <Icon {...props} as={RemixIcon} />;
+}
+
+export default NativeRemixIcon;

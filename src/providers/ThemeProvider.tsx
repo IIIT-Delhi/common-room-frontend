@@ -101,7 +101,7 @@ const components = {
 	},
 	IconButton: {
 		baseStyle: {
-			rounded: 'sm',
+			rounded: 'full',
 		},
 		variants: {
 			outline: {
