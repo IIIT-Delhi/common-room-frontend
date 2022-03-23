@@ -2,39 +2,31 @@ import * as Google from 'expo-auth-session/providers/google';
 import { Button, Center, Image, Text } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Header, ParentScrollContainer } from '../components/general';
+import { useAuth } from '../hooks';
 
 export default function AccountScreen() {
-	const [request, response, promptAsync] = Google.useAuthRequest({
-		expoClientId:
-			'34680095709-j58gd0gjvfc43dakfp3e677u6b319q7h.apps.googleusercontent.com',
-		androidClientId:
-			'34680095709-7n87bn7q6sr5ce1jjc02eko1jfu30a49.apps.googleusercontent.com',
-	});
-	const [accessToken, setAccessToken] = useState<string>();
+	const {
+		authData: { token },
+		signOut,
+	} = useAuth();
 	const [userInfo, setUserInfo] = useState<any>();
 	const getUserData = async () => {
 		const userInfoResponse = await fetch(
 			Google.discovery.userInfoEndpoint ||
 				'https://www.googleapis.com/userinfo/v2/me',
 			{
-				headers: { Authorization: `Bearer ${accessToken}` },
+				headers: { Authorization: `Bearer ${token}` },
 			},
 		);
 		const userInfoJSON = await userInfoResponse.json();
 		setUserInfo(userInfoJSON);
 	};
+
 	useEffect(() => {
-		if (response?.type === 'success') {
-			const { authentication } = response;
-			setAccessToken(authentication?.accessToken);
-			console.log(JSON.stringify(response, null, 2));
-		}
-	}, [response]);
-	useEffect(() => {
-		if (accessToken) {
+		if (token) {
 			getUserData();
 		}
-	}, [accessToken]);
+	}, [token]);
 	return (
 		<ParentScrollContainer noHorizontalPadding stickyHeaderIndices={[0]}>
 			<Header title="Account" />
@@ -47,14 +39,13 @@ export default function AccountScreen() {
 						resizeMode="contain"
 						borderRadius={100}
 						mb={5}
+						alt="User profile image"
 					/>
 					<Text>{userInfo.name}</Text>
 					<Text>{userInfo.email}</Text>
 				</Center>
 			)}
-			<Button disabled={!request} onPress={() => promptAsync()}>
-				Log In
-			</Button>
+			<Button onPress={signOut}>Sign Out</Button>
 		</ParentScrollContainer>
 	);
 }

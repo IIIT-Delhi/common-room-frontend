@@ -1,14 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ThemeProvider } from './src/providers';
-import HomeStack from './src/navigation/home';
+import { ThemeProvider, AuthProvider } from './src/providers';
+import MainNavigation from './src/navigation/main';
 
 export default function App() {
 	return (
 		<ThemeProvider>
 			<SafeAreaProvider>
 				<NavigationContainer>
-					<HomeStack />
+					<AuthProvider>
+						<MainNavigation />
+					</AuthProvider>
 				</NavigationContainer>
 			</SafeAreaProvider>
 		</ThemeProvider>
