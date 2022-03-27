@@ -7,6 +7,8 @@ export default function AccountScreen() {
 	const [request, response, promptAsync] = Google.useAuthRequest({
 		expoClientId:
 			'34680095709-j58gd0gjvfc43dakfp3e677u6b319q7h.apps.googleusercontent.com',
+		androidClientId:
+			'34680095709-7n87bn7q6sr5ce1jjc02eko1jfu30a49.apps.googleusercontent.com',
 	});
 	const [accessToken, setAccessToken] = useState<string>();
 	const [userInfo, setUserInfo] = useState<any>();
@@ -25,6 +27,7 @@ export default function AccountScreen() {
 		if (response?.type === 'success') {
 			const { authentication } = response;
 			setAccessToken(authentication?.accessToken);
+			console.log(JSON.stringify(response, null, 2));
 		}
 	}, [response]);
 	useEffect(() => {
