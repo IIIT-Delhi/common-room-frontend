@@ -1,6 +1,6 @@
 import { Box, Button, HStack, IconButton, Image, VStack } from 'native-base';
 import { useState } from 'react';
-import { Dimensions } from 'react-native';
+import { Alert, Dimensions } from 'react-native';
 
 import clubImage from '../assets/dummyClubEvents';
 import { ParentScrollContainer, RemixIcon } from '../components/general';
@@ -21,7 +21,7 @@ export default function EventScreen() {
 			<IconButton
 				icon={<RemixIcon name="arrow-left-line" />}
 				zIndex={1}
-				onPress={() => alert('back')}
+				onPress={() => Alert.alert('back')}
 				variant="solid"
 				position="absolute"
 				top="10"

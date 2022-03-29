@@ -1,6 +1,7 @@
 import { Box, HStack, ScrollView, useTheme, VStack } from 'native-base';
 import RemixIcon from 'react-native-remix-icon';
 import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {
 	Header,
 	ParentScrollContainer,
@@ -28,12 +29,14 @@ function EventCard({
 	isOldCard = false,
 }) {
 	const { colors } = useTheme();
+	const navigation = useNavigation();
 	return (
 		<TouchableOpacity
 			activeOpacity={isOldCard ? 0.1 : 0.8}
 			style={{
 				opacity: isOldCard ? 0.2 : 1,
 			}}
+			onPress={() => navigation.navigate('Event')}
 		>
 			<SquircleCard>
 				<HStack space="4">
