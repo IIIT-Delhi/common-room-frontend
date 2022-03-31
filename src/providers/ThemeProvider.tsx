@@ -1,5 +1,7 @@
 import { useFonts } from 'expo-font';
-
+import { extendTheme, NativeBaseProvider } from 'native-base';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
 	Outfit_100Thin,
 	Outfit_200ExtraLight,
@@ -11,7 +13,6 @@ import {
 	Outfit_800ExtraBold,
 	Outfit_900Black,
 } from '@expo-google-fonts/outfit';
-import { extendTheme, NativeBaseProvider } from 'native-base';
 import AppLoading from 'expo-app-loading';
 
 const fontConfig = {
@@ -160,6 +161,14 @@ declare module 'native-base' {
 	interface ICustomTheme extends CustomThemeType {}
 }
 
+const navigationTheme = {
+	...DarkTheme,
+	colors: {
+		...DarkTheme.colors,
+		background: '#111111',
+	},
+};
+
 export default function ThemeProvider({ children }: any) {
 	const [fontsLoaded] = useFonts({
 		Outfit_100Thin,
@@ -173,7 +182,13 @@ export default function ThemeProvider({ children }: any) {
 		Outfit_900Black,
 	});
 	return fontsLoaded ? (
-		<NativeBaseProvider theme={theme}>{children}</NativeBaseProvider>
+		<NativeBaseProvider theme={theme}>
+			<SafeAreaProvider>
+				<NavigationContainer theme={navigationTheme}>
+					{children}
+				</NavigationContainer>
+			</SafeAreaProvider>
+		</NativeBaseProvider>
 	) : (
 		<AppLoading />
 	);

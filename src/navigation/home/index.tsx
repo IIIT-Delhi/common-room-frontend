@@ -5,12 +5,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RemixIcon } from '../../components/general';
 import {
 	AccountScreen,
-	FeedScreen,
 	NotificationsScreen,
 	ExploreScreen,
 } from '../../screens';
+import FeedStack from './feed';
+import type HomeBottomTabsParamList from './types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<HomeBottomTabsParamList>();
 
 function BottomTabs() {
 	const { colors } = useTheme();
@@ -30,7 +31,7 @@ function BottomTabs() {
 				},
 				tabBarIcon: ({ focused }) => {
 					const icons: { [key: string]: string } = {
-						Feed: 'home-2',
+						Home: 'home-2',
 						Notifications: 'notification-2',
 						Explore: 'search-2',
 						Account: 'account-circle',
@@ -49,7 +50,8 @@ function BottomTabs() {
 				tabBarShowLabel: false,
 			})}
 		>
-			<Tab.Screen name="Feed" component={FeedScreen} />
+			<Tab.Screen name="Home" component={FeedStack} />
+			{/* <Tab.Screen name="Feed" component={FeedScreen} /> */}
 			<Tab.Screen name="Notifications" component={NotificationsScreen} />
 			<Tab.Screen name="Explore" component={ExploreScreen} />
 			<Tab.Screen name="Account" component={AccountScreen} />

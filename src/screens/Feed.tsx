@@ -1,7 +1,8 @@
-import { Box, HStack, ScrollView, useTheme, VStack } from 'native-base';
+import { Box, FlatList, HStack, useTheme, VStack } from 'native-base';
 import RemixIcon from 'react-native-remix-icon';
-import { TouchableOpacity } from 'react-native';
+import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
 	Header,
 	ParentScrollContainer,
@@ -11,6 +12,7 @@ import { Heading4 } from '../components/typography';
 import { SubHeading2 } from '../components/typography/Heading';
 import clubImage from '../assets/dummyClubEvents';
 import SquircleCard from '../components/general/SquircleCard';
+import FeedStackParamsList from '../navigation/home/feed/types';
 
 function EFYCard({ src = clubImage.WASD }) {
 	return (
@@ -29,14 +31,17 @@ function EventCard({
 	isOldCard = false,
 }) {
 	const { colors } = useTheme();
-	const navigation = useNavigation();
+	const navigation =
+		useNavigation<
+			NativeStackNavigationProp<FeedStackParamsList, 'Event'>
+		>();
 	return (
 		<TouchableOpacity
 			activeOpacity={isOldCard ? 0.1 : 0.8}
 			style={{
 				opacity: isOldCard ? 0.2 : 1,
 			}}
-			onPress={() => navigation.navigate('Event')}
+			onPress={() => navigation.navigate('Event', { id: '1' })}
 		>
 			<SquircleCard>
 				<HStack space="4">
@@ -149,16 +154,33 @@ function FeedbackFeed() {
 		</VStack>
 	);
 }
+
+function Seperator() {
+	return <Box />;
+}
+
 function EventsForYouFeed() {
+	type EventDataType = { id: string; image: any };
+	const events: EventDataType[] = [
+		{ id: '1', image: clubImage.valorant },
+		{ id: '2', image: clubImage.alumni },
+		{ id: '3', image: clubImage.byldAPI },
+	];
+	const renderItem: ListRenderItem<EventDataType> = ({ item }) => (
+		<EFYCard src={item.image} />
+	);
+
 	return (
-		<ScrollView horizontal mt="4" showsHorizontalScrollIndicator={false}>
-			<HStack space="4" pl="4">
-				<EFYCard src={clubImage.valorant} />
-				<EFYCard src={clubImage.alumni} />
-				<EFYCard src={clubImage.byldAPI} />
-				<Box />
-			</HStack>
-		</ScrollView>
+		<FlatList
+			data={events}
+			renderItem={renderItem}
+			keyExtractor={(item) => item.id}
+			ItemSeparatorComponent={Seperator}
+			horizontal
+			showsHorizontalScrollIndicator={false}
+			mt="4"
+			_contentContainerStyle={{ pl: '4' }}
+		/>
 	);
 }
 function FeedStream() {

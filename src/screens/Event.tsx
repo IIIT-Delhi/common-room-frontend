@@ -1,7 +1,15 @@
-import { Box, Button, HStack, IconButton, Image, VStack } from 'native-base';
+import {
+	Box,
+	Button,
+	HStack,
+	IconButton,
+	Image,
+	View,
+	VStack,
+} from 'native-base';
 import { useState } from 'react';
-import { Alert, Dimensions } from 'react-native';
-
+import { Dimensions } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import clubImage from '../assets/dummyClubEvents';
 import { ParentScrollContainer, RemixIcon } from '../components/general';
 import {
@@ -12,22 +20,27 @@ import {
 	SubHeading1,
 	SubHeading2,
 } from '../components/typography';
+import FeedStackParamsList from '../navigation/home/feed/types';
 
-export default function EventScreen() {
+export default function EventScreen({
+	navigation,
+	route,
+}: NativeStackScreenProps<FeedStackParamsList, 'Event'>) {
 	const [isAttending, setIsAttending] = useState(false);
 	const windowWidth = Dimensions.get('window').width;
+	const { id } = route.params;
+	console.log('id', id);
 	return (
-		<>
+		<View height="100%">
 			<IconButton
 				icon={<RemixIcon name="arrow-left-line" />}
 				zIndex={1}
-				onPress={() => Alert.alert('back')}
+				onPress={() => navigation.goBack()}
 				variant="solid"
 				position="absolute"
 				top="10"
 				left="4"
 				_icon={{ color: 'white', size: 7 }}
-				// color="white"
 				colorScheme="bg"
 				backgroundColor="#00000066"
 			/>
@@ -166,6 +179,6 @@ export default function EventScreen() {
 					</VStack>
 				</VStack>
 			</ParentScrollContainer>
-		</>
+		</View>
 	);
 }
