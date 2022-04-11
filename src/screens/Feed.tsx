@@ -1,63 +1,80 @@
-import { Box, FlatList, HStack, useTheme, VStack } from 'native-base';
-import RemixIcon from 'react-native-remix-icon';
+import { FlatList, HStack, Image, Text, VStack } from 'native-base';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { isToday, format as formatDate, parseISO, isThisWeek } from 'date-fns';
+import { partition } from 'lodash';
+import { useQuery } from 'urql';
 import {
 	Header,
+	Loading,
 	ParentScrollContainer,
+	Spacer,
 	SquircleImage,
+	RemixIcon,
 } from '../components/general';
 import { Heading4 } from '../components/typography';
 import { SubHeading2 } from '../components/typography/Heading';
 import clubImage from '../assets/dummyClubEvents';
 import SquircleCard from '../components/general/SquircleCard';
 import FeedStackParamsList from '../navigation/home/feed/types';
+import { FeedEventsDocument, FeedEventsQuery } from '../generated/graphql';
 
-function EFYCard({ src = clubImage.WASD }) {
+function EventForYouCard({ image = clubImage.WASD }) {
 	return (
 		<TouchableOpacity activeOpacity={0.8}>
-			<SquircleImage height={225} width={225} src={src} />
+			<SquircleImage height={225} width={225} src={image} />
 		</TouchableOpacity>
 	);
 }
 
+type EventCardProps = {
+	id: string;
+	name: string;
+	clubs: string[];
+	attendingCount: number | string;
+	image: string | { uri: string };
+	dateTime: string | Date;
+	isOldCard?: boolean;
+};
+
 function EventCard({
-	src = clubImage.parodyNight,
+	id = 'event-0',
+	image = clubImage.parodyNight,
 	attendingCount = 21,
 	dateTime = '21 Feb, 1PM',
-	eventName = 'Parody Night',
-	clubName = 'Audiobytes',
+	name = 'Parody Night',
+	clubs = ['Audiobytes'],
 	isOldCard = false,
-}) {
-	const { colors } = useTheme();
+}: EventCardProps) {
 	const navigation =
 		useNavigation<
 			NativeStackNavigationProp<FeedStackParamsList, 'Event'>
 		>();
+	console.log('clibs', clubs);
 	return (
 		<TouchableOpacity
 			activeOpacity={isOldCard ? 0.1 : 0.8}
 			style={{
 				opacity: isOldCard ? 0.2 : 1,
 			}}
-			onPress={() => navigation.navigate('Event', { id: '1' })}
+			onPress={() => navigation.navigate('Event', { id })}
 		>
 			<SquircleCard>
 				<HStack space="4">
 					<SquircleImage
 						height={115}
 						width={115}
-						src={src}
+						src={image}
 						flex="1"
 					/>
 					<VStack space="3" flex="9">
 						<VStack space="1">
 							<Heading4 numberOfLines={2} ellipsizeMode="tail">
-								{eventName}
+								{name}
 							</Heading4>
 							<SubHeading2 color="subtle.500">
-								by {clubName}
+								by {clubs.join(', ')}
 							</SubHeading2>
 						</VStack>
 						<HStack space="3">
@@ -68,8 +85,7 @@ function EventCard({
 							>
 								<RemixIcon
 									size={16}
-									name="ri-account-circle-fill"
-									color={colors.primary['500']}
+									name="account-circle-fill"
 								/>
 								<SubHeading2 color="primary.500">
 									{attendingCount}
@@ -80,11 +96,7 @@ function EventCard({
 								justifyContent="center"
 								alignItems="center"
 							>
-								<RemixIcon
-									size={16}
-									name="ri-calendar-fill"
-									color={colors.primary['500']}
-								/>
+								<RemixIcon size={16} name="calendar-fill" />
 								<SubHeading2 color="primary.500">
 									{dateTime}
 								</SubHeading2>
@@ -93,70 +105,65 @@ function EventCard({
 					</VStack>
 				</HStack>
 			</SquircleCard>
+			<Image source={clubImage.parodyNight} />
 		</TouchableOpacity>
 	);
 }
-function TodayFeed() {
-	return (
-		<VStack mt="4" space="3">
-			<EventCard src={clubImage.parodyNight} />
-			<EventCard
-				src={clubImage.WASD}
-				attendingCount={25}
-				dateTime="21 Feb, 5PM"
-				eventName="W.A.S.D Elements Game Jam"
-				clubName="DesignHub"
-			/>
-		</VStack>
-	);
-}
-function ThisWeekFeed() {
-	return (
-		<VStack mt="4" space="3">
-			<EventCard
-				src={clubImage.placementPrep}
-				attendingCount={25}
-				dateTime="27 Feb, 5PM"
-				eventName="Placement Preparation Checker"
-				clubName="Biobytes"
-			/>
 
-			<EventCard
-				src={clubImage.micDrop}
-				attendingCount={25}
-				dateTime="27 Feb, 5PM"
-				eventName="How you doin?"
-				clubName="MicDrop"
-			/>
-		</VStack>
+function EventList({ events }: { events: FeedEventsQuery['events'] }) {
+	const data: EventCardProps[] = events.map((event) => {
+		const parsedDate = parseISO(event.eventStartDate);
+		const showDate = !isToday(parsedDate);
+		return {
+			id: event.id,
+			dateTime: formatDate(
+				parseISO(event.eventStartDate),
+				showDate ? 'dd MMM, h:mm a' : 'h:mm a',
+			),
+			image: { uri: event.image },
+			name: event.name,
+			clubs: event.clubs.map((club) => club.name),
+			attendingCount: event.rsvpEvent.length,
+		};
+	});
+	const renderItem: ListRenderItem<EventCardProps> = ({ item }) => (
+		<EventCard {...item} />
+	);
+	return (
+		// <VStack mt="4" space="3">
+		// 	<EventCard src={clubImage.parodyNight} />
+		// 	<EventCard
+		// 		src={clubImage.WASD}
+		// 		attendingCount={25}
+		// 		dateTime="21 Feb, 5PM"
+		// 		eventName="W.A.S.D Elements Game Jam"
+		// 		clubName="DesignHub"
+		// 	/>
+		// </VStack>
+		<FlatList
+			data={data}
+			renderItem={renderItem}
+			ListEmptyComponent={<Text>No events during this time 😴</Text>}
+			ItemSeparatorComponent={Spacer.Vertical}
+			_contentContainerStyle={{ mt: '4' }}
+		/>
 	);
 }
+
 function FeedbackFeed() {
 	return (
 		<VStack mt="4" space="3">
 			<EventCard
-				src={clubImage.roboMaze}
+				id="event-2"
+				image={clubImage.micDrop}
 				attendingCount={25}
 				dateTime="27 Feb, 5PM"
-				eventName="Maze Coverage and Basics of Graphs"
-				clubName="Cyborg"
-				isOldCard
-			/>
-
-			<EventCard
-				src={clubImage.meme}
-				attendingCount={25}
-				dateTime="27 Feb, 5PM"
-				eventName="This is a meme event to check long titles"
-				clubName="DesignHub"
+				name="How you doin?"
+				clubs={['MicDrop']}
 				isOldCard
 			/>
 		</VStack>
 	);
-}
-
-function Seperator() {
-	return <Box />;
 }
 
 function EventsForYouFeed() {
@@ -167,7 +174,7 @@ function EventsForYouFeed() {
 		{ id: '3', image: clubImage.byldAPI },
 	];
 	const renderItem: ListRenderItem<EventDataType> = ({ item }) => (
-		<EFYCard src={item.image} />
+		<EventForYouCard image={item.image} />
 	);
 
 	return (
@@ -175,15 +182,29 @@ function EventsForYouFeed() {
 			data={events}
 			renderItem={renderItem}
 			keyExtractor={(item) => item.id}
-			ItemSeparatorComponent={Seperator}
+			ItemSeparatorComponent={Spacer.Horizontal}
 			horizontal
 			showsHorizontalScrollIndicator={false}
 			mt="4"
-			_contentContainerStyle={{ pl: '4' }}
+			_contentContainerStyle={{ px: '4' }}
 		/>
 	);
 }
 function FeedStream() {
+	const [{ data, fetching }] = useQuery({ query: FeedEventsDocument });
+
+	if (fetching) return <Loading />;
+
+	const { events } = data || {};
+
+	const [todayEvents, otherEvents] = partition(events, (event) =>
+		isToday(parseISO(event.eventStartDate)),
+	);
+
+	const thisWeekEvents = otherEvents.filter((event) =>
+		isThisWeek(parseISO(event.eventStartDate)),
+	);
+
 	return (
 		<VStack mt="6">
 			{/* ====================1==================== */}
@@ -192,10 +213,10 @@ function FeedStream() {
 			{/* =====================2=================== */}
 			<VStack mx="4">
 				<Heading4 mt="8">Today 💃</Heading4>
-				<TodayFeed />
+				<EventList events={todayEvents} />
 				{/* =====================3=================== */}
 				<Heading4 mt="8">Happening This Week &nbsp;&nbsp;📅</Heading4>
-				<ThisWeekFeed />
+				<EventList events={thisWeekEvents} />
 				{/* =====================4=================== */}
 				<Heading4 mt="8">Leave Feedback &nbsp;&nbsp;💬</Heading4>
 				<FeedbackFeed />

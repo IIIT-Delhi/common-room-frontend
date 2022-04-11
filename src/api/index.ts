@@ -12,7 +12,7 @@ instance.interceptors.request.use(
 			// eslint-disable-next-line no-param-reassign
 			config.headers = {
 				...config.headers,
-				Authorization: `Bearer ${token}`,
+				Authorization: `${token}`,
 			};
 		}
 		return config;

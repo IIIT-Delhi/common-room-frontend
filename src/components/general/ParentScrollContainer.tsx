@@ -1,5 +1,7 @@
 import { Box, ScrollView, StatusBar, useTheme } from 'native-base';
+import { useState } from 'react';
 import { RefreshControl, ScrollViewProps } from 'react-native';
+import { useQueryClient } from 'react-query';
 
 type ParentScrollContainerProps = ScrollViewProps & {
 	noHorizontalPadding?: boolean;
@@ -14,7 +16,14 @@ function ParentScrollContainer({
 	...props
 }: ParentScrollContainerProps) {
 	const { colors } = useTheme();
-	const refreshing = false;
+
+	const [refreshing, setRefreshing] = useState(false);
+	const queryClient = useQueryClient();
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await queryClient.invalidateQueries();
+		setRefreshing(false);
+	};
 
 	return (
 		<Box flex="1">
@@ -36,7 +45,7 @@ function ParentScrollContainer({
 				refreshControl={
 					<RefreshControl
 						refreshing={refreshing}
-						onRefresh={() => null}
+						onRefresh={onRefresh}
 					/>
 				}
 			>

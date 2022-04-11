@@ -1,0 +1,38 @@
+query feedEvents {
+	events {
+		id
+		name
+		image
+		eventStartDate
+		rsvpEvent {
+			user {
+				email
+			}
+		}
+		clubs {
+			id
+			name
+		}
+	}
+}
+
+query event($where: EventWhereUniqueInput!) {
+	event(where: $where) {
+		id
+		name
+		image
+		description
+		eventStartDate
+		venue
+		rsvpEvent {
+			user {
+				email
+			}
+		}
+		link
+		clubs {
+			id
+			name
+		}
+	}
+}

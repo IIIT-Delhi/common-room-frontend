@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import {
 	useQuery,
 	useMutation,
@@ -7,8 +8,20 @@ import {
 } from 'react-query';
 import axios from '../../api';
 
-function useGetData(key: QueryKey, gql: string, config: UseQueryOptions) {
-	return useQuery(
+function useGetData(
+	key: QueryKey,
+	gql: string,
+	config: UseQueryOptions = {
+		onError: (error: any) => {
+			Alert.alert(
+				'❌ Error',
+				`There was an error fetching data: ${error.message}`,
+			);
+			console.log(error);
+		},
+	},
+) {
+	return useQuery<any, any, any>(
 		key,
 		async () => {
 			const { data } = await axios.post('/graphql', { query: gql });
@@ -18,18 +31,15 @@ function useGetData(key: QueryKey, gql: string, config: UseQueryOptions) {
 	);
 }
 
-function usePostData(key: QueryKey, gql: string, config: UseMutationOptions) {
-	return useMutation(
-		key,
-		async (variables: any) => {
-			const { data } = await axios.post('/graphql', {
+function usePostData(gql: string, config: UseMutationOptions = {}) {
+	const mutationFn = (variables: any) =>
+		axios
+			.post('/graphql', {
 				query: gql,
 				variables,
-			});
-			return data;
-		},
-		config,
-	);
+			})
+			.then((res) => res.data);
+	return useMutation<any, any, any>(mutationFn, config);
 }
 
 export { useGetData, usePostData };

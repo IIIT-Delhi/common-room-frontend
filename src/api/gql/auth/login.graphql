@@ -1,0 +1,10 @@
+mutation login($token: String!) {
+	login(token: $token) {
+		user {
+			jwtToken
+			name
+			email
+			picture
+		}
+	}
+}
