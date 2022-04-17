@@ -1,0 +1,12 @@
+query notifications {
+	notifications {
+		id
+		message
+		updatedAt
+		createdBy {
+			id
+			name
+			image
+		}
+	}
+}

@@ -3,6 +3,9 @@ import { getToken, setToken, clearToken } from '../utils';
 
 type AuthData = {
 	token: string | null | undefined;
+	name?: string | null | undefined;
+	email?: string | null | undefined;
+	picture?: any;
 };
 
 type ReducerState = {
@@ -11,7 +14,7 @@ type ReducerState = {
 };
 
 type AuthContextData = ReducerState & {
-	signIn: (token: string) => void;
+	signIn: (authData: AuthData) => void;
 	signOut: () => void;
 };
 
@@ -55,9 +58,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 		() => ({
 			authData: { ...state.authData },
 			isLoading: state.isLoading,
-			signIn: (token: string) => {
+			signIn: ({ token, email }: AuthData) => {
+				if (!token) return;
+				console.log('token', token);
 				setToken(token);
-				dispatch({ type: 'SIGN_IN', payload: { token } });
+				dispatch({ type: 'SIGN_IN', payload: { token, email } });
 			},
 			signOut: () => {
 				clearToken();

@@ -18,11 +18,29 @@ import { SubHeading2 } from '../components/typography/Heading';
 import clubImage from '../assets/dummyClubEvents';
 import SquircleCard from '../components/general/SquircleCard';
 import FeedStackParamsList from '../navigation/home/feed/types';
-import { FeedEventsDocument, FeedEventsQuery } from '../generated/graphql';
+import {
+	FeedEventsDocument,
+	FeedEventsQuery,
+	EventsForYouDocument,
+} from '../generated/graphql';
+import { getEventsForYouVariable } from '../api/gql/events';
+import { useAuth } from '../hooks';
 
-function EventForYouCard({ image = clubImage.WASD }) {
+type EventForYouCardProps = {
+	id: string;
+	image: string | { uri: string };
+};
+
+function EventForYouCard({ id, image }: EventForYouCardProps) {
+	const navigation =
+		useNavigation<
+			NativeStackNavigationProp<FeedStackParamsList, 'Event'>
+		>();
 	return (
-		<TouchableOpacity activeOpacity={0.8}>
+		<TouchableOpacity
+			activeOpacity={0.8}
+			onPress={() => navigation.navigate('Event', { id })}
+		>
 			<SquircleImage height={225} width={225} src={image} />
 		</TouchableOpacity>
 	);
@@ -51,7 +69,6 @@ function EventCard({
 		useNavigation<
 			NativeStackNavigationProp<FeedStackParamsList, 'Event'>
 		>();
-	console.log('clibs', clubs);
 	return (
 		<TouchableOpacity
 			activeOpacity={isOldCard ? 0.1 : 0.8}
@@ -84,7 +101,8 @@ function EventCard({
 								alignItems="center"
 							>
 								<RemixIcon
-									size={16}
+									size={5}
+									color="primary.500"
 									name="account-circle-fill"
 								/>
 								<SubHeading2 color="primary.500">
@@ -96,7 +114,11 @@ function EventCard({
 								justifyContent="center"
 								alignItems="center"
 							>
-								<RemixIcon size={16} name="calendar-fill" />
+								<RemixIcon
+									size={5}
+									color="primary.500"
+									name="calendar-fill"
+								/>
 								<SubHeading2 color="primary.500">
 									{dateTime}
 								</SubHeading2>
@@ -167,19 +189,28 @@ function FeedbackFeed() {
 }
 
 function EventsForYouFeed() {
-	type EventDataType = { id: string; image: any };
-	const events: EventDataType[] = [
-		{ id: '1', image: clubImage.valorant },
-		{ id: '2', image: clubImage.alumni },
-		{ id: '3', image: clubImage.byldAPI },
-	];
-	const renderItem: ListRenderItem<EventDataType> = ({ item }) => (
-		<EventForYouCard image={item.image} />
+	const auth = useAuth();
+
+	const [{ data, fetching }] = useQuery({
+		query: EventsForYouDocument,
+		variables: getEventsForYouVariable({
+			email: auth.authData.email ?? '',
+		}),
+	});
+	if (fetching) return <Loading />;
+	console.log('data', data);
+	const eventData = data?.events.map((event) => ({
+		id: event.id,
+		image: { uri: event.image },
+	}));
+
+	const renderItem: ListRenderItem<EventForYouCardProps> = ({ item }) => (
+		<EventForYouCard id={item.id} image={item.image} />
 	);
 
 	return (
 		<FlatList
-			data={events}
+			data={eventData}
 			renderItem={renderItem}
 			keyExtractor={(item) => item.id}
 			ItemSeparatorComponent={Spacer.Horizontal}
@@ -187,6 +218,12 @@ function EventsForYouFeed() {
 			showsHorizontalScrollIndicator={false}
 			mt="4"
 			_contentContainerStyle={{ px: '4' }}
+			ListEmptyComponent={
+				<Text>
+					No events for you right now 😓{'\n'}
+					Try adding more interests ✨
+				</Text>
+			}
 		/>
 	);
 }

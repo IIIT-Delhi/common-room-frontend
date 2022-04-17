@@ -14,7 +14,12 @@ export default function LoginScreen() {
 
 	useEffect(() => {
 		if (data) {
-			signIn(data.login.user.jwtToken ?? '');
+			const authData = data.login.user;
+			signIn({
+				token: authData.jwtToken,
+				email: authData.email,
+				name: authData.name,
+			});
 		}
 		if (error) {
 			Alert.alert(
@@ -26,6 +31,7 @@ export default function LoginScreen() {
 
 	useEffect(() => {
 		const googleSignIn = async () => {
+			if (!response) return;
 			if (response?.type === 'success') {
 				const { id_token: idToken } = response.params;
 				const userToken = await getUserIdToken(idToken);

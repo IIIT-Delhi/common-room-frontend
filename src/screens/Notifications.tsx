@@ -1,31 +1,53 @@
-import { Box, HStack, VStack } from 'native-base';
-
-import { TouchableOpacity } from 'react-native';
-import clubImage from '../assets/dummyClubEvents';
+import { Box, FlatList, HStack } from 'native-base';
+import { useQuery } from 'urql';
+import { ListRenderItem, TouchableOpacity } from 'react-native';
+import { format, parseISO } from 'date-fns';
 import {
 	Header,
 	ParentScrollContainer,
 	SquircleImage,
+	SquircleCard,
+	Loading,
+	Spacer,
 } from '../components/general';
-import SquircleCard from '../components/general/SquircleCard';
 import { Body1, Body2, Heading4 } from '../components/typography';
+import {
+	NotificationsDocument,
+	NotificationsQuery,
+} from '../generated/graphql';
 
-function NotificationCard({ clubImg, description, time }: any) {
+type NotificationCardProps = {
+	id: string;
+	message: string;
+	timestamp: string | Date;
+	image: string | { uri: string };
+};
+
+function NotificationCard({
+	id,
+	message,
+	timestamp,
+	image,
+}: NotificationCardProps) {
+	const notifImage = typeof image === 'string' ? { uri: image } : image;
 	return (
-		<TouchableOpacity activeOpacity={0.8}>
+		<TouchableOpacity
+			activeOpacity={0.8}
+			onPress={() => console.log('notif id', id)}
+		>
 			<SquircleCard>
 				<HStack justifyContent="space-between">
 					<HStack space="4" flex="8">
 						<SquircleImage
 							height={50}
 							width={50}
-							src={clubImg}
+							src={notifImage}
 							flex="1"
 						/>
-						<Body1 flex="5">{description}</Body1>
+						<Body1 flex="5">{message}</Body1>
 					</HStack>
-					<Body2 flex="1" textAlign="right">
-						{time}
+					<Body2 flex="2" textAlign="right">
+						{timestamp}
 					</Body2>
 				</HStack>
 			</SquircleCard>
@@ -33,6 +55,30 @@ function NotificationCard({ clubImg, description, time }: any) {
 	);
 }
 export default function NotificationsScreen() {
+	const [{ data, fetching }] = useQuery({ query: NotificationsDocument });
+	if (fetching) return <Loading />;
+	const { notifications } = data || {};
+
+	const renderNotifs: ListRenderItem<
+		NotificationsQuery['notifications'][0]
+	> = ({ item }) => {
+		const {
+			id,
+			message,
+			updatedAt,
+			createdBy: { image },
+		} = item;
+		const timestamp = format(parseISO(updatedAt), 'MMM dd, hh:mm a');
+		return (
+			<NotificationCard
+				id={id}
+				message={message}
+				timestamp={timestamp}
+				image={image}
+			/>
+		);
+	};
+
 	return (
 		<ParentScrollContainer noHorizontalPadding stickyHeaderIndices={[0]}>
 			<Header title="Notifications" />
@@ -40,7 +86,13 @@ export default function NotificationsScreen() {
 				<Heading4>New</Heading4>
 				<Box h="3" w="3" borderRadius="full" bg="alert.500" />
 			</HStack>
-			<VStack mx="4" mt="4" space="3">
+			<FlatList
+				data={notifications}
+				renderItem={renderNotifs}
+				ItemSeparatorComponent={Spacer.Vertical}
+				_contentContainerStyle={{ m: '4' }}
+			/>
+			{/* <VStack mx="4" mt="4" space="3">
 				<NotificationCard
 					clubImg={clubImage.audiobytes}
 					description="Audiobytes just posted a new event Parody Night"
@@ -76,7 +128,7 @@ export default function NotificationsScreen() {
 					description="Cyborg just posted a new event ‘Maze Coverage and Basics of Graphs’"
 					time="4h"
 				/>
-			</VStack>
+			</VStack> */}
 		</ParentScrollContainer>
 	);
 }

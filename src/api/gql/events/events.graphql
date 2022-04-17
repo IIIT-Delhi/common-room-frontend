@@ -36,3 +36,21 @@ query event($where: EventWhereUniqueInput!) {
 		}
 	}
 }
+
+query eventsForYou($where: EventWhereInput) {
+	events {
+		id
+		name
+		image
+		eventStartDate
+		rsvpEvent {
+			user {
+				email
+			}
+		}
+		clubs {
+			id
+			name
+		}
+	}
+}

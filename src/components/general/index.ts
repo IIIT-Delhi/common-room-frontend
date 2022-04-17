@@ -4,3 +4,4 @@ export { default as RemixIcon } from './RemixIcon';
 export { default as Header } from './Header';
 export { default as Loading } from './Loading';
 export { default as Spacer } from './Spacer';
+export { default as SquircleCard } from './SquircleCard';

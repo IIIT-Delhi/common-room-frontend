@@ -1,7 +1,10 @@
 import { useFonts } from 'expo-font';
 import { extendTheme, NativeBaseProvider } from 'native-base';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+	SafeAreaProvider,
+	initialWindowMetrics,
+} from 'react-native-safe-area-context';
 import {
 	Outfit_100Thin,
 	Outfit_200ExtraLight,
@@ -182,13 +185,13 @@ export default function ThemeProvider({ children }: any) {
 		Outfit_900Black,
 	});
 	return fontsLoaded ? (
-		<NativeBaseProvider theme={theme}>
-			<SafeAreaProvider>
+		<SafeAreaProvider initialMetrics={initialWindowMetrics}>
+			<NativeBaseProvider theme={theme}>
 				<NavigationContainer theme={navigationTheme}>
 					{children}
 				</NavigationContainer>
-			</SafeAreaProvider>
-		</NativeBaseProvider>
+			</NativeBaseProvider>
+		</SafeAreaProvider>
 	) : (
 		<AppLoading />
 	);

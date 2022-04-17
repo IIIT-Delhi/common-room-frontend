@@ -2,6 +2,10 @@
 
 import { useTheme } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+	useSafeAreaFrame,
+	useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { RemixIcon } from '../../components/general';
 import {
 	AccountScreen,
@@ -15,14 +19,16 @@ const Tab = createBottomTabNavigator<HomeBottomTabsParamList>();
 
 function BottomTabs() {
 	const { colors } = useTheme();
+	const insets = useSafeAreaInsets();
+	const frame = useSafeAreaFrame();
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
 				headerShown: false,
 				tabBarStyle: {
 					backgroundColor: colors.bg['500'],
-					height: 65,
-					paddingBottom: 5,
+					height: frame.height * 0.08 + insets.bottom - 10,
+					paddingBottom: insets.bottom ? insets.bottom : 8,
 					paddingTop: 5,
 					elevation: 0, // remove shadow on Android
 					shadowOpacity: 0, // remove shadow on iOS

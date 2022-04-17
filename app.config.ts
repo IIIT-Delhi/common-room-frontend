@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export default {
 	expo: {
-		name: 'common-room',
+		name: 'Common Room',
 		slug: 'common-room',
 		scheme: 'common-room',
 		version: '1.0.0',
