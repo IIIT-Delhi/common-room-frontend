@@ -8,11 +8,11 @@ export default function App() {
 	return (
 		<ThemeProvider>
 			<QueryClientProvider client={queryClient}>
-				<UrqlProvider>
-					<AuthProvider>
+				<AuthProvider>
+					<UrqlProvider>
 						<MainNavigation />
-					</AuthProvider>
-				</UrqlProvider>
+					</UrqlProvider>
+				</AuthProvider>
 			</QueryClientProvider>
 		</ThemeProvider>
 	);

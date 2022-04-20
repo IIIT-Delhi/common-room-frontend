@@ -15,11 +15,15 @@ export default function LoginScreen() {
 	useEffect(() => {
 		if (data) {
 			const authData = data.login.user;
-			signIn({
-				token: authData.jwtToken,
-				email: authData.email,
-				name: authData.name,
-			});
+			if (!authData.jwtToken) {
+				Alert.alert('Error ❌', 'No JWT token found');
+			} else {
+				signIn({
+					token: authData.jwtToken,
+					email: authData.email,
+					name: authData.name,
+				});
+			}
 		}
 		if (error) {
 			Alert.alert(

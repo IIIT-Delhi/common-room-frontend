@@ -2,9 +2,9 @@ import { createContext, useEffect, useMemo, useReducer } from 'react';
 import { getToken, setToken, clearToken } from '../utils';
 
 type AuthData = {
-	token: string | null | undefined;
+	token: string | null;
+	email: string | null;
 	name?: string | null | undefined;
-	email?: string | null | undefined;
 	picture?: any;
 };
 
@@ -38,6 +38,9 @@ const reducer = (
 				...state,
 				authData: {
 					token: null,
+					email: null,
+					name: null,
+					picture: null,
 				},
 				isLoading: false,
 			};
@@ -50,6 +53,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	const initialState: ReducerState = {
 		authData: {
 			token: null,
+			email: null,
 		},
 		isLoading: true,
 	};
@@ -61,6 +65,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 			signIn: ({ token, email }: AuthData) => {
 				if (!token) return;
 				console.log('token', token);
+				console.log('email', email);
 				setToken(token);
 				dispatch({ type: 'SIGN_IN', payload: { token, email } });
 			},
@@ -74,7 +79,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		async function checkUser() {
 			const token = await getToken();
-			if (token) dispatch({ type: 'SIGN_IN', payload: { token } });
+			if (token)
+				dispatch({ type: 'SIGN_IN', payload: { token, email: null } });
 			else dispatch({ type: 'SIGN_OUT' });
 		}
 		checkUser();

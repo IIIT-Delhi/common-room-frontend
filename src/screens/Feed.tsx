@@ -2,7 +2,13 @@ import { FlatList, HStack, Image, Text, VStack } from 'native-base';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { isToday, format as formatDate, parseISO, isThisWeek } from 'date-fns';
+import {
+	isToday,
+	format as formatDate,
+	parseISO,
+	isThisWeek,
+	isAfter,
+} from 'date-fns';
 import { partition } from 'lodash';
 import { useQuery } from 'urql';
 import {
@@ -197,8 +203,9 @@ function EventsForYouFeed() {
 			email: auth.authData.email ?? '',
 		}),
 	});
+
 	if (fetching) return <Loading />;
-	console.log('data', data);
+
 	const eventData = data?.events.map((event) => ({
 		id: event.id,
 		image: { uri: event.image },
@@ -228,7 +235,9 @@ function EventsForYouFeed() {
 	);
 }
 function FeedStream() {
-	const [{ data, fetching }] = useQuery({ query: FeedEventsDocument });
+	const [{ data, fetching }] = useQuery({
+		query: FeedEventsDocument,
+	});
 
 	if (fetching) return <Loading />;
 
@@ -238,9 +247,12 @@ function FeedStream() {
 		isToday(parseISO(event.eventStartDate)),
 	);
 
-	const thisWeekEvents = otherEvents.filter((event) =>
-		isThisWeek(parseISO(event.eventStartDate)),
-	);
+	const thisWeekEvents = otherEvents.filter((event) => {
+		const eventStartDate = parseISO(event.eventStartDate);
+		return (
+			isThisWeek(eventStartDate) && isAfter(eventStartDate, new Date())
+		);
+	});
 
 	return (
 		<VStack mt="6">
@@ -255,11 +267,11 @@ function FeedStream() {
 				<Heading4 mt="8">Happening This Week &nbsp;&nbsp;📅</Heading4>
 				<EventList events={thisWeekEvents} />
 				{/* =====================4=================== */}
-				<Heading4 mt="8">Leave Feedback &nbsp;&nbsp;💬</Heading4>
+				{/* <Heading4 mt="8">Leave Feedback &nbsp;&nbsp;💬</Heading4>
 				<FeedbackFeed />
 				<SubHeading2 mt="6" color="body.500" m="auto">
 					older events
-				</SubHeading2>
+				</SubHeading2> */}
 			</VStack>
 		</VStack>
 	);

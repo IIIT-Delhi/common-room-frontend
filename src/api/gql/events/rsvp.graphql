@@ -1,0 +1,15 @@
+mutation rsvpEvent($data: RSVPEventCreateInput!) {
+	createRSVPEvent(data: $data) {
+		eventId
+		userEmail
+		createdAt
+	}
+}
+
+mutation unRSVPEvent($where: RSVPEventWhereUniqueInput!) {
+	deleteRSVPEvent(where: $where) {
+		eventId
+		userEmail
+		deletedAt
+	}
+}
