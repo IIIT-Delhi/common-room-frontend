@@ -78,7 +78,7 @@ export default function EventScreen({
 	const attendance = (rsvpEvent || []).length;
 
 	const isAttending = authData.email
-		? some(rsvpEvent, { user: { email: 'shashwat18097@iiitd.ac.in' } })
+		? some(rsvpEvent, { user: { email: authData.email } })
 		: false;
 
 	const handleRSVP = () => {
