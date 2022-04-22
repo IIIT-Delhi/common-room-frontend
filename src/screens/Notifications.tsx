@@ -1,5 +1,4 @@
 import { Box, FlatList, HStack } from 'native-base';
-import { useQuery } from 'urql';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { format, parseISO } from 'date-fns';
 import {
@@ -12,8 +11,8 @@ import {
 } from '../components/general';
 import { Body1, Body2, Heading4 } from '../components/typography';
 import {
-	NotificationsDocument,
 	NotificationsQuery,
+	useNotificationsQuery,
 } from '../generated/graphql';
 
 type NotificationCardProps = {
@@ -55,8 +54,9 @@ function NotificationCard({
 	);
 }
 export default function NotificationsScreen() {
-	const [{ data, fetching }] = useQuery({ query: NotificationsDocument });
-	if (fetching) return <Loading />;
+	const { data, isLoading } = useNotificationsQuery();
+
+	if (isLoading) return <Loading />;
 	const { notifications } = data || {};
 
 	const renderNotifs: ListRenderItem<

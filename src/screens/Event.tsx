@@ -9,9 +9,9 @@ import {
 } from 'native-base';
 import { Dimensions } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useMutation, useQuery } from 'urql';
 import { format, parseISO } from 'date-fns';
 import { some } from 'lodash';
+import { useQueryClient } from 'react-query';
 import clubImage from '../assets/dummyClubEvents';
 import {
 	Loading,
@@ -28,9 +28,9 @@ import {
 } from '../components/typography';
 import FeedStackParamsList from '../navigation/home/feed/types';
 import {
-	EventDocument,
-	UnRsvpEventDocument,
-	RsvpEventDocument,
+	useEventQuery,
+	useUnRsvpEventMutation,
+	useRsvpEventMutation,
 } from '../generated/graphql';
 import { useAuth } from '../hooks';
 
@@ -42,20 +42,27 @@ export default function EventScreen({
 
 	const { id } = route.params;
 	const { authData } = useAuth();
-	const [{ data, fetching }, fetchEvent] = useQuery({
-		query: EventDocument,
-		variables: {
-			where: {
-				id,
-			},
+
+	const queryClient = useQueryClient();
+
+	const { data, isLoading } = useEventQuery({
+		where: {
+			id,
 		},
 	});
-	const [{ fetching: isLoadingUnRSVP }, executeUnRSVPEvent] =
-		useMutation(UnRsvpEventDocument);
-	const [{ fetching: isLoadingRSVP }, executeRSVPEvent] =
-		useMutation(RsvpEventDocument);
 
-	if (fetching) return <Loading />;
+	const unRSVPToEvent = useUnRsvpEventMutation({
+		onSettled: () => {
+			queryClient.invalidateQueries('event');
+		},
+	});
+	const rsvpToEvent = useRsvpEventMutation({
+		onSettled: () => {
+			queryClient.invalidateQueries('event');
+		},
+	});
+
+	if (isLoading) return <Loading />;
 
 	const { event } = data || {};
 	const {
@@ -74,20 +81,16 @@ export default function EventScreen({
 		? some(rsvpEvent, { user: { email: 'shashwat18097@iiitd.ac.in' } })
 		: false;
 
-	const rsvpToEvent = async () => {
-		await executeRSVPEvent({
+	const handleRSVP = () => {
+		rsvpToEvent.mutate({
 			data: {
 				event: { connect: { id } },
-				user: { connect: { email: authData.email } },
+				user: { connect: { email: authData.email ?? '' } },
 			},
 		});
-		// console.log('rsvpToEvent', x);s
-		fetchEvent({
-			requestPolicy: 'cache-and-network',
-		});
 	};
-	const unRSVPEvent = async () => {
-		await executeUnRSVPEvent({
+	const handleUnRSVP = () => {
+		unRSVPToEvent.mutate({
 			where: {
 				eventId_userEmail: {
 					eventId: id,
@@ -95,15 +98,8 @@ export default function EventScreen({
 				},
 			},
 		});
-		// console.log('unRSVPEvent', y);
-		fetchEvent({
-			requestPolicy: 'cache-and-network',
-		});
 	};
-	// const rsvpToEvent = async () => {};
-	// const unRSVPEvent = async () => {};
-	// const isLoadingRSVP = false;
-	// const isLoadingUnRSVP = false;
+
 	return (
 		<View height="100%">
 			<IconButton
@@ -125,8 +121,8 @@ export default function EventScreen({
 						m="auto"
 						w="90%"
 						height="12"
-						isLoading={isLoadingRSVP}
-						onPress={rsvpToEvent}
+						isLoading={rsvpToEvent.isLoading}
+						onPress={handleRSVP}
 					>
 						I&apos;m Attending 🙋‍♀️
 					</Button>
@@ -161,11 +157,12 @@ export default function EventScreen({
 								</SubHeading1>
 								<SubHeading1
 									color="subtle.500"
-									onPress={
-										!isLoadingUnRSVP
-											? unRSVPEvent
-											: undefined
-									}
+									onPress={handleUnRSVP}
+									// onPress={
+									// 	!isLoadingUnRSVP
+									// 		? unRSVPEvent
+									// 		: undefined
+									// }
 								>
 									Cancel?
 								</SubHeading1>

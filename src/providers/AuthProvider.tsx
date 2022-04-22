@@ -1,5 +1,12 @@
 import { createContext, useEffect, useMemo, useReducer } from 'react';
-import { getToken, setToken, clearToken } from '../utils';
+import {
+	getToken,
+	setToken,
+	clearToken,
+	getEmail,
+	setEmail,
+	clearEmail,
+} from '../utils';
 
 type AuthData = {
 	token: string | null;
@@ -63,14 +70,16 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 			authData: { ...state.authData },
 			isLoading: state.isLoading,
 			signIn: ({ token, email }: AuthData) => {
-				if (!token) return;
+				if (!(token && email)) return;
 				console.log('token', token);
 				console.log('email', email);
 				setToken(token);
+				setEmail(email);
 				dispatch({ type: 'SIGN_IN', payload: { token, email } });
 			},
 			signOut: () => {
 				clearToken();
+				clearEmail();
 				dispatch({ type: 'SIGN_OUT' });
 			},
 		}),
@@ -79,8 +88,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		async function checkUser() {
 			const token = await getToken();
-			if (token)
-				dispatch({ type: 'SIGN_IN', payload: { token, email: null } });
+			const email = await getEmail();
+			if (token && email)
+				dispatch({ type: 'SIGN_IN', payload: { token, email } });
 			else dispatch({ type: 'SIGN_OUT' });
 		}
 		checkUser();

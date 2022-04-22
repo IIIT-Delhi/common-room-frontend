@@ -1,7 +1,8 @@
+/* eslint-disable import/prefer-default-export */
 import { InputMaybe, EventWhereInput, Exact } from '../../../generated/graphql';
 
 const getEventsForYouVariable = (input: {
-	email: String;
+	email: string;
 }):
 	| Exact<{
 			where?: InputMaybe<EventWhereInput> | undefined;

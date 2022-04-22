@@ -2,6 +2,7 @@ import { Box, ScrollView, StatusBar, useTheme } from 'native-base';
 import { useState } from 'react';
 import { RefreshControl, ScrollViewProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useQueryClient } from 'react-query';
 
 type ParentScrollContainerProps = ScrollViewProps & {
 	noHorizontalPadding?: boolean;
@@ -16,9 +17,11 @@ function ParentScrollContainer({
 	...props
 }: ParentScrollContainerProps) {
 	const { colors } = useTheme();
+	const queryClient = useQueryClient();
 	const [refreshing, setRefreshing] = useState(false);
-	const onRefresh = () => {
+	const onRefresh = async () => {
 		setRefreshing(true);
+		await queryClient.invalidateQueries();
 		setRefreshing(false);
 	};
 

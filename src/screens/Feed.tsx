@@ -10,7 +10,6 @@ import {
 	isAfter,
 } from 'date-fns';
 import { partition } from 'lodash';
-import { useQuery } from 'urql';
 import {
 	Header,
 	Loading,
@@ -25,9 +24,9 @@ import clubImage from '../assets/dummyClubEvents';
 import SquircleCard from '../components/general/SquircleCard';
 import FeedStackParamsList from '../navigation/home/feed/types';
 import {
-	FeedEventsDocument,
 	FeedEventsQuery,
-	EventsForYouDocument,
+	useFeedEventsQuery,
+	useEventsForYouQuery,
 } from '../generated/graphql';
 import { getEventsForYouVariable } from '../api/gql/events';
 import { useAuth } from '../hooks';
@@ -158,16 +157,6 @@ function EventList({ events }: { events: FeedEventsQuery['events'] }) {
 		<EventCard {...item} />
 	);
 	return (
-		// <VStack mt="4" space="3">
-		// 	<EventCard src={clubImage.parodyNight} />
-		// 	<EventCard
-		// 		src={clubImage.WASD}
-		// 		attendingCount={25}
-		// 		dateTime="21 Feb, 5PM"
-		// 		eventName="W.A.S.D Elements Game Jam"
-		// 		clubName="DesignHub"
-		// 	/>
-		// </VStack>
 		<FlatList
 			data={data}
 			renderItem={renderItem}
@@ -195,16 +184,26 @@ function FeedbackFeed() {
 }
 
 function EventsForYouFeed() {
-	const auth = useAuth();
+	const { authData } = useAuth();
 
-	const [{ data, fetching }] = useQuery({
-		query: EventsForYouDocument,
-		variables: getEventsForYouVariable({
-			email: auth.authData.email ?? '',
+	const { data, isLoading, error } = useEventsForYouQuery(
+		getEventsForYouVariable({
+			email: authData.email ?? '',
 		}),
-	});
+		{
+			retry: false,
+			refetchOnMount: false,
+		},
+	);
 
-	if (fetching) return <Loading />;
+	// console.log(
+	// 	'EventsForYouFeed',
+	// 	data,
+	// 	isLoading,
+	// 	JSON.stringify(error, null, 2),
+	// );
+
+	if (isLoading) return <Loading />;
 
 	const eventData = data?.events.map((event) => ({
 		id: event.id,
@@ -235,11 +234,9 @@ function EventsForYouFeed() {
 	);
 }
 function FeedStream() {
-	const [{ data, fetching }] = useQuery({
-		query: FeedEventsDocument,
-	});
+	const { data, isLoading } = useFeedEventsQuery();
 
-	if (fetching) return <Loading />;
+	if (isLoading) return <Loading />;
 
 	const { events } = data || {};
 

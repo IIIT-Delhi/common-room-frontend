@@ -32,6 +32,7 @@ export default {
 				backgroundColor: '#111111',
 			},
 			package: 'com.lemon8.commonroom',
+			googleServicesFile: './google-services.json',
 		},
 		web: {
 			favicon: './src/assets/favicon.png',

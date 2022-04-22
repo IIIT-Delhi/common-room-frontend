@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "407776071745",
+    "firebase_url": "https://common-room-1939e-default-rtdb.firebaseio.com",
+    "project_id": "common-room-1939e",
+    "storage_bucket": "common-room-1939e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407776071745:android:f091f8c23e415792fe76c0",
+        "android_client_info": {
+          "package_name": "com.lemon8.commonroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407776071745-q2dncci7kv03onfhhoc0to6nlkjb5858.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu0nB6RGIwOJtsiq1-tfmCc9fufTGK4q4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407776071745-q2dncci7kv03onfhhoc0to6nlkjb5858.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
