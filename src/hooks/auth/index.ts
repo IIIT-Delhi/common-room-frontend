@@ -6,5 +6,17 @@ export default function useAuth() {
 	if (context === undefined) {
 		throw new Error('useAuth must be used within an AuthProvider');
 	}
+
 	return context;
+}
+
+export function useAuthData() {
+	const { authData } = useAuth();
+	return {
+		id: authData.id ?? -1,
+		token: authData.token ?? '',
+		email: authData.email ?? '',
+		name: authData.name ?? '',
+		picture: authData.picture ?? '',
+	};
 }

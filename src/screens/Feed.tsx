@@ -1,6 +1,6 @@
 import { FlatList, HStack, Image, Text, VStack } from 'native-base';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
 	isToday,
@@ -32,7 +32,7 @@ import { getEventsForYouVariable } from '../api/gql/events';
 import { useAuth } from '../hooks';
 
 type EventForYouCardProps = {
-	id: string;
+	id: number;
 	image: string | { uri: string };
 };
 
@@ -52,7 +52,7 @@ function EventForYouCard({ id, image }: EventForYouCardProps) {
 }
 
 type EventCardProps = {
-	id: string;
+	id: number;
 	name: string;
 	clubs: string[];
 	attendingCount: number | string;
@@ -62,7 +62,7 @@ type EventCardProps = {
 };
 
 function EventCard({
-	id = 'event-0',
+	id = 511,
 	image = clubImage.parodyNight,
 	attendingCount = 21,
 	dateTime = '21 Feb, 1PM',
@@ -149,7 +149,7 @@ function EventList({ events }: { events: FeedEventsQuery['events'] }) {
 			),
 			image: { uri: event.image },
 			name: event.name,
-			clubs: event.clubs.map((club) => club.name),
+			clubs: event.clubEvents.map(({ club }) => club.name),
 			attendingCount: event.rsvpEvent.length,
 		};
 	});
@@ -171,7 +171,7 @@ function FeedbackFeed() {
 	return (
 		<VStack mt="4" space="3">
 			<EventCard
-				id="event-2"
+				id={512}
 				image={clubImage.micDrop}
 				attendingCount={25}
 				dateTime="27 Feb, 5PM"
@@ -186,7 +186,7 @@ function FeedbackFeed() {
 function EventsForYouFeed() {
 	const { authData } = useAuth();
 
-	const { data, isLoading, error } = useEventsForYouQuery(
+	const { data, isLoading } = useEventsForYouQuery(
 		getEventsForYouVariable({
 			email: authData.email ?? '',
 		}),
@@ -218,7 +218,7 @@ function EventsForYouFeed() {
 		<FlatList
 			data={eventData}
 			renderItem={renderItem}
-			keyExtractor={(item) => item.id}
+			keyExtractor={(item) => item.id.toString()}
 			ItemSeparatorComponent={Spacer.Horizontal}
 			horizontal
 			showsHorizontalScrollIndicator={false}
@@ -234,7 +234,10 @@ function EventsForYouFeed() {
 	);
 }
 function FeedStream() {
-	const { data, isLoading } = useFeedEventsQuery();
+	const { data, isLoading, error, refetch } = useFeedEventsQuery();
+	useFocusEffect(() => {
+		refetch();
+	});
 
 	if (isLoading) return <Loading />;
 
@@ -255,7 +258,7 @@ function FeedStream() {
 		<VStack mt="6">
 			{/* ====================1==================== */}
 			<Heading4 ml="4">Events for you &nbsp;⭐</Heading4>
-			<EventsForYouFeed />
+			{/* <EventsForYouFeed /> */}
 			{/* =====================2=================== */}
 			<VStack mx="4">
 				<Heading4 mt="8">Today 💃</Heading4>

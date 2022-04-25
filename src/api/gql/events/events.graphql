@@ -6,12 +6,15 @@ query feedEvents {
 		eventStartDate
 		rsvpEvent {
 			user {
+				id
 				email
 			}
 		}
-		clubs {
-			id
-			name
+		clubEvents {
+			club {
+				id
+				name
+			}
 		}
 	}
 }
@@ -26,13 +29,16 @@ query event($where: EventWhereUniqueInput!) {
 		venue
 		rsvpEvent {
 			user {
+				id
 				email
 			}
 		}
 		link
-		clubs {
-			id
-			name
+		clubEvents {
+			club {
+				id
+				name
+			}
 		}
 	}
 }
@@ -45,12 +51,15 @@ query eventsForYou($where: EventWhereInput) {
 		eventStartDate
 		rsvpEvent {
 			user {
+				id
 				email
 			}
 		}
-		clubs {
-			id
-			name
+		clubEvents {
+			club {
+				id
+				name
+			}
 		}
 	}
 }

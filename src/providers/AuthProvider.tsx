@@ -1,29 +1,7 @@
 import { createContext, useEffect, useMemo, useReducer } from 'react';
-import {
-	getToken,
-	setToken,
-	clearToken,
-	getEmail,
-	setEmail,
-	clearEmail,
-} from '../utils';
-
-type AuthData = {
-	token: string | null;
-	email: string | null;
-	name?: string | null | undefined;
-	picture?: any;
-};
-
-type ReducerState = {
-	authData: AuthData;
-	isLoading: boolean;
-};
-
-type AuthContextData = ReducerState & {
-	signIn: (authData: AuthData) => void;
-	signOut: () => void;
-};
+import { Alert } from 'react-native';
+import { setToken, getAuthData, setAuthData, clearAuthData } from '../utils';
+import { AuthData, AuthContextData, ReducerState } from './types';
 
 export const AuthContext = createContext<AuthContextData>(
 	{} as AuthContextData,
@@ -45,6 +23,7 @@ const reducer = (
 				...state,
 				authData: {
 					token: null,
+					id: null,
 					email: null,
 					name: null,
 					picture: null,
@@ -60,6 +39,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	const initialState: ReducerState = {
 		authData: {
 			token: null,
+			id: null,
 			email: null,
 		},
 		isLoading: true,
@@ -69,17 +49,17 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 		() => ({
 			authData: { ...state.authData },
 			isLoading: state.isLoading,
-			signIn: ({ token, email }: AuthData) => {
-				if (!(token && email)) return;
-				console.log('token', token);
-				console.log('email', email);
-				setToken(token);
-				setEmail(email);
-				dispatch({ type: 'SIGN_IN', payload: { token, email } });
+			signIn: (authData: AuthData) => {
+				if (!authData.token || !authData.id || !authData.email) {
+					Alert.alert('Error ❌', 'Invalid login credentials!');
+					return;
+				}
+				setToken(authData.token);
+				setAuthData(authData);
+				dispatch({ type: 'SIGN_IN', payload: authData });
 			},
 			signOut: () => {
-				clearToken();
-				clearEmail();
+				clearAuthData();
 				dispatch({ type: 'SIGN_OUT' });
 			},
 		}),
@@ -87,10 +67,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	);
 	useEffect(() => {
 		async function checkUser() {
-			const token = await getToken();
-			const email = await getEmail();
-			if (token && email)
-				dispatch({ type: 'SIGN_IN', payload: { token, email } });
+			const authData = await getAuthData();
+			console.log('checkUser', authData);
+			if (authData?.token && authData?.id && authData?.email)
+				dispatch({ type: 'SIGN_IN', payload: authData });
 			else dispatch({ type: 'SIGN_OUT' });
 		}
 		checkUser();

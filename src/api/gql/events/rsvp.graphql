@@ -1,7 +1,7 @@
 mutation rsvpEvent($data: RSVPEventCreateInput!) {
 	createRSVPEvent(data: $data) {
 		eventId
-		userEmail
+		userId
 		createdAt
 	}
 }
@@ -9,7 +9,7 @@ mutation rsvpEvent($data: RSVPEventCreateInput!) {
 mutation unRSVPEvent($where: RSVPEventWhereUniqueInput!) {
 	deleteRSVPEvent(where: $where) {
 		eventId
-		userEmail
+		userId
 		deletedAt
 	}
 }

@@ -1,5 +1,6 @@
 query userDetails {
 	me {
+		id
 		name
 		email
 		picture

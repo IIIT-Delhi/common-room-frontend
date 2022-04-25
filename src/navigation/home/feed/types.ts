@@ -1,7 +1,7 @@
 type FeedStackParamsList = {
 	Feed: undefined;
-	Event: { id: string };
-	Club: { id: string };
+	Event: { id: number };
+	Club: { id: number };
 };
 
 export default FeedStackParamsList;
