@@ -136,6 +136,7 @@ function EventCard({
 		</TouchableOpacity>
 	);
 }
+export { EventCard };
 
 function EventList({ events }: { events: FeedEventsQuery['events'] }) {
 	const data: EventCardProps[] = events.map((event) => {

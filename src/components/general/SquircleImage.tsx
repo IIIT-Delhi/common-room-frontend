@@ -2,7 +2,7 @@ import { Image } from 'native-base';
 import { SquircleView } from 'react-native-figma-squircle';
 import MaskedView from '@react-native-community/masked-view';
 
-function SquircleImage({ height, width, src }: any) {
+function SquircleImage({ height, width, src, props }: any) {
 	return (
 		<MaskedView
 			maskElement={
@@ -21,6 +21,7 @@ function SquircleImage({ height, width, src }: any) {
 				w={width}
 				h={height}
 				alt="Dummy Image"
+				{...props}
 			/>
 		</MaskedView>
 	);
