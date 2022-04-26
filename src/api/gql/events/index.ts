@@ -9,14 +9,26 @@ const getEventsForYouVariable = (input: {
 	  }>
 	| undefined => ({
 	where: {
-		clubs: {
+		clubEvents: {
 			some: {
-				tags: {
-					some: {
-						users: {
+				club: {
+					is: {
+						clubtags: {
 							some: {
-								email: {
-									equals: input.email,
+								tag: {
+									is: {
+										userTags: {
+											some: {
+												user: {
+													is: {
+														email: {
+															equals: input.email,
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},

@@ -32,7 +32,7 @@ import {
 	useUnRsvpEventMutation,
 	useRsvpEventMutation,
 } from '../generated/graphql';
-import { useAuth } from '../hooks';
+import { useAuthData } from '../hooks/auth';
 
 export default function EventScreen({
 	navigation,
@@ -41,8 +41,7 @@ export default function EventScreen({
 	const windowWidth = Dimensions.get('window').width;
 
 	const { id } = route.params;
-	const { authData } = useAuth();
-
+	const authData = useAuthData();
 	const queryClient = useQueryClient();
 
 	const { data, isLoading } = useEventQuery({
@@ -71,8 +70,9 @@ export default function EventScreen({
 		image,
 		eventStartDate,
 		venue,
-		clubs,
 		rsvpEvent,
+		clubEvents,
+		link,
 	} = event || {};
 	const date = parseISO(eventStartDate);
 	const attendance = (rsvpEvent || []).length;
@@ -85,16 +85,16 @@ export default function EventScreen({
 		rsvpToEvent.mutate({
 			data: {
 				event: { connect: { id } },
-				user: { connect: { email: authData.email ?? '' } },
+				user: { connect: { email: authData.email } },
 			},
 		});
 	};
 	const handleUnRSVP = () => {
 		unRSVPToEvent.mutate({
 			where: {
-				eventId_userEmail: {
+				eventId_userId: {
+					userId: authData.id,
 					eventId: id,
-					userEmail: authData.email ?? '',
 				},
 			},
 		});
@@ -141,7 +141,10 @@ export default function EventScreen({
 							color="subtle.500"
 							onPress={() => navigation.navigate('Club', { id })}
 						>
-							by {clubs}
+							by{' '}
+							{clubEvents
+								?.map(({ club }) => club.name)
+								.join(', ')}
 						</SubHeading1>
 					</VStack>
 					<VStack space="3">
@@ -195,7 +198,8 @@ export default function EventScreen({
 								w="48%"
 							>
 								<Heading3 color="primary.500">
-									{attendance} {isAttending ? '+ you' : ''}
+									{isAttending ? attendance - 1 : attendance}{' '}
+									{isAttending ? '+ you' : ''}
 								</Heading3>
 								<Heading5>Attending</Heading5>
 							</VStack>
@@ -219,8 +223,7 @@ export default function EventScreen({
 						<SubHeading1 color="primary.500">Links</SubHeading1>
 						{isAttending ? (
 							<HStack space="4">
-								<SubHeading2>Zoom</SubHeading2>
-								<SubHeading2>Discord</SubHeading2>
+								<SubHeading2>{link}</SubHeading2>
 							</HStack>
 						) : (
 							<Body2>

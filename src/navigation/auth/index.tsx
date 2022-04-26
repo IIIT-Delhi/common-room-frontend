@@ -14,14 +14,15 @@ export default function LoginScreen() {
 	const windowHeight = Dimensions.get('window').height;
 	const { isLoading, mutate: generateJWTToken } = useLoginMutation({
 		onSuccess: ({ login }) => {
-			const authData = login.user;
-			if (!authData.jwtToken) {
+			const { token, user } = login;
+			if (!token) {
 				Alert.alert('Error ❌', 'No JWT token found');
 			} else {
 				signIn({
-					token: authData.jwtToken,
-					email: authData.email,
-					name: authData.name,
+					token,
+					id: user.id,
+					email: user.email,
+					name: user.name,
 				});
 			}
 		},

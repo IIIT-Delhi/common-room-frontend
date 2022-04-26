@@ -2,7 +2,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import { getToken } from '../utils';
 
-const baseURL = Constants?.manifest?.extra?.API_URL;
+const baseURL = `${Constants?.manifest?.extra?.API_URL}graphql`;
 const instance = axios.create({ baseURL });
 
 instance.interceptors.request.use(
@@ -27,9 +27,9 @@ export function useAxios<TData, TVariables>(
 	variables?: TVariables,
 ): () => Promise<TData> {
 	return async () => {
-		const res = await instance('graphql', {
+		const res = await instance({
 			method: 'POST',
-			data: JSON.stringify({ query, variables }),
+			data: { query, variables },
 			headers: {
 				'Content-Type': 'application/json',
 			},

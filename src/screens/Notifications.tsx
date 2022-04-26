@@ -1,4 +1,4 @@
-import { Box, FlatList, HStack } from 'native-base';
+import { Box, FlatList, HStack, Text } from 'native-base';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { format, parseISO } from 'date-fns';
 import {
@@ -16,7 +16,7 @@ import {
 } from '../generated/graphql';
 
 type NotificationCardProps = {
-	id: string;
+	id: number;
 	message: string;
 	timestamp: string | Date;
 	image: string | { uri: string };
@@ -91,6 +91,7 @@ export default function NotificationsScreen() {
 				renderItem={renderNotifs}
 				ItemSeparatorComponent={Spacer.Vertical}
 				_contentContainerStyle={{ m: '4' }}
+				ListEmptyComponent={<Text>No new notifcations 🔕</Text>}
 			/>
 			{/* <VStack mx="4" mt="4" space="3">
 				<NotificationCard

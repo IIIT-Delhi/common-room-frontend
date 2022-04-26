@@ -1,9 +1,10 @@
 mutation login($token: String!) {
 	login(token: $token) {
+		token
 		user {
-			jwtToken
-			name
+			id
 			email
+			name
 			picture
 		}
 	}
