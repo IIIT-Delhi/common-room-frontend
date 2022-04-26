@@ -6,7 +6,7 @@ type BodyProps = ITextProps & {
 
 function Body1({ children, ...props }: BodyProps) {
 	return (
-		<Text {...props} fontSize="18" lineHeight="22" fontWeight="normal">
+		<Text fontSize="18" lineHeight="22" fontWeight="normal" {...props}>
 			{children}
 		</Text>
 	);
