@@ -6,6 +6,7 @@ import { ParentScrollContainer } from '../../components/general';
 import { Body1, Heading1, Heading5 } from '../../components/typography';
 import { useLoginMutation } from '../../generated/graphql';
 import { useAuth } from '../../hooks';
+import { InterestsScreen } from '../../screens';
 import { GoogleFirebase, getUserIdToken } from './firebase';
 
 export default function LoginScreen() {
