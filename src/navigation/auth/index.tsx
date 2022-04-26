@@ -1,17 +1,8 @@
-import {
-	Box,
-	Button,
-	Center,
-	HStack,
-	Image,
-	Text,
-	View,
-	VStack,
-} from 'native-base';
+import { Box, Button, Center, HStack, Image, VStack } from 'native-base';
 import { useEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Dimensions } from 'react-native';
 import { commonRoomLogo, google } from '../../assets';
-import { Header, ParentScrollContainer } from '../../components/general';
+import { ParentScrollContainer } from '../../components/general';
 import { Body1, Heading1, Heading5 } from '../../components/typography';
 import { useLoginMutation } from '../../generated/graphql';
 import { useAuth } from '../../hooks';
@@ -20,7 +11,7 @@ import { GoogleFirebase, getUserIdToken } from './firebase';
 export default function LoginScreen() {
 	const { signIn } = useAuth();
 	const [request, response, promptAsync] = GoogleFirebase();
-
+	const windowHeight = Dimensions.get('window').height;
 	const { isLoading, mutate: generateJWTToken } = useLoginMutation({
 		onSuccess: ({ login }) => {
 			const authData = login.user;
@@ -80,7 +71,7 @@ export default function LoginScreen() {
 				noHorizontalPadding
 				stickyHeaderIndices={[0]}
 			>
-				<Center p="4" mt="16">
+				<Center p="4" h={windowHeight - 100}>
 					<Image
 						source={commonRoomLogo}
 						h="32"
