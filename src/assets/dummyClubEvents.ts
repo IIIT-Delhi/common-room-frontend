@@ -38,6 +38,9 @@ const clubImage = {
 	designhub: {
 		uri: 'https://i.imgur.com/1Z6F9gx.png',
 	},
+	commonRoom: {
+		uri: 'https://i.imgur.com/MsLDO4O.png',
+	},
 };
 
 export default clubImage;
