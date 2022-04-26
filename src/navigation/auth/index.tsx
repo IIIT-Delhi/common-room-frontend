@@ -56,6 +56,9 @@ export default function LoginScreen() {
 					bg="white"
 					zIndex={2}
 					h="12"
+					_pressed={{
+						bg: '#dcdcdc',
+					}}
 				>
 					<HStack space="4">
 						<Image source={google} h="5" w="5" alt="common-room" />
