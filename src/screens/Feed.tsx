@@ -136,9 +136,10 @@ function EventCard({
 		</TouchableOpacity>
 	);
 }
-export { EventCard };
 
-function EventList({ events }: { events: FeedEventsQuery['events'] }) {
+type EventListProps = { events: FeedEventsQuery['events'] };
+
+function EventList({ events }: EventListProps) {
 	const data: EventCardProps[] = events.map((event) => {
 		const parsedDate = parseISO(event.eventStartDate);
 		const showDate = !isToday(parsedDate);
@@ -278,7 +279,7 @@ function FeedStream() {
 	);
 }
 
-export default function FeedScreen() {
+function FeedScreen() {
 	return (
 		<ParentScrollContainer noHorizontalPadding stickyHeaderIndices={[0]}>
 			<Header title="Feed" />
@@ -286,3 +287,6 @@ export default function FeedScreen() {
 		</ParentScrollContainer>
 	);
 }
+
+export default FeedScreen;
+export { EventList, EventListProps };

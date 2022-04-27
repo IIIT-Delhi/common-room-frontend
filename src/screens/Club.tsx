@@ -1,10 +1,12 @@
 import { HStack, IconButton, Image, View, VStack } from 'native-base';
 import { Dimensions } from 'react-native';
-import { useState } from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import clubImage from '../assets/dummyClubEvents';
+import { startOfWeek } from 'date-fns';
+import { find, orderBy } from 'lodash';
+import { useQueryClient } from 'react-query';
 import {
+	Loading,
 	ParentScrollContainer,
 	RemixIcon,
 	SquircleCard,
@@ -18,40 +20,47 @@ import {
 	SubHeading1,
 } from '../components/typography';
 import FeedStackParamsList from '../navigation/home/feed/types';
-import { EventCard } from './Feed';
+import { EventList, EventListProps } from './Feed';
+import {
+	useClubQuery,
+	useSubscribeClubMutation,
+	useUnsubscribeClubMutation,
+} from '../generated/graphql';
+import { useAuthData } from '../hooks/auth';
 
-function ThisWeek() {
+function ThisWeek({ events }: EventListProps) {
 	return (
 		<VStack space="4">
-			<Heading4>Happening This Week</Heading4>
-			<VStack space="3">
-				<EventCard />
-				<EventCard />
-			</VStack>
+			<Heading4>Happening This Week 📅</Heading4>
+			<EventList events={events} />
 		</VStack>
 	);
 }
 
-function Coordinators() {
-	const coordinators = [
-		{ name: 'Abhimanyu Jha', email: 'abhimanyu17126@iiitd.ac.in' },
-		{ name: 'Abhimanyu Jha', email: 'abhimanyu17126@iiitd.ac.in' },
-		{ name: 'Abhimanyu Jha', email: 'abhimanyu17126@iiitd.ac.in' },
-		{ name: 'Abhimanyu Jha', email: 'abhimanyu17126@iiitd.ac.in' },
-	];
+type Coordinator = {
+	name: string;
+	email: string;
+	picture: string;
+};
+
+type CoordinatorsProps = {
+	coordinators: Array<Coordinator> | undefined;
+};
+
+function Coordinators({ coordinators }: CoordinatorsProps) {
 	return (
 		<VStack space="4">
-			<Heading4>Club Coordinators</Heading4>
+			<Heading4>Club Coordinators 👑</Heading4>
 			<VStack space="2">
-				{coordinators.map((coordinator, index) => (
-					<SquircleCard>
+				{coordinators?.map((coordinator) => (
+					<SquircleCard key={`coordinator${coordinator.email}`}>
 						<HStack
 							flexDir="row-reverse"
 							justifyContent="space-between"
 						>
 							<Image
-								source={clubImage.valorant}
-								alt="coordinator-image"
+								source={{ uri: coordinator.picture }}
+								alt={`${coordinator.name}-image`}
 								h="12"
 								w="12"
 								borderRadius="6"
@@ -68,31 +77,92 @@ function Coordinators() {
 	);
 }
 
-function AboutClub({ clubName }: any) {
+type AboutClubProps = {
+	name: string | undefined;
+	description: string | undefined;
+};
+
+function AboutClub({ name, description }: AboutClubProps) {
 	return (
 		<VStack space="4">
-			<Heading4>About {clubName}</Heading4>
-			<Body2>
-				Audiobytes is the music society of IIIT Delhi. We seek to
-				increase the music culture among the students at our college by
-				organizing vocal and instrumental events, and encourage the
-				music enthusiasts to take part in inter-college competitions for
-				the betterment of the individuals as musicians.
-			</Body2>
+			<Heading4>About {name} 💭</Heading4>
+			<Body2>{description}</Body2>
 		</VStack>
 	);
 }
 
 export default function ClubScreen({
 	navigation,
-}: // route,
-NativeStackScreenProps<FeedStackParamsList, 'Event'>) {
+	route,
+}: NativeStackScreenProps<FeedStackParamsList, 'Club'>) {
 	const windowWidth = Dimensions.get('window').width;
-	const [isFollowing, setIsFollowing] = useState(false);
-	// const { id } = route.params;
-	const clubName = 'Audiobytes';
+
+	const { id } = route.params;
+	const authData = useAuthData();
+	const queryClient = useQueryClient();
+
+	const startDate = startOfWeek(new Date());
+	const endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+	const { data, isLoading } = useClubQuery({
+		whereClub: { id },
+		whereEvent: {
+			event: { is: { eventStartDate: { gte: startDate, lt: endDate } } },
+		},
+	});
+
+	const subscribeClub = useSubscribeClubMutation({
+		onSuccess: () => {
+			queryClient.invalidateQueries(['club']);
+		},
+	});
+
+	const unsubscribeClub = useUnsubscribeClubMutation({
+		onSuccess: () => {
+			queryClient.invalidateQueries(['club']);
+		},
+	});
+
+	if (isLoading) return <Loading />;
+
+	const {
+		name,
+		image,
+		description,
+		clubCoordinator,
+		clubEvents,
+		subscription,
+	} = data?.club || {};
+
+	const userSubscription =
+		find(subscription, { userId: authData.id }) ?? null;
+	const isFollowing = !!userSubscription?.id;
+
+	const weekEvents = clubEvents?.map((event) => event.event);
+	const coordinators = orderBy(
+		clubCoordinator?.map((coordinator) => coordinator.user),
+		['name'],
+		['asc'],
+	);
+
+	const toggleSubscription = () => {
+		if (isFollowing) {
+			unsubscribeClub.mutate({
+				where: { id: userSubscription?.id },
+			});
+		} else {
+			subscribeClub.mutate({
+				data: {
+					club: { connect: { id } },
+					user: { connect: { id: authData.id } },
+				},
+			});
+		}
+	};
+
 	const popularity = 9.7;
-	const following = 210;
+	const following = subscription?.length || 0;
+
 	return (
 		<View height="100%">
 			<IconButton
@@ -110,7 +180,7 @@ NativeStackScreenProps<FeedStackParamsList, 'Event'>) {
 
 			<ParentScrollContainer contentUnderStatusBar noHorizontalPadding>
 				<Image
-					source={clubImage.commonRoom}
+					source={{ uri: image }}
 					size={windowWidth}
 					alt="event image"
 				/>
@@ -121,7 +191,7 @@ NativeStackScreenProps<FeedStackParamsList, 'Event'>) {
 							justifyContent="space-between"
 							alignItems="center"
 						>
-							<Heading2>{clubName}</Heading2>
+							<Heading2>{name}</Heading2>
 							<IconButton
 								icon={
 									<RemixIcon
@@ -134,9 +204,13 @@ NativeStackScreenProps<FeedStackParamsList, 'Event'>) {
 									/>
 								}
 								zIndex={1}
-								onPress={() => setIsFollowing(!isFollowing)}
+								onPress={toggleSubscription}
 								variant="ghost"
 								color="primary.500"
+								isDisabled={
+									subscribeClub.isLoading ||
+									unsubscribeClub.isLoading
+								}
 							/>
 						</HStack>
 					</VStack>
@@ -148,7 +222,7 @@ NativeStackScreenProps<FeedStackParamsList, 'Event'>) {
 								<SubHeading1>You follow</SubHeading1>
 							)}
 							<SubHeading1 color="primary.500">
-								{clubName}
+								{name}
 							</SubHeading1>
 							{isFollowing && <SubHeading1>🙌</SubHeading1>}
 						</HStack>
@@ -185,9 +259,9 @@ NativeStackScreenProps<FeedStackParamsList, 'Event'>) {
 				</VStack>
 
 				<VStack px="4" mt="6" space="6" pb="24">
-					<ThisWeek />
-					<Coordinators />
-					<AboutClub clubName={clubName} />
+					{weekEvents && <ThisWeek events={weekEvents} />}
+					<Coordinators coordinators={coordinators} />
+					<AboutClub name={name} description={description} />
 				</VStack>
 			</ParentScrollContainer>
 		</View>

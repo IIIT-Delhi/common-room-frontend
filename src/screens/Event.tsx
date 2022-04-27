@@ -51,12 +51,18 @@ export default function EventScreen({
 	});
 
 	const unRSVPToEvent = useUnRsvpEventMutation({
-		onSettled: () => {
+		onSuccess: () => {
+			queryClient.invalidateQueries('event');
+		},
+		onError: () => {
 			queryClient.invalidateQueries('event');
 		},
 	});
 	const rsvpToEvent = useRsvpEventMutation({
-		onSettled: () => {
+		onSuccess: () => {
+			queryClient.invalidateQueries('event');
+		},
+		onError: () => {
 			queryClient.invalidateQueries('event');
 		},
 	});
@@ -137,15 +143,26 @@ export default function EventScreen({
 				<VStack px="4" mt="6" space="4" pb="24">
 					<VStack space="2">
 						<Heading2>{name}</Heading2>
-						<SubHeading1
-							color="subtle.500"
-							onPress={() => navigation.navigate('Club', { id })}
-						>
-							by{' '}
-							{clubEvents
-								?.map(({ club }) => club.name)
-								.join(', ')}
-						</SubHeading1>
+
+						<HStack>
+							<SubHeading1 color="subtle.500">by </SubHeading1>
+							{clubEvents?.map(({ club }, index) => (
+								<SubHeading1
+									color="subtle.500"
+									onPress={() =>
+										navigation.navigate('Club', {
+											id: club.id,
+										})
+									}
+								>
+									{`${club.name}${
+										index === clubEvents.length - 1
+											? ' '
+											: ', '
+									}`}
+								</SubHeading1>
+							))}
+						</HStack>
 					</VStack>
 					<VStack space="3">
 						{isAttending && (

@@ -10195,6 +10195,28 @@ export type UserDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UserDetailsQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, picture: string } };
 
+export type ClubQueryVariables = Exact<{
+  whereClub: ClubWhereUniqueInput;
+  whereEvent?: InputMaybe<ClubEventWhereInput>;
+}>;
+
+
+export type ClubQuery = { __typename?: 'Query', club?: { __typename?: 'Club', id: number, name: string, description: string, image: string, subscription: Array<{ __typename?: 'Subscription', id: number, userId: number }>, clubRank?: { __typename?: 'ClubRank', rank: number, rsvpCount: number } | null, clubEvents: Array<{ __typename?: 'ClubEvent', event: { __typename?: 'Event', id: number, name: string, image: string, eventStartDate?: any | null, rsvpEvent: Array<{ __typename?: 'RSVPEvent', user: { __typename?: 'User', id: number, email: string } }>, clubEvents: Array<{ __typename?: 'ClubEvent', club: { __typename?: 'Club', id: number, name: string } }> } }>, clubCoordinator: Array<{ __typename?: 'ClubCoordinator', user: { __typename?: 'User', name: string, picture: string, email: string } }> } | null };
+
+export type SubscribeClubMutationVariables = Exact<{
+  data: SubscriptionCreateInput;
+}>;
+
+
+export type SubscribeClubMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'Subscription', id: number, clubId: number, userId: number, createdAt: any } };
+
+export type UnsubscribeClubMutationVariables = Exact<{
+  where: SubscriptionWhereUniqueInput;
+}>;
+
+
+export type UnsubscribeClubMutation = { __typename?: 'Mutation', deleteSubscription?: { __typename?: 'Subscription', id: number, clubId: number, userId: number, deletedAt?: any | null } | null };
+
 export type FeedEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -10213,6 +10235,8 @@ export type EventsForYouQueryVariables = Exact<{
 
 
 export type EventsForYouQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, image: string, eventStartDate?: any | null, rsvpEvent: Array<{ __typename?: 'RSVPEvent', user: { __typename?: 'User', id: number, email: string } }>, clubEvents: Array<{ __typename?: 'ClubEvent', club: { __typename?: 'Club', id: number, name: string } }> }> };
+
+export type EventFragmentFragment = { __typename?: 'Event', id: number, name: string, image: string, eventStartDate?: any | null, rsvpEvent: Array<{ __typename?: 'RSVPEvent', user: { __typename?: 'User', id: number, email: string } }>, clubEvents: Array<{ __typename?: 'ClubEvent', club: { __typename?: 'Club', id: number, name: string } }> };
 
 export type RsvpEventMutationVariables = Exact<{
   data: RsvpEventCreateInput;
@@ -10233,7 +10257,26 @@ export type NotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: number, message: string, updatedAt: any, createdBy: { __typename?: 'Club', id: number, name: string, image: string } }> };
 
-
+export const EventFragmentFragmentDoc = `
+    fragment EventFragment on Event {
+  id
+  name
+  image
+  eventStartDate
+  rsvpEvent {
+    user {
+      id
+      email
+    }
+  }
+  clubEvents {
+    club {
+      id
+      name
+    }
+  }
+}
+    `;
 export const LoginDocument = `
     mutation login($token: String!) {
   login(token: $token) {
@@ -10276,6 +10319,86 @@ export const useUserDetailsQuery = <
     useQuery<UserDetailsQuery, TError, TData>(
       variables === undefined ? ['userDetails'] : ['userDetails', variables],
       useAxios<UserDetailsQuery, UserDetailsQueryVariables>(UserDetailsDocument, variables),
+      options
+    );
+export const ClubDocument = `
+    query club($whereClub: ClubWhereUniqueInput!, $whereEvent: ClubEventWhereInput) {
+  club(where: $whereClub) {
+    id
+    name
+    description
+    image
+    subscription {
+      id
+      userId
+    }
+    clubRank {
+      rank
+      rsvpCount
+    }
+    clubEvents(where: $whereEvent) {
+      event {
+        ...EventFragment
+      }
+    }
+    clubCoordinator {
+      user {
+        name
+        picture
+        email
+      }
+    }
+  }
+}
+    ${EventFragmentFragmentDoc}`;
+export const useClubQuery = <
+      TData = ClubQuery,
+      TError = unknown
+    >(
+      variables: ClubQueryVariables,
+      options?: UseQueryOptions<ClubQuery, TError, TData>
+    ) =>
+    useQuery<ClubQuery, TError, TData>(
+      ['club', variables],
+      useAxios<ClubQuery, ClubQueryVariables>(ClubDocument, variables),
+      options
+    );
+export const SubscribeClubDocument = `
+    mutation subscribeClub($data: SubscriptionCreateInput!) {
+  createSubscription(data: $data) {
+    id
+    clubId
+    userId
+    createdAt
+  }
+}
+    `;
+export const useSubscribeClubMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<SubscribeClubMutation, TError, SubscribeClubMutationVariables, TContext>) =>
+    useMutation<SubscribeClubMutation, TError, SubscribeClubMutationVariables, TContext>(
+      ['subscribeClub'],
+      (variables?: SubscribeClubMutationVariables) => useAxios<SubscribeClubMutation, SubscribeClubMutationVariables>(SubscribeClubDocument, variables)(),
+      options
+    );
+export const UnsubscribeClubDocument = `
+    mutation unsubscribeClub($where: SubscriptionWhereUniqueInput!) {
+  deleteSubscription(where: $where) {
+    id
+    clubId
+    userId
+    deletedAt
+  }
+}
+    `;
+export const useUnsubscribeClubMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<UnsubscribeClubMutation, TError, UnsubscribeClubMutationVariables, TContext>) =>
+    useMutation<UnsubscribeClubMutation, TError, UnsubscribeClubMutationVariables, TContext>(
+      ['unsubscribeClub'],
+      (variables?: UnsubscribeClubMutationVariables) => useAxios<UnsubscribeClubMutation, UnsubscribeClubMutationVariables>(UnsubscribeClubDocument, variables)(),
       options
     );
 export const FeedEventsDocument = `

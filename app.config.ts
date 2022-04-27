@@ -24,7 +24,7 @@ export default {
 		},
 		assetBundlePatterns: ['**/*'],
 		ios: {
-			supportsTablet: true,
+			supportsTablet: false,
 		},
 		android: {
 			adaptiveIcon: {
