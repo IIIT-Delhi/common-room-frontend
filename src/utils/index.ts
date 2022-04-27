@@ -20,6 +20,7 @@ export async function clearToken() {
 }
 
 export async function getAuthData(): Promise<AuthData | null> {
+	console.log('getAuthData');
 	const authData = await SecureStore.getItemAsync(AUTH_KEY);
 	return authData ? (JSON.parse(authData) as AuthData) : null;
 }

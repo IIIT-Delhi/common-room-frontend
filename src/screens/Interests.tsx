@@ -44,21 +44,48 @@ function InterestsScreen() {
 		me: { userTags },
 	} = (data || { tags: [], me: { userTags: [] } }) as AllUserTagsQuery;
 
-	useEffect(() => {
-		// make object of tag Ids
-		// eslint-disable-next-line prefer-const
-		let tagStatusInit = tags.reduce(
-			(prev, current) => ({ ...prev, [current.id]: false }),
-			{} as Record<number, boolean>,
-		);
-		// set tag status to true if user has tag
-		userTags.forEach(({ tag }) => {
-			tagStatusInit[tag.id] = true;
-		});
-		updateTagStatus(tagStatusInit);
-	}, [tags, userTags]);
+	// useEffect(() => {
+	// 	// make object of tag Ids
+	// 	// eslint-disable-next-line prefer-const
+	// 	console.log('userTags', userTags);
+	// 	const tagStatusInit = {} as Record<
+	// 		number,
+	// 		{ status: boolean; name: string }
+	// 	>;
+	// 	for (let index = 0; index < tags.length; index += 1) {
+	// 		tagStatusInit[tags[index].id] = {
+	// 			status: false,
+	// 			name: tags[index].name,
+	// 		};
+	// 	}
+	// 	for (let index = 0; index < userTags.length; index += 1) {
+	// 		tagStatusInit[userTags[index].tag.id] = {
+	// 			status: true,
+	// 			name: tags[index].name,
+	// 		};
+	// 	}
 
-	console.log('tagStatus', tagStatus);
+	// 	updateTagStatus(tagStatusInit);
+	// }, [tags, userTags]);
+
+	const tagStatusInit = {} as Record<
+		number,
+		{ status: boolean; name: string }
+	>;
+	for (let index = 0; index < tags.length; index += 1) {
+		tagStatusInit[tags[index].id] = {
+			status: false,
+			name: tags[index].name,
+		};
+	}
+	for (let index = 0; index < userTags.length; index += 1) {
+		tagStatusInit[userTags[index].tag.id] = {
+			status: true,
+			name: tags[index].name,
+		};
+	}
+
+	console.log('tagStatus', tagStatusInit);
 
 	const saveInterests = () => {
 		signIn({
@@ -66,7 +93,9 @@ function InterestsScreen() {
 			isOnBoarded: true,
 		});
 	};
-	console.log('data', data, isLoading);
+
+	// const tags = [] as any;
+	// console.log('data', data, isLoading);
 	if (isLoading) return <Loading />;
 
 	return (
@@ -88,7 +117,7 @@ function InterestsScreen() {
 						events you&apos;ll love the most
 					</Body1>
 				</VStack>
-				<Flex mt="6" direction="row" wrap="wrap">
+				{/* <Flex mt="6" direction="row" wrap="wrap">
 					{tags.map(({ id, name }) => (
 						<Pill
 							key={id}
@@ -102,10 +131,18 @@ function InterestsScreen() {
 							tagStatus={tagStatus[id]}
 						/>
 					))}
-				</Flex>
+				</Flex> */}
 			</ParentScrollContainer>
 		</Box>
 	);
 }
 
 export default InterestsScreen;
+
+// export default function Temp() {
+// 	return (
+// 		<Box pt={200}>
+// 			<Heading2>Hi</Heading2>
+// 		</Box>
+// 	);
+// }

@@ -10,6 +10,7 @@ function MainNavigation() {
 	console.log('MainNavigation', authData, isLoading);
 	if (isLoading) return <AppLoading />;
 	if (token) {
+		// return <HomeStack />;
 		return isOnBoarded ? <HomeStack /> : <InterestsScreen />;
 	}
 	return <LoginStack />;

@@ -52,6 +52,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 			authData: { ...state.authData },
 			isLoading: state.isLoading,
 			signIn: (authData: AuthData) => {
+				console.log('signIn', authData);
 				if (!authData.token || !authData.id || !authData.email) {
 					Alert.alert('Error ❌', 'Invalid login credentials!');
 					return;
@@ -69,6 +70,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	);
 	useEffect(() => {
 		async function checkUser() {
+			console.log('checkUser');
 			const authData = await getAuthData();
 			console.log('checkUser', authData);
 			if (authData?.token && authData?.id && authData?.email)
