@@ -27,6 +27,7 @@ const reducer = (
 					email: null,
 					name: null,
 					picture: null,
+					isOnBoarded: false,
 				},
 				isLoading: false,
 			};
@@ -41,6 +42,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 			token: null,
 			id: null,
 			email: null,
+			isOnBoarded: false,
 		},
 		isLoading: true,
 	};
@@ -70,7 +72,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 			const authData = await getAuthData();
 			console.log('checkUser', authData);
 			if (authData?.token && authData?.id && authData?.email)
-				dispatch({ type: 'SIGN_IN', payload: authData });
+				dispatch({
+					type: 'SIGN_IN',
+					payload: { ...state.authData, ...authData },
+				});
 			else dispatch({ type: 'SIGN_OUT' });
 		}
 		checkUser();

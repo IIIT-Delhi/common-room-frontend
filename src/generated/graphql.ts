@@ -10188,7 +10188,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Auth', token: string, user: { __typename?: 'User', id: number, email: string, name: string, picture: string } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Auth', token: string, user: { __typename?: 'User', id: number, email: string, name: string, picture: string, isOnBoarded: boolean } } };
 
 export type UserDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10257,6 +10257,11 @@ export type NotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: number, message: string, updatedAt: any, createdBy: { __typename?: 'Club', id: number, name: string, image: string } }> };
 
+export type AllUserTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllUserTagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: number, name: string }>, me: { __typename?: 'User', userTags: Array<{ __typename?: 'UserTag', tag: { __typename?: 'Tag', id: number, name: string } }> } };
+
 export const EventFragmentFragmentDoc = `
     fragment EventFragment on Event {
   id
@@ -10286,6 +10291,7 @@ export const LoginDocument = `
       email
       name
       picture
+      isOnBoarded
     }
   }
 }
@@ -10566,5 +10572,33 @@ export const useNotificationsQuery = <
     useQuery<NotificationsQuery, TError, TData>(
       variables === undefined ? ['notifications'] : ['notifications', variables],
       useAxios<NotificationsQuery, NotificationsQueryVariables>(NotificationsDocument, variables),
+      options
+    );
+export const AllUserTagsDocument = `
+    query allUserTags {
+  tags {
+    id
+    name
+  }
+  me {
+    userTags {
+      tag {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export const useAllUserTagsQuery = <
+      TData = AllUserTagsQuery,
+      TError = unknown
+    >(
+      variables?: AllUserTagsQueryVariables,
+      options?: UseQueryOptions<AllUserTagsQuery, TError, TData>
+    ) =>
+    useQuery<AllUserTagsQuery, TError, TData>(
+      variables === undefined ? ['allUserTags'] : ['allUserTags', variables],
+      useAxios<AllUserTagsQuery, AllUserTagsQueryVariables>(AllUserTagsDocument, variables),
       options
     );

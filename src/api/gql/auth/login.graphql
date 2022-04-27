@@ -6,6 +6,7 @@ mutation login($token: String!) {
 			email
 			name
 			picture
+			isOnBoarded
 		}
 	}
 }
