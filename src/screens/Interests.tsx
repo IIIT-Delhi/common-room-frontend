@@ -66,7 +66,7 @@ function InterestsScreen() {
 			isOnBoarded: true,
 		});
 	};
-
+	console.log('data', data, isLoading);
 	if (isLoading) return <Loading />;
 
 	return (
