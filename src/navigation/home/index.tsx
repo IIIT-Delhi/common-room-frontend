@@ -6,6 +6,7 @@ import {
 	useSafeAreaFrame,
 	useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
 import { RemixIcon } from '../../components/general';
 import {
 	AccountScreen,
@@ -14,6 +15,9 @@ import {
 } from '../../screens';
 import FeedStack from './feed';
 import type HomeBottomTabsParamList from './types';
+import { registerForPushNotificationsAsync } from '../../utils';
+import { useUpdateUserMutation } from '../../generated/graphql';
+import { useAuthData } from '../../hooks/auth';
 
 const Tab = createBottomTabNavigator<HomeBottomTabsParamList>();
 
@@ -21,6 +25,25 @@ function BottomTabs() {
 	const { colors } = useTheme();
 	const insets = useSafeAreaInsets();
 	const frame = useSafeAreaFrame();
+	const updateUser = useUpdateUserMutation();
+	const authData = useAuthData();
+	useEffect(() => {
+		const registerExpoToken = async () => {
+			const expoToken = await registerForPushNotificationsAsync();
+			console.log('Expo Token', expoToken);
+			if (expoToken) {
+				updateUser.mutate({
+					data: {
+						expoToken: { set: expoToken },
+					},
+					where: {
+						id: authData.id,
+					},
+				});
+			}
+		};
+		registerExpoToken();
+	}, []);
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({

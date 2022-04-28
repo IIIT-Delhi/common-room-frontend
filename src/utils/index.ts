@@ -1,4 +1,7 @@
+import { Platform, Alert } from 'react-native';
+import * as Device from 'expo-device';
 import * as SecureStore from 'expo-secure-store';
+import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { AuthData } from '../providers/types';
 
@@ -31,4 +34,35 @@ export async function setAuthData(value: AuthData) {
 export async function clearAuthData() {
 	clearToken();
 	return SecureStore.deleteItemAsync(AUTH_KEY);
+}
+
+export async function registerForPushNotificationsAsync() {
+	let token;
+	if (Device.isDevice) {
+		const { status: existingStatus } =
+			await Notifications.getPermissionsAsync();
+		let finalStatus = existingStatus;
+		if (existingStatus !== 'granted') {
+			const { status } = await Notifications.requestPermissionsAsync();
+			finalStatus = status;
+		}
+		if (finalStatus !== 'granted') {
+			Alert.alert(
+				'Permission Denied 🚫',
+				'Failed to get push token for push notification!',
+			);
+			return null;
+		}
+		token = (await Notifications.getExpoPushTokenAsync()).data;
+	}
+
+	if (Platform.OS === 'android') {
+		Notifications.setNotificationChannelAsync('default', {
+			name: 'default',
+			importance: Notifications.AndroidImportance.MAX,
+			vibrationPattern: [0, 250, 250, 250],
+			lightColor: '#FF231F7C',
+		});
+	}
+	return token;
 }

@@ -4,6 +4,7 @@ export type AuthData = {
 	email: string | null;
 	name?: string | null | undefined;
 	picture?: any;
+	isOnBoarded?: boolean;
 };
 
 export type ReducerState = {

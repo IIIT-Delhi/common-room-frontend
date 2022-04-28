@@ -1,0 +1,15 @@
+query allUserTags {
+	tags {
+		id
+		name
+	}
+
+	me {
+		userTags {
+			tag {
+				id
+				name
+			}
+		}
+	}
+}

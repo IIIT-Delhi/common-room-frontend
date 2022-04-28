@@ -8,8 +8,8 @@ import {
 	parseISO,
 	isThisWeek,
 	isAfter,
+	isBefore,
 } from 'date-fns';
-import { partition } from 'lodash';
 import {
 	Header,
 	Loading,
@@ -136,11 +136,13 @@ function EventCard({
 		</TouchableOpacity>
 	);
 }
-export { EventCard };
 
-function EventList({ events }: { events: FeedEventsQuery['events'] }) {
+type EventListProps = { events: FeedEventsQuery['events'] };
+
+function EventList({ events }: EventListProps) {
 	const data: EventCardProps[] = events.map((event) => {
 		const parsedDate = parseISO(event.eventStartDate);
+		const eventEndDate = parseISO(event.eventEndDate);
 		const showDate = !isToday(parsedDate);
 		return {
 			id: event.id,
@@ -152,6 +154,7 @@ function EventList({ events }: { events: FeedEventsQuery['events'] }) {
 			name: event.name,
 			clubs: event.clubEvents.map(({ club }) => club.name),
 			attendingCount: event.rsvpEvent.length,
+			isOldCard: isBefore(eventEndDate, new Date()),
 		};
 	});
 	const renderItem: ListRenderItem<EventCardProps> = ({ item }) => (
@@ -197,13 +200,6 @@ function EventsForYouFeed() {
 		},
 	);
 
-	// console.log(
-	// 	'EventsForYouFeed',
-	// 	data,
-	// 	isLoading,
-	// 	JSON.stringify(error, null, 2),
-	// );
-
 	if (isLoading) return <Loading />;
 
 	const eventData = data?.events.map((event) => ({
@@ -235,25 +231,41 @@ function EventsForYouFeed() {
 	);
 }
 function FeedStream() {
-	const { data, isLoading, error, refetch } = useFeedEventsQuery();
+	const { data, isLoading, refetch } = useFeedEventsQuery();
 	useFocusEffect(() => {
 		refetch();
 	});
 
 	if (isLoading) return <Loading />;
 
-	const { events } = data || {};
+	const { events } = data || { events: [] };
 
-	const [todayEvents, otherEvents] = partition(events, (event) =>
-		isToday(parseISO(event.eventStartDate)),
-	);
+	const todayEvents = [] as FeedEventsQuery['events'];
+	const thisWeekEvents = [] as FeedEventsQuery['events'];
+	const ongoingEvents = [] as FeedEventsQuery['events'];
+	const pastEvents = [] as FeedEventsQuery['events'];
 
-	const thisWeekEvents = otherEvents.filter((event) => {
+	for (let index = 0; index < events.length; index += 1) {
+		const event = events[index];
 		const eventStartDate = parseISO(event.eventStartDate);
-		return (
-			isThisWeek(eventStartDate) && isAfter(eventStartDate, new Date())
-		);
-	});
+		const eventEndDate = parseISO(event.eventEndDate);
+		const currentTime = new Date();
+
+		if (isToday(eventStartDate)) {
+			todayEvents.push(event);
+		} else if (
+			isThisWeek(eventStartDate) &&
+			isAfter(eventStartDate, currentTime)
+		) {
+			thisWeekEvents.push(event);
+		} else if (isBefore(eventStartDate, currentTime)) {
+			if (isAfter(eventEndDate, currentTime)) {
+				ongoingEvents.push(event);
+			} else {
+				pastEvents.push(event);
+			}
+		}
+	}
 
 	return (
 		<VStack mt="6">
@@ -264,21 +276,25 @@ function FeedStream() {
 			<VStack mx="4">
 				<Heading4 mt="8">Today 💃</Heading4>
 				<EventList events={todayEvents} />
+				<Heading4 mt="8">Ongoing ⌛</Heading4>
+				<EventList events={ongoingEvents} />
+
 				{/* =====================3=================== */}
-				<Heading4 mt="8">Happening This Week &nbsp;&nbsp;📅</Heading4>
+				<Heading4 mt="8">Upcoming This Week &nbsp;&nbsp;📅</Heading4>
 				<EventList events={thisWeekEvents} />
 				{/* =====================4=================== */}
-				{/* <Heading4 mt="8">Leave Feedback &nbsp;&nbsp;💬</Heading4>
-				<FeedbackFeed />
+				<Heading4 mt="8">Leave Feedback &nbsp;&nbsp;💬</Heading4>
+				<EventList events={pastEvents} />
+				{/* <FeedbackFeed /> */}
 				<SubHeading2 mt="6" color="body.500" m="auto">
 					older events
-				</SubHeading2> */}
+				</SubHeading2>
 			</VStack>
 		</VStack>
 	);
 }
 
-export default function FeedScreen() {
+function FeedScreen() {
 	return (
 		<ParentScrollContainer noHorizontalPadding stickyHeaderIndices={[0]}>
 			<Header title="Feed" />
@@ -286,3 +302,6 @@ export default function FeedScreen() {
 		</ParentScrollContainer>
 	);
 }
+
+export default FeedScreen;
+export { EventList, EventListProps };

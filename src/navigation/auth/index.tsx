@@ -23,6 +23,7 @@ export default function LoginScreen() {
 					id: user.id,
 					email: user.email,
 					name: user.name,
+					isOnBoarded: user.isOnBoarded,
 				});
 			}
 		},

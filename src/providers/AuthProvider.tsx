@@ -27,6 +27,7 @@ const reducer = (
 					email: null,
 					name: null,
 					picture: null,
+					isOnBoarded: false,
 				},
 				isLoading: false,
 			};
@@ -41,6 +42,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 			token: null,
 			id: null,
 			email: null,
+			isOnBoarded: false,
 		},
 		isLoading: true,
 	};
@@ -50,6 +52,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 			authData: { ...state.authData },
 			isLoading: state.isLoading,
 			signIn: (authData: AuthData) => {
+				console.log('signIn', authData);
 				if (!authData.token || !authData.id || !authData.email) {
 					Alert.alert('Error ❌', 'Invalid login credentials!');
 					return;
@@ -67,10 +70,14 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	);
 	useEffect(() => {
 		async function checkUser() {
+			console.log('checkUser');
 			const authData = await getAuthData();
 			console.log('checkUser', authData);
 			if (authData?.token && authData?.id && authData?.email)
-				dispatch({ type: 'SIGN_IN', payload: authData });
+				dispatch({
+					type: 'SIGN_IN',
+					payload: { ...state.authData, ...authData },
+				});
 			else dispatch({ type: 'SIGN_OUT' });
 		}
 		checkUser();

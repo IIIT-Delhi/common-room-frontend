@@ -4,6 +4,7 @@ query feedEvents {
 		name
 		image
 		eventStartDate
+		eventEndDate
 		rsvpEvent {
 			user {
 				id

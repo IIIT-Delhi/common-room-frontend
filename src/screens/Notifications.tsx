@@ -62,12 +62,8 @@ export default function NotificationsScreen() {
 	const renderNotifs: ListRenderItem<
 		NotificationsQuery['notifications'][0]
 	> = ({ item }) => {
-		const {
-			id,
-			message,
-			updatedAt,
-			createdBy: { image },
-		} = item;
+		const { id, message, updatedAt, createdBy } = item;
+		const image = createdBy.length > 0 ? createdBy[0].club.image : null;
 		const timestamp = format(parseISO(updatedAt), 'MMM dd, hh:mm a');
 		return (
 			<NotificationCard

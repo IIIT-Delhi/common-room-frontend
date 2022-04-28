@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import { gql } from 'urql';
 import { InputMaybe, EventWhereInput, Exact } from '../../../generated/graphql';
 
 const getEventsForYouVariable = (input: {
@@ -39,4 +40,24 @@ const getEventsForYouVariable = (input: {
 	},
 });
 
-export { getEventsForYouVariable };
+const EVENT_FRAGMENT = gql`
+	fragment EventFragment on Event {
+		id
+		name
+		image
+		eventStartDate
+		rsvpEvent {
+			user {
+				id
+				email
+			}
+		}
+		clubEvents {
+			club {
+				id
+				name
+			}
+		}
+	}
+`;
+export { getEventsForYouVariable, EVENT_FRAGMENT };

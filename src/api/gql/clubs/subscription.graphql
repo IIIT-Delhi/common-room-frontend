@@ -1,0 +1,17 @@
+mutation subscribeClub($data: SubscriptionCreateInput!) {
+	createSubscription(data: $data) {
+		id
+		clubId
+		userId
+		createdAt
+	}
+}
+
+mutation unsubscribeClub($where: SubscriptionWhereUniqueInput!) {
+	deleteSubscription(where: $where) {
+		id
+		clubId
+		userId
+		deletedAt
+	}
+}

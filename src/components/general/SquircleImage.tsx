@@ -17,10 +17,11 @@ function SquircleImage({ height, width, src, props }: any) {
 		>
 			<Image
 				source={src}
+				key={`${src}-${width}-${height}`}
 				size="xl"
 				w={width}
 				h={height}
-				alt="Dummy Image"
+				alt={`${src}-${width}-${height}`}
 				{...props}
 			/>
 		</MaskedView>
