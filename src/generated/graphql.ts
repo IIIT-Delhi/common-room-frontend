@@ -10644,7 +10644,7 @@ export type UnsubscribeClubMutation = { __typename?: 'Mutation', deleteSubscript
 export type FeedEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FeedEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, image: string, eventStartDate?: any | null, rsvpEvent: Array<{ __typename?: 'RSVPEvent', user: { __typename?: 'User', id: number, email: string } }>, clubEvents: Array<{ __typename?: 'ClubEvent', club: { __typename?: 'Club', id: number, name: string } }> }> };
+export type FeedEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, image: string, eventStartDate?: any | null, eventEndDate?: any | null, rsvpEvent: Array<{ __typename?: 'RSVPEvent', user: { __typename?: 'User', id: number, email: string } }>, clubEvents: Array<{ __typename?: 'ClubEvent', club: { __typename?: 'Club', id: number, name: string } }> }> };
 
 export type EventQueryVariables = Exact<{
   where: EventWhereUniqueInput;
@@ -10858,6 +10858,7 @@ export const FeedEventsDocument = `
     name
     image
     eventStartDate
+    eventEndDate
     rsvpEvent {
       user {
         id
