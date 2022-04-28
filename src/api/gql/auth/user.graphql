@@ -6,3 +6,13 @@ query userDetails {
 		picture
 	}
 }
+
+mutation updateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
+	updateUser(data: $data, where: $where) {
+		id
+		email
+		name
+		picture
+		isOnBoarded
+	}
+}

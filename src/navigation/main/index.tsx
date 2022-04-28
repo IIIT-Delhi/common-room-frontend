@@ -7,10 +7,9 @@ import { InterestsScreen } from '../../screens';
 function MainNavigation() {
 	const { authData, isLoading } = useAuth();
 	const { token, isOnBoarded } = authData;
-	console.log('MainNavigation', authData, isLoading);
+
 	if (isLoading) return <AppLoading />;
 	if (token) {
-		// return <HomeStack />;
 		return isOnBoarded ? <HomeStack /> : <InterestsScreen />;
 	}
 	return <LoginStack />;

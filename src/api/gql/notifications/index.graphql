@@ -4,9 +4,11 @@ query notifications {
 		message
 		updatedAt
 		createdBy {
-			id
-			name
-			image
+			club {
+				id
+				name
+				image
+			}
 		}
 	}
 }

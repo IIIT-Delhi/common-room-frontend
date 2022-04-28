@@ -57,6 +57,15 @@ export type AggregateClubMember = {
   _sum?: Maybe<ClubMemberSumAggregate>;
 };
 
+export type AggregateClubNotification = {
+  __typename?: 'AggregateClubNotification';
+  _avg?: Maybe<ClubNotificationAvgAggregate>;
+  _count?: Maybe<ClubNotificationCountAggregate>;
+  _max?: Maybe<ClubNotificationMaxAggregate>;
+  _min?: Maybe<ClubNotificationMinAggregate>;
+  _sum?: Maybe<ClubNotificationSumAggregate>;
+};
+
 export type AggregateClubRank = {
   __typename?: 'AggregateClubRank';
   _avg?: Maybe<ClubRankAvgAggregate>;
@@ -212,6 +221,7 @@ export type Club = {
   clubCoordinator: Array<ClubCoordinator>;
   clubEvents: Array<ClubEvent>;
   clubMember: Array<ClubMember>;
+  clubNotifications: Array<ClubNotification>;
   clubRank?: Maybe<ClubRank>;
   clubtags: Array<ClubTag>;
   createdAt: Scalars['DateTime'];
@@ -221,7 +231,6 @@ export type Club = {
   image: Scalars['String'];
   links: Scalars['String'];
   name: Scalars['String'];
-  notifications: Array<Notification>;
   otp?: Maybe<Otp>;
   subscription: Array<Subscription>;
   updatedAt: Scalars['DateTime'];
@@ -258,6 +267,16 @@ export type ClubClubMemberArgs = {
 };
 
 
+export type ClubClubNotificationsArgs = {
+  cursor?: InputMaybe<ClubNotificationWhereUniqueInput>;
+  distinct?: InputMaybe<Array<ClubNotificationScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<ClubNotificationOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClubNotificationWhereInput>;
+};
+
+
 export type ClubClubtagsArgs = {
   cursor?: InputMaybe<ClubTagWhereUniqueInput>;
   distinct?: InputMaybe<Array<ClubTagScalarFieldEnum>>;
@@ -265,16 +284,6 @@ export type ClubClubtagsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ClubTagWhereInput>;
-};
-
-
-export type ClubNotificationsArgs = {
-  cursor?: InputMaybe<NotificationWhereUniqueInput>;
-  distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<NotificationOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<NotificationWhereInput>;
 };
 
 
@@ -673,8 +682,8 @@ export type ClubCount = {
   clubCoordinator: Scalars['Int'];
   clubEvents: Scalars['Int'];
   clubMember: Scalars['Int'];
+  clubNotifications: Scalars['Int'];
   clubtags: Scalars['Int'];
-  notifications: Scalars['Int'];
   subscription: Scalars['Int'];
 };
 
@@ -706,6 +715,7 @@ export type ClubCreateInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -714,7 +724,6 @@ export type ClubCreateInput = {
   image?: InputMaybe<Scalars['String']>;
   links: Scalars['String'];
   name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -749,6 +758,12 @@ export type ClubCreateNestedOneWithoutClubMemberInput = {
   create?: InputMaybe<ClubCreateWithoutClubMemberInput>;
 };
 
+export type ClubCreateNestedOneWithoutClubNotificationsInput = {
+  connect?: InputMaybe<ClubWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ClubCreateOrConnectWithoutClubNotificationsInput>;
+  create?: InputMaybe<ClubCreateWithoutClubNotificationsInput>;
+};
+
 export type ClubCreateNestedOneWithoutClubRankInput = {
   connect?: InputMaybe<ClubWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ClubCreateOrConnectWithoutClubRankInput>;
@@ -759,12 +774,6 @@ export type ClubCreateNestedOneWithoutClubtagsInput = {
   connect?: InputMaybe<ClubWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ClubCreateOrConnectWithoutClubtagsInput>;
   create?: InputMaybe<ClubCreateWithoutClubtagsInput>;
-};
-
-export type ClubCreateNestedOneWithoutNotificationsInput = {
-  connect?: InputMaybe<ClubWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<ClubCreateOrConnectWithoutNotificationsInput>;
-  create?: InputMaybe<ClubCreateWithoutNotificationsInput>;
 };
 
 export type ClubCreateNestedOneWithoutOtpInput = {
@@ -794,6 +803,11 @@ export type ClubCreateOrConnectWithoutClubMemberInput = {
   where: ClubWhereUniqueInput;
 };
 
+export type ClubCreateOrConnectWithoutClubNotificationsInput = {
+  create: ClubCreateWithoutClubNotificationsInput;
+  where: ClubWhereUniqueInput;
+};
+
 export type ClubCreateOrConnectWithoutClubRankInput = {
   create: ClubCreateWithoutClubRankInput;
   where: ClubWhereUniqueInput;
@@ -801,11 +815,6 @@ export type ClubCreateOrConnectWithoutClubRankInput = {
 
 export type ClubCreateOrConnectWithoutClubtagsInput = {
   create: ClubCreateWithoutClubtagsInput;
-  where: ClubWhereUniqueInput;
-};
-
-export type ClubCreateOrConnectWithoutNotificationsInput = {
-  create: ClubCreateWithoutNotificationsInput;
   where: ClubWhereUniqueInput;
 };
 
@@ -822,6 +831,7 @@ export type ClubCreateOrConnectWithoutSubscriptionInput = {
 export type ClubCreateWithoutClubCoordinatorInput = {
   clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -830,7 +840,6 @@ export type ClubCreateWithoutClubCoordinatorInput = {
   image?: InputMaybe<Scalars['String']>;
   links: Scalars['String'];
   name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -838,6 +847,41 @@ export type ClubCreateWithoutClubCoordinatorInput = {
 
 export type ClubCreateWithoutClubEventsInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
+  clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
+  clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
+  clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  description: Scalars['String'];
+  image?: InputMaybe<Scalars['String']>;
+  links: Scalars['String'];
+  name: Scalars['String'];
+  otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
+  subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubCreateWithoutClubMemberInput = {
+  clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
+  clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
+  clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
+  clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  description: Scalars['String'];
+  image?: InputMaybe<Scalars['String']>;
+  links: Scalars['String'];
+  name: Scalars['String'];
+  otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
+  subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubCreateWithoutClubNotificationsInput = {
+  clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
+  clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
@@ -847,24 +891,6 @@ export type ClubCreateWithoutClubEventsInput = {
   image?: InputMaybe<Scalars['String']>;
   links: Scalars['String'];
   name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
-  otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
-  subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type ClubCreateWithoutClubMemberInput = {
-  clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
-  clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
-  clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
-  clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
-  createdAt?: InputMaybe<Scalars['DateTime']>;
-  deletedAt?: InputMaybe<Scalars['DateTime']>;
-  description: Scalars['String'];
-  image?: InputMaybe<Scalars['String']>;
-  links: Scalars['String'];
-  name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -874,6 +900,7 @@ export type ClubCreateWithoutClubRankInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   deletedAt?: InputMaybe<Scalars['DateTime']>;
@@ -881,7 +908,6 @@ export type ClubCreateWithoutClubRankInput = {
   image?: InputMaybe<Scalars['String']>;
   links: Scalars['String'];
   name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -891,25 +917,8 @@ export type ClubCreateWithoutClubtagsInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
-  createdAt?: InputMaybe<Scalars['DateTime']>;
-  deletedAt?: InputMaybe<Scalars['DateTime']>;
-  description: Scalars['String'];
-  image?: InputMaybe<Scalars['String']>;
-  links: Scalars['String'];
-  name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
-  otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
-  subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type ClubCreateWithoutNotificationsInput = {
-  clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
-  clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
-  clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
-  clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
-  clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   deletedAt?: InputMaybe<Scalars['DateTime']>;
   description: Scalars['String'];
@@ -925,6 +934,7 @@ export type ClubCreateWithoutOtpInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -933,7 +943,6 @@ export type ClubCreateWithoutOtpInput = {
   image?: InputMaybe<Scalars['String']>;
   links: Scalars['String'];
   name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
   subscription?: InputMaybe<SubscriptionCreateNestedManyWithoutClubInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -942,6 +951,7 @@ export type ClubCreateWithoutSubscriptionInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorCreateNestedManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventCreateNestedManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberCreateNestedManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationCreateNestedManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankCreateNestedOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagCreateNestedManyWithoutClubInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -950,7 +960,6 @@ export type ClubCreateWithoutSubscriptionInput = {
   image?: InputMaybe<Scalars['String']>;
   links: Scalars['String'];
   name: Scalars['String'];
-  notifications?: InputMaybe<NotificationCreateNestedManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpCreateNestedOneWithoutClubInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -1790,6 +1799,378 @@ export type ClubMinOrderByAggregateInput = {
   updatedAt?: InputMaybe<SortOrder>;
 };
 
+export type ClubNotification = {
+  __typename?: 'ClubNotification';
+  club: Club;
+  clubId: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Int'];
+  notification: Notification;
+  notificationId: Scalars['Int'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ClubNotificationAvgAggregate = {
+  __typename?: 'ClubNotificationAvgAggregate';
+  clubId?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  notificationId?: Maybe<Scalars['Float']>;
+};
+
+export type ClubNotificationAvgOrderByAggregateInput = {
+  clubId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  notificationId?: InputMaybe<SortOrder>;
+};
+
+export type ClubNotificationClubIdNotificationIdCompoundUniqueInput = {
+  clubId: Scalars['Int'];
+  notificationId: Scalars['Int'];
+};
+
+export type ClubNotificationCountAggregate = {
+  __typename?: 'ClubNotificationCountAggregate';
+  _all: Scalars['Int'];
+  clubId: Scalars['Int'];
+  createdAt: Scalars['Int'];
+  deletedAt: Scalars['Int'];
+  id: Scalars['Int'];
+  notificationId: Scalars['Int'];
+  updatedAt: Scalars['Int'];
+};
+
+export type ClubNotificationCountOrderByAggregateInput = {
+  clubId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  deletedAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  notificationId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type ClubNotificationCreateInput = {
+  club: ClubCreateNestedOneWithoutClubNotificationsInput;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  notification: NotificationCreateNestedOneWithoutCreatedByInput;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationCreateManyClubInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  notificationId: Scalars['Int'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationCreateManyClubInputEnvelope = {
+  data: Array<ClubNotificationCreateManyClubInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ClubNotificationCreateManyInput = {
+  clubId: Scalars['Int'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  notificationId: Scalars['Int'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationCreateManyNotificationInput = {
+  clubId: Scalars['Int'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationCreateManyNotificationInputEnvelope = {
+  data: Array<ClubNotificationCreateManyNotificationInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ClubNotificationCreateNestedManyWithoutClubInput = {
+  connect?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ClubNotificationCreateOrConnectWithoutClubInput>>;
+  create?: InputMaybe<Array<ClubNotificationCreateWithoutClubInput>>;
+  createMany?: InputMaybe<ClubNotificationCreateManyClubInputEnvelope>;
+};
+
+export type ClubNotificationCreateNestedManyWithoutNotificationInput = {
+  connect?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ClubNotificationCreateOrConnectWithoutNotificationInput>>;
+  create?: InputMaybe<Array<ClubNotificationCreateWithoutNotificationInput>>;
+  createMany?: InputMaybe<ClubNotificationCreateManyNotificationInputEnvelope>;
+};
+
+export type ClubNotificationCreateOrConnectWithoutClubInput = {
+  create: ClubNotificationCreateWithoutClubInput;
+  where: ClubNotificationWhereUniqueInput;
+};
+
+export type ClubNotificationCreateOrConnectWithoutNotificationInput = {
+  create: ClubNotificationCreateWithoutNotificationInput;
+  where: ClubNotificationWhereUniqueInput;
+};
+
+export type ClubNotificationCreateWithoutClubInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  notification: NotificationCreateNestedOneWithoutCreatedByInput;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationCreateWithoutNotificationInput = {
+  club: ClubCreateNestedOneWithoutClubNotificationsInput;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationGroupBy = {
+  __typename?: 'ClubNotificationGroupBy';
+  _avg?: Maybe<ClubNotificationAvgAggregate>;
+  _count?: Maybe<ClubNotificationCountAggregate>;
+  _max?: Maybe<ClubNotificationMaxAggregate>;
+  _min?: Maybe<ClubNotificationMinAggregate>;
+  _sum?: Maybe<ClubNotificationSumAggregate>;
+  clubId: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Int'];
+  notificationId: Scalars['Int'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ClubNotificationListRelationFilter = {
+  every?: InputMaybe<ClubNotificationWhereInput>;
+  none?: InputMaybe<ClubNotificationWhereInput>;
+  some?: InputMaybe<ClubNotificationWhereInput>;
+};
+
+export type ClubNotificationMaxAggregate = {
+  __typename?: 'ClubNotificationMaxAggregate';
+  clubId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['Int']>;
+  notificationId?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationMaxOrderByAggregateInput = {
+  clubId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  deletedAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  notificationId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type ClubNotificationMinAggregate = {
+  __typename?: 'ClubNotificationMinAggregate';
+  clubId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['Int']>;
+  notificationId?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type ClubNotificationMinOrderByAggregateInput = {
+  clubId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  deletedAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  notificationId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type ClubNotificationOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type ClubNotificationOrderByWithAggregationInput = {
+  _avg?: InputMaybe<ClubNotificationAvgOrderByAggregateInput>;
+  _count?: InputMaybe<ClubNotificationCountOrderByAggregateInput>;
+  _max?: InputMaybe<ClubNotificationMaxOrderByAggregateInput>;
+  _min?: InputMaybe<ClubNotificationMinOrderByAggregateInput>;
+  _sum?: InputMaybe<ClubNotificationSumOrderByAggregateInput>;
+  clubId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  deletedAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  notificationId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type ClubNotificationOrderByWithRelationInput = {
+  club?: InputMaybe<ClubOrderByWithRelationInput>;
+  clubId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  deletedAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  notification?: InputMaybe<NotificationOrderByWithRelationInput>;
+  notificationId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export enum ClubNotificationScalarFieldEnum {
+  ClubId = 'clubId',
+  CreatedAt = 'createdAt',
+  DeletedAt = 'deletedAt',
+  Id = 'id',
+  NotificationId = 'notificationId',
+  UpdatedAt = 'updatedAt'
+}
+
+export type ClubNotificationScalarWhereInput = {
+  AND?: InputMaybe<Array<ClubNotificationScalarWhereInput>>;
+  NOT?: InputMaybe<Array<ClubNotificationScalarWhereInput>>;
+  OR?: InputMaybe<Array<ClubNotificationScalarWhereInput>>;
+  clubId?: InputMaybe<IntFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  deletedAt?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IntFilter>;
+  notificationId?: InputMaybe<IntFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ClubNotificationScalarWhereWithAggregatesInput = {
+  AND?: InputMaybe<Array<ClubNotificationScalarWhereWithAggregatesInput>>;
+  NOT?: InputMaybe<Array<ClubNotificationScalarWhereWithAggregatesInput>>;
+  OR?: InputMaybe<Array<ClubNotificationScalarWhereWithAggregatesInput>>;
+  clubId?: InputMaybe<IntWithAggregatesFilter>;
+  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+  deletedAt?: InputMaybe<DateTimeNullableWithAggregatesFilter>;
+  id?: InputMaybe<IntWithAggregatesFilter>;
+  notificationId?: InputMaybe<IntWithAggregatesFilter>;
+  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+};
+
+export type ClubNotificationSumAggregate = {
+  __typename?: 'ClubNotificationSumAggregate';
+  clubId?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  notificationId?: Maybe<Scalars['Int']>;
+};
+
+export type ClubNotificationSumOrderByAggregateInput = {
+  clubId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  notificationId?: InputMaybe<SortOrder>;
+};
+
+export type ClubNotificationUpdateInput = {
+  club?: InputMaybe<ClubUpdateOneRequiredWithoutClubNotificationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  notification?: InputMaybe<NotificationUpdateOneRequiredWithoutCreatedByInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ClubNotificationUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ClubNotificationUpdateManyWithWhereWithoutClubInput = {
+  data: ClubNotificationUpdateManyMutationInput;
+  where: ClubNotificationScalarWhereInput;
+};
+
+export type ClubNotificationUpdateManyWithWhereWithoutNotificationInput = {
+  data: ClubNotificationUpdateManyMutationInput;
+  where: ClubNotificationScalarWhereInput;
+};
+
+export type ClubNotificationUpdateManyWithoutClubInput = {
+  connect?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ClubNotificationCreateOrConnectWithoutClubInput>>;
+  create?: InputMaybe<Array<ClubNotificationCreateWithoutClubInput>>;
+  createMany?: InputMaybe<ClubNotificationCreateManyClubInputEnvelope>;
+  delete?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<ClubNotificationScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  set?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  update?: InputMaybe<Array<ClubNotificationUpdateWithWhereUniqueWithoutClubInput>>;
+  updateMany?: InputMaybe<Array<ClubNotificationUpdateManyWithWhereWithoutClubInput>>;
+  upsert?: InputMaybe<Array<ClubNotificationUpsertWithWhereUniqueWithoutClubInput>>;
+};
+
+export type ClubNotificationUpdateManyWithoutNotificationInput = {
+  connect?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ClubNotificationCreateOrConnectWithoutNotificationInput>>;
+  create?: InputMaybe<Array<ClubNotificationCreateWithoutNotificationInput>>;
+  createMany?: InputMaybe<ClubNotificationCreateManyNotificationInputEnvelope>;
+  delete?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<ClubNotificationScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  set?: InputMaybe<Array<ClubNotificationWhereUniqueInput>>;
+  update?: InputMaybe<Array<ClubNotificationUpdateWithWhereUniqueWithoutNotificationInput>>;
+  updateMany?: InputMaybe<Array<ClubNotificationUpdateManyWithWhereWithoutNotificationInput>>;
+  upsert?: InputMaybe<Array<ClubNotificationUpsertWithWhereUniqueWithoutNotificationInput>>;
+};
+
+export type ClubNotificationUpdateWithWhereUniqueWithoutClubInput = {
+  data: ClubNotificationUpdateWithoutClubInput;
+  where: ClubNotificationWhereUniqueInput;
+};
+
+export type ClubNotificationUpdateWithWhereUniqueWithoutNotificationInput = {
+  data: ClubNotificationUpdateWithoutNotificationInput;
+  where: ClubNotificationWhereUniqueInput;
+};
+
+export type ClubNotificationUpdateWithoutClubInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  notification?: InputMaybe<NotificationUpdateOneRequiredWithoutCreatedByInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ClubNotificationUpdateWithoutNotificationInput = {
+  club?: InputMaybe<ClubUpdateOneRequiredWithoutClubNotificationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ClubNotificationUpsertWithWhereUniqueWithoutClubInput = {
+  create: ClubNotificationCreateWithoutClubInput;
+  update: ClubNotificationUpdateWithoutClubInput;
+  where: ClubNotificationWhereUniqueInput;
+};
+
+export type ClubNotificationUpsertWithWhereUniqueWithoutNotificationInput = {
+  create: ClubNotificationCreateWithoutNotificationInput;
+  update: ClubNotificationUpdateWithoutNotificationInput;
+  where: ClubNotificationWhereUniqueInput;
+};
+
+export type ClubNotificationWhereInput = {
+  AND?: InputMaybe<Array<ClubNotificationWhereInput>>;
+  NOT?: InputMaybe<Array<ClubNotificationWhereInput>>;
+  OR?: InputMaybe<Array<ClubNotificationWhereInput>>;
+  club?: InputMaybe<ClubRelationFilter>;
+  clubId?: InputMaybe<IntFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  deletedAt?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IntFilter>;
+  notification?: InputMaybe<NotificationRelationFilter>;
+  notificationId?: InputMaybe<IntFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ClubNotificationWhereUniqueInput = {
+  clubId_notificationId?: InputMaybe<ClubNotificationClubIdNotificationIdCompoundUniqueInput>;
+  id?: InputMaybe<Scalars['Int']>;
+};
+
 export type ClubOrderByWithAggregationInput = {
   _avg?: InputMaybe<ClubAvgOrderByAggregateInput>;
   _count?: InputMaybe<ClubCountOrderByAggregateInput>;
@@ -1810,6 +2191,7 @@ export type ClubOrderByWithRelationInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorOrderByRelationAggregateInput>;
   clubEvents?: InputMaybe<ClubEventOrderByRelationAggregateInput>;
   clubMember?: InputMaybe<ClubMemberOrderByRelationAggregateInput>;
+  clubNotifications?: InputMaybe<ClubNotificationOrderByRelationAggregateInput>;
   clubRank?: InputMaybe<ClubRankOrderByWithRelationInput>;
   clubtags?: InputMaybe<ClubTagOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
@@ -1819,7 +2201,6 @@ export type ClubOrderByWithRelationInput = {
   image?: InputMaybe<SortOrder>;
   links?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
-  notifications?: InputMaybe<NotificationOrderByRelationAggregateInput>;
   otp?: InputMaybe<OtpOrderByWithRelationInput>;
   subscription?: InputMaybe<SubscriptionOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
@@ -2582,6 +2963,7 @@ export type ClubUpdateInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2590,7 +2972,6 @@ export type ClubUpdateInput = {
   image?: InputMaybe<StringFieldUpdateOperationsInput>;
   links?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2630,6 +3011,14 @@ export type ClubUpdateOneRequiredWithoutClubMemberInput = {
   upsert?: InputMaybe<ClubUpsertWithoutClubMemberInput>;
 };
 
+export type ClubUpdateOneRequiredWithoutClubNotificationsInput = {
+  connect?: InputMaybe<ClubWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ClubCreateOrConnectWithoutClubNotificationsInput>;
+  create?: InputMaybe<ClubCreateWithoutClubNotificationsInput>;
+  update?: InputMaybe<ClubUpdateWithoutClubNotificationsInput>;
+  upsert?: InputMaybe<ClubUpsertWithoutClubNotificationsInput>;
+};
+
 export type ClubUpdateOneRequiredWithoutClubRankInput = {
   connect?: InputMaybe<ClubWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ClubCreateOrConnectWithoutClubRankInput>;
@@ -2644,14 +3033,6 @@ export type ClubUpdateOneRequiredWithoutClubtagsInput = {
   create?: InputMaybe<ClubCreateWithoutClubtagsInput>;
   update?: InputMaybe<ClubUpdateWithoutClubtagsInput>;
   upsert?: InputMaybe<ClubUpsertWithoutClubtagsInput>;
-};
-
-export type ClubUpdateOneRequiredWithoutNotificationsInput = {
-  connect?: InputMaybe<ClubWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<ClubCreateOrConnectWithoutNotificationsInput>;
-  create?: InputMaybe<ClubCreateWithoutNotificationsInput>;
-  update?: InputMaybe<ClubUpdateWithoutNotificationsInput>;
-  upsert?: InputMaybe<ClubUpsertWithoutNotificationsInput>;
 };
 
 export type ClubUpdateOneRequiredWithoutOtpInput = {
@@ -2673,6 +3054,7 @@ export type ClubUpdateOneRequiredWithoutSubscriptionInput = {
 export type ClubUpdateWithoutClubCoordinatorInput = {
   clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2681,7 +3063,6 @@ export type ClubUpdateWithoutClubCoordinatorInput = {
   image?: InputMaybe<StringFieldUpdateOperationsInput>;
   links?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2689,6 +3070,41 @@ export type ClubUpdateWithoutClubCoordinatorInput = {
 
 export type ClubUpdateWithoutClubEventsInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
+  clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
+  clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
+  clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<StringFieldUpdateOperationsInput>;
+  links?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
+  subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ClubUpdateWithoutClubMemberInput = {
+  clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
+  clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
+  clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
+  clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<StringFieldUpdateOperationsInput>;
+  links?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
+  subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ClubUpdateWithoutClubNotificationsInput = {
+  clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
+  clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
@@ -2698,24 +3114,6 @@ export type ClubUpdateWithoutClubEventsInput = {
   image?: InputMaybe<StringFieldUpdateOperationsInput>;
   links?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
-  otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
-  subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
-  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-};
-
-export type ClubUpdateWithoutClubMemberInput = {
-  clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
-  clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
-  clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
-  clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
-  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
-  description?: InputMaybe<StringFieldUpdateOperationsInput>;
-  image?: InputMaybe<StringFieldUpdateOperationsInput>;
-  links?: InputMaybe<StringFieldUpdateOperationsInput>;
-  name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2725,6 +3123,7 @@ export type ClubUpdateWithoutClubRankInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -2732,7 +3131,6 @@ export type ClubUpdateWithoutClubRankInput = {
   image?: InputMaybe<StringFieldUpdateOperationsInput>;
   links?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
   subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2742,25 +3140,8 @@ export type ClubUpdateWithoutClubtagsInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
-  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
-  description?: InputMaybe<StringFieldUpdateOperationsInput>;
-  image?: InputMaybe<StringFieldUpdateOperationsInput>;
-  links?: InputMaybe<StringFieldUpdateOperationsInput>;
-  name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
-  otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
-  subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
-  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-};
-
-export type ClubUpdateWithoutNotificationsInput = {
-  clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
-  clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
-  clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
-  clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
-  clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2776,6 +3157,7 @@ export type ClubUpdateWithoutOtpInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2784,7 +3166,6 @@ export type ClubUpdateWithoutOtpInput = {
   image?: InputMaybe<StringFieldUpdateOperationsInput>;
   links?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
   subscription?: InputMaybe<SubscriptionUpdateManyWithoutClubInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -2793,6 +3174,7 @@ export type ClubUpdateWithoutSubscriptionInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorUpdateManyWithoutClubInput>;
   clubEvents?: InputMaybe<ClubEventUpdateManyWithoutClubInput>;
   clubMember?: InputMaybe<ClubMemberUpdateManyWithoutClubInput>;
+  clubNotifications?: InputMaybe<ClubNotificationUpdateManyWithoutClubInput>;
   clubRank?: InputMaybe<ClubRankUpdateOneWithoutClubInput>;
   clubtags?: InputMaybe<ClubTagUpdateManyWithoutClubInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2801,7 +3183,6 @@ export type ClubUpdateWithoutSubscriptionInput = {
   image?: InputMaybe<StringFieldUpdateOperationsInput>;
   links?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  notifications?: InputMaybe<NotificationUpdateManyWithoutCreatedByInput>;
   otp?: InputMaybe<OtpUpdateOneWithoutClubInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -2821,6 +3202,11 @@ export type ClubUpsertWithoutClubMemberInput = {
   update: ClubUpdateWithoutClubMemberInput;
 };
 
+export type ClubUpsertWithoutClubNotificationsInput = {
+  create: ClubCreateWithoutClubNotificationsInput;
+  update: ClubUpdateWithoutClubNotificationsInput;
+};
+
 export type ClubUpsertWithoutClubRankInput = {
   create: ClubCreateWithoutClubRankInput;
   update: ClubUpdateWithoutClubRankInput;
@@ -2829,11 +3215,6 @@ export type ClubUpsertWithoutClubRankInput = {
 export type ClubUpsertWithoutClubtagsInput = {
   create: ClubCreateWithoutClubtagsInput;
   update: ClubUpdateWithoutClubtagsInput;
-};
-
-export type ClubUpsertWithoutNotificationsInput = {
-  create: ClubCreateWithoutNotificationsInput;
-  update: ClubUpdateWithoutNotificationsInput;
 };
 
 export type ClubUpsertWithoutOtpInput = {
@@ -2853,6 +3234,7 @@ export type ClubWhereInput = {
   clubCoordinator?: InputMaybe<ClubCoordinatorListRelationFilter>;
   clubEvents?: InputMaybe<ClubEventListRelationFilter>;
   clubMember?: InputMaybe<ClubMemberListRelationFilter>;
+  clubNotifications?: InputMaybe<ClubNotificationListRelationFilter>;
   clubRank?: InputMaybe<ClubRankRelationFilter>;
   clubtags?: InputMaybe<ClubTagListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -2862,7 +3244,6 @@ export type ClubWhereInput = {
   image?: InputMaybe<StringFilter>;
   links?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
-  notifications?: InputMaybe<NotificationListRelationFilter>;
   otp?: InputMaybe<OtpRelationFilter>;
   subscription?: InputMaybe<SubscriptionListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -3602,6 +3983,7 @@ export type Mutation = {
   createClubCoordinator: ClubCoordinator;
   createClubEvent: ClubEvent;
   createClubMember: ClubMember;
+  createClubNotification: ClubNotification;
   createClubRank: ClubRank;
   createClubTag: ClubTag;
   createEvent: Event;
@@ -3609,6 +3991,7 @@ export type Mutation = {
   createManyClubCoordinator: AffectedRowsOutput;
   createManyClubEvent: AffectedRowsOutput;
   createManyClubMember: AffectedRowsOutput;
+  createManyClubNotification: AffectedRowsOutput;
   createManyClubRank: AffectedRowsOutput;
   createManyClubTag: AffectedRowsOutput;
   createManyEvent: AffectedRowsOutput;
@@ -3638,6 +4021,7 @@ export type Mutation = {
   deleteClubCoordinator?: Maybe<ClubCoordinator>;
   deleteClubEvent?: Maybe<ClubEvent>;
   deleteClubMember?: Maybe<ClubMember>;
+  deleteClubNotification?: Maybe<ClubNotification>;
   deleteClubRank?: Maybe<ClubRank>;
   deleteClubTag?: Maybe<ClubTag>;
   deleteEvent?: Maybe<Event>;
@@ -3645,6 +4029,7 @@ export type Mutation = {
   deleteManyClubCoordinator: AffectedRowsOutput;
   deleteManyClubEvent: AffectedRowsOutput;
   deleteManyClubMember: AffectedRowsOutput;
+  deleteManyClubNotification: AffectedRowsOutput;
   deleteManyClubRank: AffectedRowsOutput;
   deleteManyClubTag: AffectedRowsOutput;
   deleteManyEvent: AffectedRowsOutput;
@@ -3675,6 +4060,7 @@ export type Mutation = {
   updateClubCoordinator?: Maybe<ClubCoordinator>;
   updateClubEvent?: Maybe<ClubEvent>;
   updateClubMember?: Maybe<ClubMember>;
+  updateClubNotification?: Maybe<ClubNotification>;
   updateClubRank?: Maybe<ClubRank>;
   updateClubTag?: Maybe<ClubTag>;
   updateEvent?: Maybe<Event>;
@@ -3682,6 +4068,7 @@ export type Mutation = {
   updateManyClubCoordinator: AffectedRowsOutput;
   updateManyClubEvent: AffectedRowsOutput;
   updateManyClubMember: AffectedRowsOutput;
+  updateManyClubNotification: AffectedRowsOutput;
   updateManyClubRank: AffectedRowsOutput;
   updateManyClubTag: AffectedRowsOutput;
   updateManyEvent: AffectedRowsOutput;
@@ -3712,6 +4099,7 @@ export type Mutation = {
   upsertClubCoordinator: ClubCoordinator;
   upsertClubEvent: ClubEvent;
   upsertClubMember: ClubMember;
+  upsertClubNotification: ClubNotification;
   upsertClubRank: ClubRank;
   upsertClubTag: ClubTag;
   upsertEvent: Event;
@@ -3746,6 +4134,11 @@ export type MutationCreateClubEventArgs = {
 
 export type MutationCreateClubMemberArgs = {
   data: ClubMemberCreateInput;
+};
+
+
+export type MutationCreateClubNotificationArgs = {
+  data: ClubNotificationCreateInput;
 };
 
 
@@ -3784,6 +4177,12 @@ export type MutationCreateManyClubEventArgs = {
 
 export type MutationCreateManyClubMemberArgs = {
   data: Array<ClubMemberCreateManyInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationCreateManyClubNotificationArgs = {
+  data: Array<ClubNotificationCreateManyInput>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -3947,6 +4346,11 @@ export type MutationDeleteClubMemberArgs = {
 };
 
 
+export type MutationDeleteClubNotificationArgs = {
+  where: ClubNotificationWhereUniqueInput;
+};
+
+
 export type MutationDeleteClubRankArgs = {
   where: ClubRankWhereUniqueInput;
 };
@@ -3979,6 +4383,11 @@ export type MutationDeleteManyClubEventArgs = {
 
 export type MutationDeleteManyClubMemberArgs = {
   where?: InputMaybe<ClubMemberWhereInput>;
+};
+
+
+export type MutationDeleteManyClubNotificationArgs = {
+  where?: InputMaybe<ClubNotificationWhereInput>;
 };
 
 
@@ -4136,6 +4545,12 @@ export type MutationUpdateClubMemberArgs = {
 };
 
 
+export type MutationUpdateClubNotificationArgs = {
+  data: ClubNotificationUpdateInput;
+  where: ClubNotificationWhereUniqueInput;
+};
+
+
 export type MutationUpdateClubRankArgs = {
   data: ClubRankUpdateInput;
   where: ClubRankWhereUniqueInput;
@@ -4175,6 +4590,12 @@ export type MutationUpdateManyClubEventArgs = {
 export type MutationUpdateManyClubMemberArgs = {
   data: ClubMemberUpdateManyMutationInput;
   where?: InputMaybe<ClubMemberWhereInput>;
+};
+
+
+export type MutationUpdateManyClubNotificationArgs = {
+  data: ClubNotificationUpdateManyMutationInput;
+  where?: InputMaybe<ClubNotificationWhereInput>;
 };
 
 
@@ -4358,6 +4779,13 @@ export type MutationUpsertClubMemberArgs = {
   create: ClubMemberCreateInput;
   update: ClubMemberUpdateInput;
   where: ClubMemberWhereUniqueInput;
+};
+
+
+export type MutationUpsertClubNotificationArgs = {
+  create: ClubNotificationCreateInput;
+  update: ClubNotificationUpdateInput;
+  where: ClubNotificationWhereUniqueInput;
 };
 
 
@@ -4662,14 +5090,23 @@ export type NestedStringWithAggregatesFilter = {
 export type Notification = {
   __typename?: 'Notification';
   _count?: Maybe<NotificationCount>;
-  clubId: Scalars['Int'];
   createdAt: Scalars['DateTime'];
-  createdBy: Club;
+  createdBy: Array<ClubNotification>;
   deletedAt?: Maybe<Scalars['DateTime']>;
   id: Scalars['Int'];
   message: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   userNotifications: Array<UserNotification>;
+};
+
+
+export type NotificationCreatedByArgs = {
+  cursor?: InputMaybe<ClubNotificationWhereUniqueInput>;
+  distinct?: InputMaybe<Array<ClubNotificationScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<ClubNotificationOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClubNotificationWhereInput>;
 };
 
 
@@ -4684,24 +5121,22 @@ export type NotificationUserNotificationsArgs = {
 
 export type NotificationAvgAggregate = {
   __typename?: 'NotificationAvgAggregate';
-  clubId?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
 export type NotificationAvgOrderByAggregateInput = {
-  clubId?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
 };
 
 export type NotificationCount = {
   __typename?: 'NotificationCount';
+  createdBy: Scalars['Int'];
   userNotifications: Scalars['Int'];
 };
 
 export type NotificationCountAggregate = {
   __typename?: 'NotificationCountAggregate';
   _all: Scalars['Int'];
-  clubId: Scalars['Int'];
   createdAt: Scalars['Int'];
   deletedAt: Scalars['Int'];
   id: Scalars['Int'];
@@ -4710,7 +5145,6 @@ export type NotificationCountAggregate = {
 };
 
 export type NotificationCountOrderByAggregateInput = {
-  clubId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   deletedAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -4720,28 +5154,14 @@ export type NotificationCountOrderByAggregateInput = {
 
 export type NotificationCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  createdBy: ClubCreateNestedOneWithoutNotificationsInput;
+  createdBy?: InputMaybe<ClubNotificationCreateNestedManyWithoutNotificationInput>;
   deletedAt?: InputMaybe<Scalars['DateTime']>;
   message: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   userNotifications?: InputMaybe<UserNotificationCreateNestedManyWithoutNotificationInput>;
 };
 
-export type NotificationCreateManyCreatedByInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']>;
-  deletedAt?: InputMaybe<Scalars['DateTime']>;
-  id?: InputMaybe<Scalars['Int']>;
-  message: Scalars['String'];
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type NotificationCreateManyCreatedByInputEnvelope = {
-  data: Array<NotificationCreateManyCreatedByInput>;
-  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
-};
-
 export type NotificationCreateManyInput = {
-  clubId: Scalars['Int'];
   createdAt?: InputMaybe<Scalars['DateTime']>;
   deletedAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['Int']>;
@@ -4749,11 +5169,10 @@ export type NotificationCreateManyInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
-export type NotificationCreateNestedManyWithoutCreatedByInput = {
-  connect?: InputMaybe<Array<NotificationWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<NotificationCreateOrConnectWithoutCreatedByInput>>;
-  create?: InputMaybe<Array<NotificationCreateWithoutCreatedByInput>>;
-  createMany?: InputMaybe<NotificationCreateManyCreatedByInputEnvelope>;
+export type NotificationCreateNestedOneWithoutCreatedByInput = {
+  connect?: InputMaybe<NotificationWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<NotificationCreateOrConnectWithoutCreatedByInput>;
+  create?: InputMaybe<NotificationCreateWithoutCreatedByInput>;
 };
 
 export type NotificationCreateNestedOneWithoutUserNotificationsInput = {
@@ -4782,7 +5201,7 @@ export type NotificationCreateWithoutCreatedByInput = {
 
 export type NotificationCreateWithoutUserNotificationsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  createdBy: ClubCreateNestedOneWithoutNotificationsInput;
+  createdBy?: InputMaybe<ClubNotificationCreateNestedManyWithoutNotificationInput>;
   deletedAt?: InputMaybe<Scalars['DateTime']>;
   message: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -4795,7 +5214,6 @@ export type NotificationGroupBy = {
   _max?: Maybe<NotificationMaxAggregate>;
   _min?: Maybe<NotificationMinAggregate>;
   _sum?: Maybe<NotificationSumAggregate>;
-  clubId: Scalars['Int'];
   createdAt: Scalars['DateTime'];
   deletedAt?: Maybe<Scalars['DateTime']>;
   id: Scalars['Int'];
@@ -4803,15 +5221,8 @@ export type NotificationGroupBy = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type NotificationListRelationFilter = {
-  every?: InputMaybe<NotificationWhereInput>;
-  none?: InputMaybe<NotificationWhereInput>;
-  some?: InputMaybe<NotificationWhereInput>;
-};
-
 export type NotificationMaxAggregate = {
   __typename?: 'NotificationMaxAggregate';
-  clubId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   deletedAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['Int']>;
@@ -4820,7 +5231,6 @@ export type NotificationMaxAggregate = {
 };
 
 export type NotificationMaxOrderByAggregateInput = {
-  clubId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   deletedAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -4830,7 +5240,6 @@ export type NotificationMaxOrderByAggregateInput = {
 
 export type NotificationMinAggregate = {
   __typename?: 'NotificationMinAggregate';
-  clubId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   deletedAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['Int']>;
@@ -4839,16 +5248,11 @@ export type NotificationMinAggregate = {
 };
 
 export type NotificationMinOrderByAggregateInput = {
-  clubId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   deletedAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   message?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
-};
-
-export type NotificationOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
 };
 
 export type NotificationOrderByWithAggregationInput = {
@@ -4857,7 +5261,6 @@ export type NotificationOrderByWithAggregationInput = {
   _max?: InputMaybe<NotificationMaxOrderByAggregateInput>;
   _min?: InputMaybe<NotificationMinOrderByAggregateInput>;
   _sum?: InputMaybe<NotificationSumOrderByAggregateInput>;
-  clubId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   deletedAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -4866,9 +5269,8 @@ export type NotificationOrderByWithAggregationInput = {
 };
 
 export type NotificationOrderByWithRelationInput = {
-  clubId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
-  createdBy?: InputMaybe<ClubOrderByWithRelationInput>;
+  createdBy?: InputMaybe<ClubNotificationOrderByRelationAggregateInput>;
   deletedAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   message?: InputMaybe<SortOrder>;
@@ -4882,7 +5284,6 @@ export type NotificationRelationFilter = {
 };
 
 export enum NotificationScalarFieldEnum {
-  ClubId = 'clubId',
   CreatedAt = 'createdAt',
   DeletedAt = 'deletedAt',
   Id = 'id',
@@ -4890,23 +5291,10 @@ export enum NotificationScalarFieldEnum {
   UpdatedAt = 'updatedAt'
 }
 
-export type NotificationScalarWhereInput = {
-  AND?: InputMaybe<Array<NotificationScalarWhereInput>>;
-  NOT?: InputMaybe<Array<NotificationScalarWhereInput>>;
-  OR?: InputMaybe<Array<NotificationScalarWhereInput>>;
-  clubId?: InputMaybe<IntFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  deletedAt?: InputMaybe<DateTimeNullableFilter>;
-  id?: InputMaybe<IntFilter>;
-  message?: InputMaybe<StringFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
 export type NotificationScalarWhereWithAggregatesInput = {
   AND?: InputMaybe<Array<NotificationScalarWhereWithAggregatesInput>>;
   NOT?: InputMaybe<Array<NotificationScalarWhereWithAggregatesInput>>;
   OR?: InputMaybe<Array<NotificationScalarWhereWithAggregatesInput>>;
-  clubId?: InputMaybe<IntWithAggregatesFilter>;
   createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
   deletedAt?: InputMaybe<DateTimeNullableWithAggregatesFilter>;
   id?: InputMaybe<IntWithAggregatesFilter>;
@@ -4916,18 +5304,16 @@ export type NotificationScalarWhereWithAggregatesInput = {
 
 export type NotificationSumAggregate = {
   __typename?: 'NotificationSumAggregate';
-  clubId?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
 };
 
 export type NotificationSumOrderByAggregateInput = {
-  clubId?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
 };
 
 export type NotificationUpdateInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  createdBy?: InputMaybe<ClubUpdateOneRequiredWithoutNotificationsInput>;
+  createdBy?: InputMaybe<ClubNotificationUpdateManyWithoutNotificationInput>;
   deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -4941,23 +5327,12 @@ export type NotificationUpdateManyMutationInput = {
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
-export type NotificationUpdateManyWithWhereWithoutCreatedByInput = {
-  data: NotificationUpdateManyMutationInput;
-  where: NotificationScalarWhereInput;
-};
-
-export type NotificationUpdateManyWithoutCreatedByInput = {
-  connect?: InputMaybe<Array<NotificationWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<NotificationCreateOrConnectWithoutCreatedByInput>>;
-  create?: InputMaybe<Array<NotificationCreateWithoutCreatedByInput>>;
-  createMany?: InputMaybe<NotificationCreateManyCreatedByInputEnvelope>;
-  delete?: InputMaybe<Array<NotificationWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<NotificationScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<NotificationWhereUniqueInput>>;
-  set?: InputMaybe<Array<NotificationWhereUniqueInput>>;
-  update?: InputMaybe<Array<NotificationUpdateWithWhereUniqueWithoutCreatedByInput>>;
-  updateMany?: InputMaybe<Array<NotificationUpdateManyWithWhereWithoutCreatedByInput>>;
-  upsert?: InputMaybe<Array<NotificationUpsertWithWhereUniqueWithoutCreatedByInput>>;
+export type NotificationUpdateOneRequiredWithoutCreatedByInput = {
+  connect?: InputMaybe<NotificationWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<NotificationCreateOrConnectWithoutCreatedByInput>;
+  create?: InputMaybe<NotificationCreateWithoutCreatedByInput>;
+  update?: InputMaybe<NotificationUpdateWithoutCreatedByInput>;
+  upsert?: InputMaybe<NotificationUpsertWithoutCreatedByInput>;
 };
 
 export type NotificationUpdateOneRequiredWithoutUserNotificationsInput = {
@@ -4966,11 +5341,6 @@ export type NotificationUpdateOneRequiredWithoutUserNotificationsInput = {
   create?: InputMaybe<NotificationCreateWithoutUserNotificationsInput>;
   update?: InputMaybe<NotificationUpdateWithoutUserNotificationsInput>;
   upsert?: InputMaybe<NotificationUpsertWithoutUserNotificationsInput>;
-};
-
-export type NotificationUpdateWithWhereUniqueWithoutCreatedByInput = {
-  data: NotificationUpdateWithoutCreatedByInput;
-  where: NotificationWhereUniqueInput;
 };
 
 export type NotificationUpdateWithoutCreatedByInput = {
@@ -4983,16 +5353,15 @@ export type NotificationUpdateWithoutCreatedByInput = {
 
 export type NotificationUpdateWithoutUserNotificationsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  createdBy?: InputMaybe<ClubUpdateOneRequiredWithoutNotificationsInput>;
+  createdBy?: InputMaybe<ClubNotificationUpdateManyWithoutNotificationInput>;
   deletedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
-export type NotificationUpsertWithWhereUniqueWithoutCreatedByInput = {
+export type NotificationUpsertWithoutCreatedByInput = {
   create: NotificationCreateWithoutCreatedByInput;
   update: NotificationUpdateWithoutCreatedByInput;
-  where: NotificationWhereUniqueInput;
 };
 
 export type NotificationUpsertWithoutUserNotificationsInput = {
@@ -5004,9 +5373,8 @@ export type NotificationWhereInput = {
   AND?: InputMaybe<Array<NotificationWhereInput>>;
   NOT?: InputMaybe<Array<NotificationWhereInput>>;
   OR?: InputMaybe<Array<NotificationWhereInput>>;
-  clubId?: InputMaybe<IntFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
-  createdBy?: InputMaybe<ClubRelationFilter>;
+  createdBy?: InputMaybe<ClubNotificationListRelationFilter>;
   deletedAt?: InputMaybe<DateTimeNullableFilter>;
   id?: InputMaybe<IntFilter>;
   message?: InputMaybe<StringFilter>;
@@ -5015,7 +5383,6 @@ export type NotificationWhereInput = {
 };
 
 export type NotificationWhereUniqueInput = {
-  clubId?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
 };
 
@@ -5724,6 +6091,7 @@ export type Query = {
   aggregateClubCoordinator: AggregateClubCoordinator;
   aggregateClubEvent: AggregateClubEvent;
   aggregateClubMember: AggregateClubMember;
+  aggregateClubNotification: AggregateClubNotification;
   aggregateClubRank: AggregateClubRank;
   aggregateClubTag: AggregateClubTag;
   aggregateEvent: AggregateEvent;
@@ -5745,6 +6113,8 @@ export type Query = {
   clubEvents: Array<ClubEvent>;
   clubMember?: Maybe<ClubMember>;
   clubMembers: Array<ClubMember>;
+  clubNotification?: Maybe<ClubNotification>;
+  clubNotifications: Array<ClubNotification>;
   clubRank?: Maybe<ClubRank>;
   clubRanks: Array<ClubRank>;
   clubTag?: Maybe<ClubTag>;
@@ -5756,6 +6126,7 @@ export type Query = {
   findFirstClubCoordinator?: Maybe<ClubCoordinator>;
   findFirstClubEvent?: Maybe<ClubEvent>;
   findFirstClubMember?: Maybe<ClubMember>;
+  findFirstClubNotification?: Maybe<ClubNotification>;
   findFirstClubRank?: Maybe<ClubRank>;
   findFirstClubTag?: Maybe<ClubTag>;
   findFirstEvent?: Maybe<Event>;
@@ -5774,6 +6145,7 @@ export type Query = {
   groupByClubCoordinator: Array<ClubCoordinatorGroupBy>;
   groupByClubEvent: Array<ClubEventGroupBy>;
   groupByClubMember: Array<ClubMemberGroupBy>;
+  groupByClubNotification: Array<ClubNotificationGroupBy>;
   groupByClubRank: Array<ClubRankGroupBy>;
   groupByClubTag: Array<ClubTagGroupBy>;
   groupByEvent: Array<EventGroupBy>;
@@ -5848,6 +6220,15 @@ export type QueryAggregateClubMemberArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ClubMemberWhereInput>;
+};
+
+
+export type QueryAggregateClubNotificationArgs = {
+  cursor?: InputMaybe<ClubNotificationWhereUniqueInput>;
+  orderBy?: InputMaybe<Array<ClubNotificationOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClubNotificationWhereInput>;
 };
 
 
@@ -6027,6 +6408,21 @@ export type QueryClubMembersArgs = {
 };
 
 
+export type QueryClubNotificationArgs = {
+  where: ClubNotificationWhereUniqueInput;
+};
+
+
+export type QueryClubNotificationsArgs = {
+  cursor?: InputMaybe<ClubNotificationWhereUniqueInput>;
+  distinct?: InputMaybe<Array<ClubNotificationScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<ClubNotificationOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClubNotificationWhereInput>;
+};
+
+
 export type QueryClubRankArgs = {
   where: ClubRankWhereUniqueInput;
 };
@@ -6119,6 +6515,16 @@ export type QueryFindFirstClubMemberArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ClubMemberWhereInput>;
+};
+
+
+export type QueryFindFirstClubNotificationArgs = {
+  cursor?: InputMaybe<ClubNotificationWhereUniqueInput>;
+  distinct?: InputMaybe<Array<ClubNotificationScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<ClubNotificationOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClubNotificationWhereInput>;
 };
 
 
@@ -6299,6 +6705,16 @@ export type QueryGroupByClubMemberArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ClubMemberWhereInput>;
+};
+
+
+export type QueryGroupByClubNotificationArgs = {
+  by: Array<ClubNotificationScalarFieldEnum>;
+  having?: InputMaybe<ClubNotificationScalarWhereWithAggregatesInput>;
+  orderBy?: InputMaybe<Array<ClubNotificationOrderByWithAggregationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClubNotificationWhereInput>;
 };
 
 
@@ -10195,6 +10611,14 @@ export type UserDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UserDetailsQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, picture: string } };
 
+export type UpdateUserMutationVariables = Exact<{
+  data: UserUpdateInput;
+  where: UserWhereUniqueInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', id: number, email: string, name: string, picture: string, isOnBoarded: boolean } | null };
+
 export type ClubQueryVariables = Exact<{
   whereClub: ClubWhereUniqueInput;
   whereEvent?: InputMaybe<ClubEventWhereInput>;
@@ -10255,7 +10679,7 @@ export type UnRsvpEventMutation = { __typename?: 'Mutation', deleteRSVPEvent?: {
 export type NotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: number, message: string, updatedAt: any, createdBy: { __typename?: 'Club', id: number, name: string, image: string } }> };
+export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: number, message: string, updatedAt: any, createdBy: Array<{ __typename?: 'ClubNotification', club: { __typename?: 'Club', id: number, name: string, image: string } }> }> };
 
 export type AllUserTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10325,6 +10749,26 @@ export const useUserDetailsQuery = <
     useQuery<UserDetailsQuery, TError, TData>(
       variables === undefined ? ['userDetails'] : ['userDetails', variables],
       useAxios<UserDetailsQuery, UserDetailsQueryVariables>(UserDetailsDocument, variables),
+      options
+    );
+export const UpdateUserDocument = `
+    mutation updateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
+  updateUser(data: $data, where: $where) {
+    id
+    email
+    name
+    picture
+    isOnBoarded
+  }
+}
+    `;
+export const useUpdateUserMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<UpdateUserMutation, TError, UpdateUserMutationVariables, TContext>) =>
+    useMutation<UpdateUserMutation, TError, UpdateUserMutationVariables, TContext>(
+      ['updateUser'],
+      (variables?: UpdateUserMutationVariables) => useAxios<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, variables)(),
       options
     );
 export const ClubDocument = `
@@ -10555,9 +10999,11 @@ export const NotificationsDocument = `
     message
     updatedAt
     createdBy {
-      id
-      name
-      image
+      club {
+        id
+        name
+        image
+      }
     }
   }
 }
