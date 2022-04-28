@@ -1,12 +1,12 @@
 import { Button, Center, Image, Text } from 'native-base';
 import { useQuery } from 'urql';
+import Constants from 'expo-constants';
 import { Header, Loading, ParentScrollContainer } from '../components/general';
 import { UserDetailsDocument } from '../generated/graphql';
 import { useAuth } from '../hooks';
 
 export default function AccountScreen() {
 	const { signOut } = useAuth();
-
 	const [{ data, fetching }] = useQuery({
 		query: UserDetailsDocument,
 	});
@@ -35,6 +35,8 @@ export default function AccountScreen() {
 				)
 			)}
 			<Button onPress={signOut}>Sign Out</Button>
+
+			<Text mt="2">v {Constants.manifest?.version}</Text>
 		</ParentScrollContainer>
 	);
 }
