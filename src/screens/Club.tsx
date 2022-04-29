@@ -18,6 +18,7 @@ import {
 	Heading4,
 	Heading5,
 	SubHeading1,
+	SubHeading2,
 } from '../components/typography';
 import FeedStackParamsList from '../navigation/home/feed/types';
 import { EventList, EventListProps } from './Feed';
@@ -162,7 +163,7 @@ export default function ClubScreen({
 
 	const popularity = 9.7;
 	const following = subscription?.length || 0;
-
+	const links = [];
 	return (
 		<View height="100%">
 			<IconButton
@@ -262,6 +263,16 @@ export default function ClubScreen({
 					{weekEvents && <ThisWeek events={weekEvents} />}
 					<Coordinators coordinators={coordinators} />
 					<AboutClub name={name} description={description} />
+					<VStack space="3">
+						<SubHeading1 color="primary.500">Links</SubHeading1>
+						{links.length > 0 ? (
+							<HStack space="4">
+								<SubHeading2>Dummy</SubHeading2>
+							</HStack>
+						) : (
+							<Body2>No links here right now</Body2>
+						)}
+					</VStack>
 				</VStack>
 			</ParentScrollContainer>
 		</View>
