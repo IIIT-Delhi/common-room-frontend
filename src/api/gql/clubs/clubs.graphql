@@ -1,0 +1,16 @@
+query allClubs {
+	clubs {
+		id
+		name
+		image
+		clubtags {
+			tag {
+				id
+				name
+			}
+		}
+		subscription {
+			userId
+		}
+	}
+}

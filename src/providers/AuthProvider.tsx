@@ -85,8 +85,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 	const queryClient = new QueryClient({
 		queryCache: new QueryCache({
-			onError: (err) => {
+			onError: (err, query) => {
 				const error = err as AxiosError;
+				console.log('query error', query);
 				if (error.response?.status === 401) {
 					Alert.alert('Error ❌', error.message);
 					contextValue.signOut();
