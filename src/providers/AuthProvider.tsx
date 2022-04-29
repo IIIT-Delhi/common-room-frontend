@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import { createContext, useEffect, useMemo, useReducer } from 'react';
 import { QueryClientProvider, QueryClient, QueryCache } from 'react-query';
+import { AxiosError } from 'axios';
 import { setToken, getAuthData, setAuthData, clearAuthData } from '../utils';
 import { AuthData, AuthContextData, ReducerState } from './types';
 
@@ -71,7 +72,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	);
 	useEffect(() => {
 		async function checkUser() {
-			console.log('checkUser');
 			const authData = await getAuthData();
 			console.log('checkUser', authData);
 			if (authData?.token && authData?.id && authData?.email)
@@ -85,10 +85,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 	const queryClient = new QueryClient({
 		queryCache: new QueryCache({
-			onError: (err, query) => {
-				console.log('onError', err, query);
-				Alert.alert('Error ❌', err.message);
-				contextValue.signOut();
+			onError: (err) => {
+				const error = err as AxiosError;
+				if (error.response?.status === 401) {
+					Alert.alert('Error ❌', error.message);
+					contextValue.signOut();
+				}
 			},
 		}),
 	});
