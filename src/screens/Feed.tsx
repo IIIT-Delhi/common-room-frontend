@@ -1,4 +1,4 @@
-import { FlatList, HStack, Image, Text, VStack } from 'native-base';
+import { FlatList, HStack, Image, Text, VStack, View } from 'native-base';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -137,9 +137,9 @@ function EventCard({
 	);
 }
 
-type EventListProps = { events: FeedEventsQuery['events'] };
+type EventListProps = { events: FeedEventsQuery['events']; listKey?: string };
 
-function EventList({ events }: EventListProps) {
+function EventList({ events, listKey = 'EventList' }: EventListProps) {
 	const data: EventCardProps[] = events.map((event) => {
 		const parsedDate = parseISO(event.eventStartDate);
 		const eventEndDate = parseISO(event.eventEndDate);
@@ -161,15 +161,17 @@ function EventList({ events }: EventListProps) {
 		<EventCard {...item} />
 	);
 	return (
-		<FlatList
-			data={data}
-			renderItem={renderItem}
-			ListEmptyComponent={
-				<Body2 color="body.500">No events during this time</Body2>
-			}
-			ItemSeparatorComponent={Spacer.Vertical}
-			_contentContainerStyle={{ mt: '4' }}
-		/>
+		<View mt="4">
+			<FlatList
+				data={data}
+				listKey={listKey}
+				renderItem={renderItem}
+				ListEmptyComponent={
+					<Body2 color="body.500">No events during this time</Body2>
+				}
+				ItemSeparatorComponent={Spacer.Vertical}
+			/>
+		</View>
 	);
 }
 

@@ -8,16 +8,13 @@ import {
 } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { RemixIcon } from '../../components/general';
-import {
-	AccountScreen,
-	NotificationsScreen,
-	ExploreScreen,
-} from '../../screens';
+import { AccountScreen, NotificationsScreen } from '../../screens';
 import FeedStack from './feed';
 import type HomeBottomTabsParamList from './types';
 import { registerForPushNotificationsAsync } from '../../utils';
 import { useUpdateUserMutation } from '../../generated/graphql';
 import { useAuthData } from '../../hooks/auth';
+import ExploreStack from './explore';
 
 const Tab = createBottomTabNavigator<HomeBottomTabsParamList>();
 
@@ -80,9 +77,8 @@ function BottomTabs() {
 			})}
 		>
 			<Tab.Screen name="Home" component={FeedStack} />
-			{/* <Tab.Screen name="Feed" component={FeedScreen} /> */}
 			<Tab.Screen name="Notifications" component={NotificationsScreen} />
-			<Tab.Screen name="Explore" component={ExploreScreen} />
+			<Tab.Screen name="Explore" component={ExploreStack} />
 			<Tab.Screen name="Account" component={AccountScreen} />
 		</Tab.Navigator>
 	);

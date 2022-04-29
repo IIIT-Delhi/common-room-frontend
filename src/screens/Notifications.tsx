@@ -1,4 +1,4 @@
-import { Box, FlatList, HStack, Text } from 'native-base';
+import { Box, FlatList, HStack, Text, View } from 'native-base';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { format, parseISO } from 'date-fns';
 import {
@@ -63,7 +63,7 @@ export default function NotificationsScreen() {
 		NotificationsQuery['notifications'][0]
 	> = ({ item }) => {
 		const { id, message, updatedAt, createdBy } = item;
-		const image = createdBy.length > 0 ? createdBy[0].club.image : null;
+		const image = createdBy.length > 0 ? createdBy[0].club.image : '';
 		const timestamp = format(parseISO(updatedAt), 'MMM dd, hh:mm a');
 		return (
 			<NotificationCard
@@ -82,13 +82,14 @@ export default function NotificationsScreen() {
 				<Heading4>New</Heading4>
 				<Box h="3" w="3" borderRadius="full" bg="alert.500" />
 			</HStack>
-			<FlatList
-				data={notifications}
-				renderItem={renderNotifs}
-				ItemSeparatorComponent={Spacer.Vertical}
-				_contentContainerStyle={{ m: '4' }}
-				ListEmptyComponent={<Text>No new notifcations 🔕</Text>}
-			/>
+			<View m="4">
+				<FlatList
+					data={notifications}
+					renderItem={renderNotifs}
+					ItemSeparatorComponent={Spacer.Vertical}
+					ListEmptyComponent={<Text>No new notifcations 🔕</Text>}
+				/>
+			</View>
 			{/* <VStack mx="4" mt="4" space="3">
 				<NotificationCard
 					clubImg={clubImage.audiobytes}

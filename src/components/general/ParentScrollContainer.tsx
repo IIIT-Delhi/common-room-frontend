@@ -1,4 +1,4 @@
-import { Box, ScrollView, StatusBar, useTheme } from 'native-base';
+import { Box, FlatList, StatusBar, useTheme } from 'native-base';
 import { useState } from 'react';
 import { RefreshControl, ScrollViewProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -35,13 +35,16 @@ function ParentScrollContainer({
 					}
 					translucent={contentUnderStatusBar}
 				/>
-				<ScrollView
+				<FlatList
+					data={[]}
+					listKey="parent-scroll-container"
+					renderItem={() => null}
 					bg="bg.500"
-					px={noHorizontalPadding ? '0' : '4'}
+					// px={noHorizontalPadding ? '0' : '4'}
 					{...props}
-					contentContainerStyle={{
-						paddingBottom: 40,
-					}}
+					// contentContainerStyle={{
+					// 	paddingBottom: 40,
+					// }}
 					showsVerticalScrollIndicator={showsVerticalScrollIndicator}
 					refreshControl={
 						<RefreshControl
@@ -50,9 +53,14 @@ function ParentScrollContainer({
 						/>
 					}
 					nestedScrollEnabled
-				>
-					{children}
-				</ScrollView>
+					// eslint-disable-next-line react/jsx-no-useless-fragment
+					ListFooterComponent={<>{children}</>}
+					_contentContainerStyle={{
+						px: noHorizontalPadding ? '0' : '4',
+						// mx: noHorizontalPadding,
+						pb: '5',
+					}}
+				/>
 			</Box>
 		</SafeAreaView>
 	);

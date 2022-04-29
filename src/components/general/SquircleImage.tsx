@@ -18,7 +18,7 @@ function SquircleImage({ height, width, src, props }: any) {
 			<Image
 				source={src}
 				// src={src}
-				key={`${src}-${width}-${height}`}
+				key={`${src?.uri}-${width}-${height}`}
 				size="xl"
 				w={width}
 				h={height}
