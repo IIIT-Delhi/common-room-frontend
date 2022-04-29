@@ -272,8 +272,8 @@ function FeedStream() {
 	return (
 		<VStack mt="6">
 			{/* ====================1==================== */}
-			{/* <Heading4 ml="4">Events for you &nbsp;⭐</Heading4> */}
-			{/* <EventsForYouFeed /> */}
+			<Heading4 ml="4">Events for you &nbsp;⭐</Heading4>
+			<EventsForYouFeed />
 			{/* =====================2=================== */}
 			<VStack mx="4">
 				<Heading4
