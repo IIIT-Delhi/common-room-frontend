@@ -87,10 +87,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 		queryCache: new QueryCache({
 			onError: (err) => {
 				const error = err as AxiosError;
-				if (error.response?.status === 401) {
-					Alert.alert('Error ❌', error.message);
-					contextValue.signOut();
-				}
+				Alert.alert('Error ❌', error.message);
+				contextValue.signOut();
 			},
 		}),
 	});

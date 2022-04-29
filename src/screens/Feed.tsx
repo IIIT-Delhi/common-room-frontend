@@ -1,4 +1,4 @@
-import { FlatList, HStack, Image, Text, VStack, View } from 'native-base';
+import { FlatList, HStack, Image, VStack, View } from 'native-base';
 import { ListRenderItem, TouchableOpacity } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -175,22 +175,6 @@ function EventList({ events, listKey = 'EventList' }: EventListProps) {
 	);
 }
 
-// function FeedbackFeed() {
-// 	return (
-// 		<VStack mt="4" space="3">
-// 			<EventCard
-// 				id={512}
-// 				image={clubImage.micDrop}
-// 				attendingCount={25}
-// 				dateTime="27 Feb, 5PM"
-// 				name="How you doin?"
-// 				clubs={['MicDrop']}
-// 				isOldCard
-// 			/>
-// 		</VStack>
-// 	);
-// }
-
 function EventsForYouFeed() {
 	const { authData } = useAuth();
 
@@ -226,10 +210,10 @@ function EventsForYouFeed() {
 			my="4"
 			_contentContainerStyle={{ px: '4' }}
 			ListEmptyComponent={
-				<Text>
-					No events for you right now 😓{'\n'}
-					Try adding more interests ✨
-				</Text>
+				<Body2 color="body.500">
+					No events currently for your interests. Please add more
+					interests!
+				</Body2>
 			}
 		/>
 	);
@@ -278,11 +262,7 @@ function FeedStream() {
 			<EventsForYouFeed />
 			{/* =====================2=================== */}
 			<VStack mx="4">
-				<Heading4
-				// mt="8" enable when EFY is active
-				>
-					Today 💃
-				</Heading4>
+				<Heading4 mt="8">Today 💃</Heading4>
 				<EventList events={todayEvents} />
 				<Heading4 mt="8">Ongoing ⌛</Heading4>
 				<EventList events={ongoingEvents} />

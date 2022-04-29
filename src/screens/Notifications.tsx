@@ -85,6 +85,7 @@ export default function NotificationsScreen() {
 			<View m="4">
 				<FlatList
 					data={notifications}
+					listKey="notifications"
 					renderItem={renderNotifs}
 					ItemSeparatorComponent={Spacer.Vertical}
 					ListEmptyComponent={<Text>No new notifcations 🔕</Text>}
