@@ -1,5 +1,6 @@
-import { createContext, useEffect, useMemo, useReducer } from 'react';
 import { Alert } from 'react-native';
+import { createContext, useEffect, useMemo, useReducer } from 'react';
+import { QueryClientProvider, QueryClient, QueryCache } from 'react-query';
 import { setToken, getAuthData, setAuthData, clearAuthData } from '../utils';
 import { AuthData, AuthContextData, ReducerState } from './types';
 
@@ -82,9 +83,20 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 		checkUser();
 	}, []);
+	const queryClient = new QueryClient({
+		queryCache: new QueryCache({
+			onError: (err, query) => {
+				console.log('onError', err, query);
+				Alert.alert('Error ❌', err.message);
+				contextValue.signOut();
+			},
+		}),
+	});
 	return (
 		<AuthContext.Provider value={contextValue}>
-			{children}
+			<QueryClientProvider client={queryClient}>
+				{children}
+			</QueryClientProvider>
 		</AuthContext.Provider>
 	);
 }
