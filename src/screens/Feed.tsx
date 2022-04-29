@@ -18,7 +18,7 @@ import {
 	SquircleImage,
 	RemixIcon,
 } from '../components/general';
-import { Heading4 } from '../components/typography';
+import { Body2, Heading4 } from '../components/typography';
 import { SubHeading2 } from '../components/typography/Heading';
 import clubImage from '../assets/dummyClubEvents';
 import SquircleCard from '../components/general/SquircleCard';
@@ -164,7 +164,9 @@ function EventList({ events }: EventListProps) {
 		<FlatList
 			data={data}
 			renderItem={renderItem}
-			ListEmptyComponent={<Text>No events during this time 😴</Text>}
+			ListEmptyComponent={
+				<Body2 color="body.500">No events during this time</Body2>
+			}
 			ItemSeparatorComponent={Spacer.Vertical}
 			_contentContainerStyle={{ mt: '4' }}
 		/>
@@ -270,11 +272,15 @@ function FeedStream() {
 	return (
 		<VStack mt="6">
 			{/* ====================1==================== */}
-			<Heading4 ml="4">Events for you &nbsp;⭐</Heading4>
+			{/* <Heading4 ml="4">Events for you &nbsp;⭐</Heading4> */}
 			{/* <EventsForYouFeed /> */}
 			{/* =====================2=================== */}
 			<VStack mx="4">
-				<Heading4 mt="8">Today 💃</Heading4>
+				<Heading4
+				// mt="8" enable when EFY is active
+				>
+					Today 💃
+				</Heading4>
 				<EventList events={todayEvents} />
 				<Heading4 mt="8">Ongoing ⌛</Heading4>
 				<EventList events={ongoingEvents} />
@@ -286,9 +292,9 @@ function FeedStream() {
 				<Heading4 mt="8">Leave Feedback &nbsp;&nbsp;💬</Heading4>
 				<EventList events={pastEvents} />
 				{/* <FeedbackFeed /> */}
-				<SubHeading2 mt="6" color="body.500" m="auto">
+				{/* <SubHeading2 mt="6" color="body.500" m="auto">
 					older events
-				</SubHeading2>
+				</SubHeading2> */}
 			</VStack>
 		</VStack>
 	);
