@@ -211,7 +211,7 @@ function EventsForYouFeed() {
 			_contentContainerStyle={{ px: '4' }}
 			ListEmptyComponent={
 				<Body2 color="body.500">
-					No events currently for your interests. Please add more
+					No events currently for your interests.{'\n'}Please add more
 					interests!
 				</Body2>
 			}
