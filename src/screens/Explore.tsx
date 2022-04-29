@@ -1,4 +1,6 @@
 import { Box, HStack, IconButton, Input, VStack } from 'native-base';
+import { TouchableOpacity } from 'react-native';
+
 import {
 	Header,
 	ParentScrollContainer,
@@ -8,7 +10,6 @@ import {
 } from '../components/general';
 import { Heading4, SubHeading2 } from '../components/typography';
 import clubImage from '../assets/dummyClubEvents';
-import { TouchableOpacity } from 'react-native';
 
 function ClubCard({ image }: any) {
 	return (
