@@ -5,7 +5,7 @@ export default {
 		name: 'Common Room',
 		slug: 'common-room',
 		scheme: 'common-room',
-		version: '1.0.0',
+		version: '1.0.1',
 		orientation: 'portrait',
 		icon: './src/assets/icon.png',
 		primaryColor: '#111111',
