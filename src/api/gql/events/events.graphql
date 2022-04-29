@@ -45,7 +45,7 @@ query event($where: EventWhereUniqueInput!) {
 }
 
 query eventsForYou($where: EventWhereInput) {
-	events {
+	events(where: $where) {
 		id
 		name
 		image

@@ -173,21 +173,21 @@ function EventList({ events }: EventListProps) {
 	);
 }
 
-function FeedbackFeed() {
-	return (
-		<VStack mt="4" space="3">
-			<EventCard
-				id={512}
-				image={clubImage.micDrop}
-				attendingCount={25}
-				dateTime="27 Feb, 5PM"
-				name="How you doin?"
-				clubs={['MicDrop']}
-				isOldCard
-			/>
-		</VStack>
-	);
-}
+// function FeedbackFeed() {
+// 	return (
+// 		<VStack mt="4" space="3">
+// 			<EventCard
+// 				id={512}
+// 				image={clubImage.micDrop}
+// 				attendingCount={25}
+// 				dateTime="27 Feb, 5PM"
+// 				name="How you doin?"
+// 				clubs={['MicDrop']}
+// 				isOldCard
+// 			/>
+// 		</VStack>
+// 	);
+// }
 
 function EventsForYouFeed() {
 	const { authData } = useAuth();
@@ -221,7 +221,7 @@ function EventsForYouFeed() {
 			ItemSeparatorComponent={Spacer.Horizontal}
 			horizontal
 			showsHorizontalScrollIndicator={false}
-			mt="4"
+			my="4"
 			_contentContainerStyle={{ px: '4' }}
 			ListEmptyComponent={
 				<Text>

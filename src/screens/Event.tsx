@@ -4,6 +4,7 @@ import {
 	HStack,
 	IconButton,
 	Image,
+	Link,
 	View,
 	VStack,
 } from 'native-base';
@@ -86,6 +87,8 @@ export default function EventScreen({
 	const isAttending = authData.email
 		? some(rsvpEvent, { user: { email: authData.email } })
 		: false;
+
+	const links = JSON.parse(link ?? '');
 
 	const handleRSVP = () => {
 		rsvpToEvent.mutate({
@@ -240,7 +243,11 @@ export default function EventScreen({
 						<SubHeading1 color="primary.500">Links</SubHeading1>
 						{isAttending ? (
 							<HStack space="4">
-								<SubHeading2>{link}</SubHeading2>
+								{Object.keys(links).map((key) => (
+									<Link href={links[key]} isExternal>
+										<SubHeading2>{key}</SubHeading2>
+									</Link>
+								))}
 							</HStack>
 						) : (
 							<Body2>

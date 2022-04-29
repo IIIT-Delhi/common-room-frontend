@@ -10619,6 +10619,11 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', id: number, email: string, name: string, picture: string, isOnBoarded: boolean } | null };
 
+export type AllClubsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllClubsQuery = { __typename?: 'Query', clubs: Array<{ __typename?: 'Club', id: number, name: string, image: string, clubtags: Array<{ __typename?: 'ClubTag', tag: { __typename?: 'Tag', id: number, name: string } }>, subscription: Array<{ __typename?: 'Subscription', userId: number }> }> };
+
 export type ClubQueryVariables = Exact<{
   whereClub: ClubWhereUniqueInput;
   whereEvent?: InputMaybe<ClubEventWhereInput>;
@@ -10769,6 +10774,36 @@ export const useUpdateUserMutation = <
     useMutation<UpdateUserMutation, TError, UpdateUserMutationVariables, TContext>(
       ['updateUser'],
       (variables?: UpdateUserMutationVariables) => useAxios<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, variables)(),
+      options
+    );
+export const AllClubsDocument = `
+    query allClubs {
+  clubs {
+    id
+    name
+    image
+    clubtags {
+      tag {
+        id
+        name
+      }
+    }
+    subscription {
+      userId
+    }
+  }
+}
+    `;
+export const useAllClubsQuery = <
+      TData = AllClubsQuery,
+      TError = unknown
+    >(
+      variables?: AllClubsQueryVariables,
+      options?: UseQueryOptions<AllClubsQuery, TError, TData>
+    ) =>
+    useQuery<AllClubsQuery, TError, TData>(
+      variables === undefined ? ['allClubs'] : ['allClubs', variables],
+      useAxios<AllClubsQuery, AllClubsQueryVariables>(AllClubsDocument, variables),
       options
     );
 export const ClubDocument = `
@@ -10925,7 +10960,7 @@ export const useEventQuery = <
     );
 export const EventsForYouDocument = `
     query eventsForYou($where: EventWhereInput) {
-  events {
+  events(where: $where) {
     id
     name
     image
