@@ -1,9 +1,20 @@
-# expo-template-native-base-typescript
+# Common-Room Frontend
 
-The official NativeBase TypeScript template for [Expo](https://docs.expo.io/)
+The official IIITD Repository for [Common Room App](https://common-room.netlify.app/)
+
+## Setting Up
+Install dependencies:
+```sh
+expo install
+```
 
 ## Usage
-
+Start the development server:
 ```sh
-expo init my-app --template expo-template-native-base-typescript
+expo start
 ```
+
+### Roadmap
+
+- [ ] Make I'm Attending Button interaction faster
+- [x] Create Functionality for Club Admins
