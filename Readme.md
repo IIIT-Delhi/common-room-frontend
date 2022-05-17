@@ -34,3 +34,7 @@ Please [create an issue in the repository.](https://github.com/IIIT-Delhi/common
 
 ## Figma Design File
 Use this [Figma file](https://www.figma.com/file/90whEYuj7wFKdPv9UPqJ6b/Common-Room-Main) to design the app.
+
+## Beta Telegram Groups
+Use this [Android Beta Telegram Group](https://t.me/+BjSckxQ2jhYxM2Nl) to stay in touch with active users.
+ 
